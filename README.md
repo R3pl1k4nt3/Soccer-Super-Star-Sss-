@@ -19,7 +19,7 @@ El script respeta el límite de la API (30 peticiones por minuto) y crea `js/esc
 
 ### Preparar la versión real
 
-Los datos reales no se incluyen en el repositorio. Para generarlos:
+El repositorio incluye `js/datos-reales.js` ya generado (temporada 2025-26), así que la versión real funciona también en la web publicada. Para actualizarlo con datos más recientes:
 
 1. Descarga el dataset «player-scores» de Kaggle y deja sus CSV (al menos clubs.csv y players.csv) en una carpeta datos junto a la carpeta del juego.
 2. Desde la carpeta del juego, ejecuta:

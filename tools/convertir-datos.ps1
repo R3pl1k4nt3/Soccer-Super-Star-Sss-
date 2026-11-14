@@ -1,7 +1,7 @@
 ﻿# Convierte los CSV del dataset de Kaggle "player-scores" (datos de Transfermarkt) en js/datos-reales.js.
 # Uso (desde la carpeta del juego):
 #   powershell -ExecutionPolicy Bypass -File tools\convertir-datos.ps1 -Datos ..\datos
-# Solo para uso particular y pruebas. El archivo generado no se sube a GitHub (.gitignore).
+# Solo para uso particular y pruebas, no comercial.
 param(
   [string]$Datos = (Join-Path $PSScriptRoot '..\..\datos'),
   [string]$Salida = (Join-Path $PSScriptRoot '..\js\datos-reales.js'),
