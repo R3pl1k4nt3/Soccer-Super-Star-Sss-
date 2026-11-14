@@ -42,7 +42,15 @@ function navHTML(){var d=dots();return '<nav id="nav" aria-label="Secciones">'+T
 function toastsHTML(){return '<div id="toasts" role="status" aria-live="polite">'+toasts.map(function(t){return '<div class="toast '+(t.err?'err':'')+'">'+esc(t.m)+'</div>';}).join('')+'</div>';}
 function render(){
  var app=$('#app');if(!app)return;
- if(!S){app.innerHTML=(UI.screen==='new'?setupHTML():menuHTML())+toastsHTML();if(setupErr&&UI.screen==='new'&&$('#nm')&&UI.focusName){UI.focusName=0;$('#nm').focus();}return;}
+ if(!S){
+  /* pantallas de inicio y creación: al repintar se conserva el desplazamiento y el control activo */
+  var scr=UI.screen==='new'?'new':'menu',st=$('.setup'),keep=st&&UI.lastScr===scr?st.scrollTop:0,ae=document.activeElement,fk=null;
+  if(ae&&ae!==document.body)fk=ae.id?'#'+ae.id:ae.getAttribute('data-a')?'[data-a="'+ae.getAttribute('data-a')+'"]'+(ae.getAttribute('data-k')?'[data-k="'+ae.getAttribute('data-k')+'"]':'')+(ae.getAttribute('data-id')!=null?'[data-id="'+ae.getAttribute('data-id')+'"]':''):null;
+  app.innerHTML=(scr==='new'?setupHTML():menuHTML())+toastsHTML();
+  var st2=$('.setup');if(st2)st2.scrollTop=keep;UI.lastScr=scr;
+  if(fk){try{var fe=document.querySelector(fk);if(fe)fe.focus({preventScroll:true});}catch(x){}}
+  if(setupErr&&scr==='new'&&$('#nm')&&UI.focusName){UI.focusName=0;$('#nm').focus();}
+  return;}
  var sc=$('#view')?$('#view').scrollTop:0,fid=document.activeElement&&document.activeElement.getAttribute&&document.activeElement.getAttribute('data-a')?[document.activeElement.getAttribute('data-a'),document.activeElement.getAttribute('data-id')]:null;
  var v=(VIEWS[S.tab]||viewTrain)();
  app.innerHTML=sideHTML()+topHTML()+'<main id="view"><div class="page">'+pageHead()+v+'</div></main>'+navHTML()+(UI.sq?squadHTML():'')+modalHTML()+
