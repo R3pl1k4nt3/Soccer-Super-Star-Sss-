@@ -198,6 +198,9 @@ function finishMatch(M){
    if(Math.random()<P.sg*f*(1+0.6*tx('gs'))){e.sc=S.me;if(e.as===S.me)e.as=-1;M.mg++;e.mine=1;}
    else if(Math.random()<P.sa*f*(1+0.6*tx('as'))){e.as=S.me;M.ma++;e.mine=1;}});
  }
+ /* el portero líbero a veces encaja por salir lejos */
+ if(mins>0&&tx('risk')&&Math.random()<tx('risk'))M.ev.push({min:10+Math.floor(Math.random()*80),side:side==='h'?'a':'h',sc:wpickXI(M.oxi,-1,'sg'),as:-1,err:1});
+ M.ev.sort(function(x,y){return x.min-y.min;});
  var ev=M.ev.filter(function(e){return !e.x;});
  var gh=ev.filter(function(e){return e.side==='h';}).length,ga=ev.length-gh;
  var gf=home?gh:ga,gc=home?ga:gh;
@@ -206,7 +209,7 @@ function finishMatch(M){
  if(pos==='POR'&&mins>0){saves=poisson(2.6*Math.exp((O.str-T.str)/50))+(M.dgc||0);}
  var r=0;
  if(mins>0){
-  r=6+(ov-O.str)*0.015+(gf>gc?0.4:gf<gc?-0.4:0)+norm()*0.6+S.bono*0.008+(S.rel.team-50)*0.003+(S.moral-50)*0.006+tx('rate')+M.dr-(S.energy<30?0.6:0)+(M.imp>1.5?tx('big')*3:0);
+  r=6+(ov-O.str)*0.015+(gf>gc?0.4:gf<gc?-0.4:0)+norm()*0.6+S.bono*0.008+(S.rel.team-50)*0.003+(S.moral-50)*0.006+tx('rate')+M.dr-(S.energy<30?0.6:0)+(M.imp>1.5?tx('big')*3:0)+(M.imp<=1.2?tx('small'):0);
   if(pos==='POR')r+=saves*0.18-gc*0.22+(gc===0?0.7:0);
   else{r+=g*1.1+asi*0.6;if(P.df)r+=(gc===0?0.6:-0.15*gc);else if(P.line==='MED'&&gf>gc)r+=0.1;}
   if(mins<90)r=6+(r-6)*(0.4+0.6*mins/90);
@@ -243,12 +246,13 @@ function finishMatch(M){
   else rel('fans',(g?2:0)+res);
   rel('press',(g>=2?2:0)+(r>=8.5?1:0)+(r<4.5?-1:0));
   moral((r-6.3)*3+res*2);
+  if(tx('pressure')&&r<5.5){rel('press',-2);moral(-4);}
   S.fol=Math.round(S.fol*(1+0.002+Math.max(0,r-6)*0.003*vis+g*0.01*vis*M.imp+0.002*vis));}
  else{S.fol=Math.round(S.fol*1.001);if(M.role==='banquillo')moral(-2);}
  /* energía, lesiones y desgaste del material */
  var inj=0;
  S.energy=Math.max(0,S.energy-mins/90*22*(1+tx('drain')));
- if(mins>0){var pi=(S.energy<35?0.07:0.02)*(mins/90)*(1-0.3*itemLvl('physio'));
+ if(mins>0){var pi=(S.energy<35?0.07:0.02)*(mins/90)*(1-0.3*itemLvl('physio'))*(1+tx('inj'));
   if(Math.random()<pi){inj=2+Math.floor(Math.random()*4);if(itemLvl('physio'))inj=Math.max(2,inj-itemLvl('physio'));S.injured=inj;logm('Te lesionas. Baja de '+(inj-1)+' semana(s).');}
   wearGear();}
  /* estadísticas propias */
@@ -418,7 +422,7 @@ function newGame(name,pos,tp,ts,nat,co,real,look){
 /* ---------- entrenamiento ---------- */
 function train(id){
  var k=mySk(id);
- if(k.lvl>=capFor(k)){toast(k.lvl>=MAXL?'Habilidad al máximo.':'Tus rasgos limitan esta habilidad al nivel '+capFor(k)+'.',1);return;}
+ if(k.lvl>=capFor(k)){var tcp=traitCap(k.id);toast(k.lvl>=MAXL?'Habilidad al máximo.':tcp.by&&tcp.cap===capFor(k)?'Tu rasgo '+tcp.by.n+' limita '+k.n+' al nivel '+tcp.cap+'.':'Solo las habilidades de tus rasgos pasan del nivel '+capFor(k)+'.',1);return;}
  var n=S.mult,done=0,up=0;
  for(var i=0;i<n;i++){var c=pointCost(k,k.lvl);if(S.money<c)break;S.money-=c;up+=addProg(k,1);done++;if(k.lvl>=capFor(k))break;}
  if(!done){toast('No tienes dinero para entrenar '+k.n+'.',1);return;}

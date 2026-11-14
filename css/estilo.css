@@ -224,3 +224,29 @@ tr:hover td{background:rgba(148,163,184,.07)}
  .page>.pagehead{display:flex}
 }
 @media (min-width:1500px){.page{column-count:3}}
+/* asistente de creación */
+.stepper{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.stepper button{width:100%;display:flex;align-items:center;gap:8px;min-height:44px;padding:6px 10px;border-radius:10px;background:var(--s1);border:1px solid var(--line);color:var(--mut);font-weight:600}
+.stepper button:disabled{opacity:.5;cursor:not-allowed}
+.stepper .sn{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--s3);font-family:var(--fd);font-size:14px;flex:none}
+.stepper button.cur{border-color:var(--acc);color:var(--txt)}
+.stepper button.cur .sn{background:var(--acc);color:var(--acc-ink)}
+.stepper button.done .sn{background:rgba(43,212,125,.25);color:var(--acc)}
+@media (max-width:640px){.stepper .sl{display:none}.stepper button{justify-content:center}}
+.wizard h2{font-size:26px;margin-bottom:12px}
+.wizard h3{margin-top:4px}
+.wiznav{display:flex;justify-content:space-between;gap:10px;position:sticky;bottom:0;padding:12px 0 calc(env(safe-area-inset-bottom) + 4px);background:linear-gradient(180deg,transparent,var(--bg) 40%)}
+.wiznav .go{min-width:140px}
+.formgrid{display:grid;grid-template-columns:1fr;gap:4px 18px}
+@media (min-width:760px){.formgrid{grid-template-columns:1fr 1fr}}
+.tcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.tcard{display:flex;flex-direction:column;gap:6px;text-align:left;padding:12px 14px;border-radius:12px;background:var(--s2);border:2px solid var(--line2);font-size:13px;line-height:1.4}
+.tcard b{font-family:var(--fd);font-size:19px}
+.tcard:hover{border-color:var(--mut)}
+.tcard.on{border-color:var(--acc);box-shadow:0 0 0 3px rgba(43,212,125,.18)}
+.tcard:disabled{opacity:.4;cursor:not-allowed}
+.tcard .tup{color:#bff3d6}.tcard .tup i{color:var(--good);font-style:normal}
+.tcard .tdown{color:#ffd0d0}.tcard .tdown i{color:var(--bad);font-style:normal}
+.summary{display:grid;grid-template-columns:200px 1fr;gap:18px;align-items:start}
+@media (max-width:640px){.summary{grid-template-columns:1fr}}
+.lv.lim{color:var(--warn)}

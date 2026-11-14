@@ -66,9 +66,13 @@ function render(){
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&UI.sq){UI.sq=null;render();}});document.addEventListener('click',function(e){
  var b=e.target.closest&&e.target.closest('[data-a]');if(!b)return;
  var a=b.getAttribute('data-a'),id=b.getAttribute('data-id'),n=+b.getAttribute('data-n'),i=+b.getAttribute('data-i');
- if(a==='start'){var nm=($('#nm').value||'').trim();if(!nm){setupErr='Escribe un nombre.';UI.focusName=1;render();return;}setupErr='';setupState.name=nm;newGame(nm,setupState.pos,setupState.tp,setupState.ts,setupState.nat,setupState.co,setupState.ver==='real',setupState.look);CUR=UI.newSlot||freeSlot()||1;saveNow();UI.comp=null;render();return;}
+ if(a==='start'){var nm=(($('#nm')?$('#nm').value:setupState.name)||'').trim();if(!nm){setupErr='Escribe un nombre.';setupState.step=2;UI.focusName=1;render();return;}setupErr='';setupState.name=nm;newGame(nm,setupState.pos,setupState.tp,setupState.ts,setupState.nat,setupState.co,setupState.ver==='real',setupState.look);CUR=UI.newSlot||freeSlot()||1;saveNow();UI.comp=null;render();return;}
  if(a==='ver'&&!S){setupState.ver=id;render();return;}
- if(!S){var M={menu:function(){UI.screen='menu';UI.delSlot=null;render();},newslot:function(){UI.newSlot=+id;UI.screen='new';setupErr='';render();},
+ if(a==='step'&&!S){var st=setupState;
+  if(n>st.step&&st.step<=2&&n>2&&!(st.name||'').trim()){st.step=2;setupErr='Escribe un nombre para seguir.';UI.focusName=1;render();return;}
+  setupErr='';st.step=n;st.maxStep=Math.max(st.maxStep||1,n);UI.lastScr='';render();var h=document.querySelector('.wizard h2');if(h){h.setAttribute('tabindex','-1');h.focus();}return;}
+ if(a==='trait'&&!S){var k=b.getAttribute('data-k');setupState[k]=id;if(k==='tp'&&setupState.ts===id)setupState.ts=null;render();return;}
+ if(!S){var M={menu:function(){UI.screen='menu';UI.delSlot=null;render();},newslot:function(){UI.newSlot=+id;UI.screen='new';setupErr='';setupState.step=1;setupState.maxStep=1;render();},
   slotopen:function(){openSlot(+id);},slotexp:function(){exportSlot(+id);},slotdel1:function(){UI.delSlot=+id;render();},slotdel0:function(){UI.delSlot=null;render();},
   slotdel2:function(){deleteSlot(+id);UI.delSlot=null;toast('Partida borrada.');render();}};
   if(M[a]){M[a]();return;}}

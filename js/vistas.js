@@ -359,7 +359,7 @@ function viewTrain(){
  S.skills.filter(function(k){return k.cat===S.cat;}).forEach(function(k){
   var cap=capFor(k),max=k.lvl>=cap,nd=need(k.lvl),cost=costFor(k,S.mult),pc=nd-k.prog,mark=tb(k.id)>0?'<span class="star" title="Rasgo">◆</span> ':'',gb=gearB(k.id);
   h+='<div class="sk"><button class="tr '+(max||S.money<pointCost(k,k.lvl)?'dis':'')+'" data-a="train" data-id="'+k.id+'" aria-label="Entrenar '+k.n+(max?' (al máximo)':' por '+fmt(cost))+'"><span class="star">★</span><span class="num">'+(max?'MAX':fmt(cost))+'</span></button>'+
-   '<div class="mid"><div class="nm">'+mark+k.n+' <span class="stars">'+stars(k.lvl)+'</span><span class="lv">Nv '+k.lvl+'/'+cap+'</span><span class="val num">★ '+Math.round(skVal(k))+(gb?' <span class="small good">(+'+gb+')</span>':'')+'</span></div>'+
+   '<div class="mid"><div class="nm">'+mark+k.n+' <span class="stars">'+stars(k.lvl)+'</span><span class="lv'+(traitCap(k.id).by&&traitCap(k.id).cap===cap?' lim':'')+'">Nv '+k.lvl+'/'+cap+(traitCap(k.id).by&&traitCap(k.id).cap===cap?' · límite por '+traitCap(k.id).by.n:'')+'</span><span class="val num">★ '+Math.round(skVal(k))+(gb?' <span class="small good">(+'+gb+')</span>':'')+'</span></div>'+
    '<div class="bar"><i style="width:'+(max?100:k.prog/nd*100)+'%"></i><span class="num">'+(max?'MAX':k.prog+'/'+nd)+'</span></div></div>'+
    '<button class="pr '+(max||S.medals<pc?'dis':'')+'" data-a="promo" data-id="'+k.id+'" aria-label="Subir '+k.n+' de nivel con '+(max?'medallas (al máximo)':pc+' medallas')+'"><span class="medal"></span><span class="num">'+(max?'-':pc)+'</span></button></div>';
  });
@@ -412,36 +412,80 @@ function modalHTML(){
 /* ---------- creación de carrera ---------- */
 var setupState={name:'',pos:'DC',tp:'',ts:'',nat:'ESP',co:'ESP',ver:'fic',look:null},setupErr='';
 var REAL_NOTE='Versión real: no es una versión comercial. Es solo para pruebas y uso particular. Los nombres de clubes y jugadores y los valores de mercado proceden de un dataset público (Kaggle, datos de Transfermarkt) y pertenecen a sus titulares. Las habilidades de cada jugador son estimaciones del juego.';
-function setupHTML(){
- var gk=setupState.pos==='POR',ts=TRAITS.filter(function(t){return !!t.gk===gk;});
- if(!ts.some(function(t){return t.id===setupState.tp;}))setupState.tp=ts[0].id;
- if(!ts.some(function(t){return t.id===setupState.ts;})||setupState.ts===setupState.tp)setupState.ts=ts.filter(function(t){return t.id!==setupState.tp;})[0].id;
- function opts(sel,ex){return ts.filter(function(t){return t.id!==ex;}).map(function(t){return '<option value="'+t.id+'"'+(t.id===sel?' selected':'')+'>'+t.n+'</option>';}).join('');}
- var groups=[['Portería',['POR']],['Defensa',['DFC','LI','LD']],['Medio campo',['MCD','MC','VI','VD','MP']],['Ataque',['SD','DC','EI','ED']]];
- var po=groups.map(function(g){return '<optgroup label="'+g[0]+'">'+g[1].map(function(c){return '<option value="'+c+'"'+(c===setupState.pos?' selected':'')+'>'+POS[c]+'</option>';}).join('')+'</optgroup>';}).join('');
- var na=NATIONS.slice().sort(function(a,b){return a.n.localeCompare(b.n);}).map(function(n){return '<option value="'+n.id+'"'+(n.id===setupState.nat?' selected':'')+'>'+n.n+'</option>';}).join('');
- var co=COUNTRIES.map(function(c){var low=c.lg[c.lg.length-1][0];return '<option value="'+c.id+'"'+(c.id===setupState.co?' selected':'')+'>'+c.n+' · empiezas en '+low+'</option>';}).join('');
- var a=traitById(setupState.tp),b=traitById(setupState.ts);
- if(!setupState.look)setupState.look=randomLook(setupState.pos);
- var hasReal=typeof REALDATA!=='undefined';if(!hasReal)setupState.ver='fic';var real=setupState.ver==='real';
- var verCard=function(id,tit,txt,dis){var on=setupState.ver===id;return '<button class="vcard'+(on?' on':'')+'" data-a="ver" data-id="'+id+'" aria-pressed="'+on+'"'+(dis?' disabled':'')+'><b>'+tit+'</b><span>'+txt+'</span></button>';};
- return '<div class="setup"><div class="setup-in">'+
-  '<div class="rowb"><div><h1>Nueva carrera</h1><p class="mut" style="margin:6px 0 0">Empiezas con 16 años en la cantera de un club modesto. Sube de categoría, ficha por grandes clubes, juega con tu selección y pelea por el Balón de Oro.</p></div><button class="go alt" data-a="menu">Volver</button></div>'+
-  '<section class="card"><h3>Versión</h3><div class="vcards">'+verCard('fic','Ficticia','Clubes con nombres inspirados en los reales y jugadores inventados.')+verCard('real','Real','Clubes, jugadores y valores de mercado reales de la temporada '+(hasReal?REALDATA.temporada:'')+'.',!hasReal)+'</div>'+
-  (!hasReal?'<p class="small mut">Versión real no disponible: genera js/datos-reales.js con tools/convertir-datos.ps1 (ver README).</p>':'')+
-  (real?'<p class="small notice"><b class="star">Aviso.</b> '+REAL_NOTE+' Las primeras divisiones de España, Inglaterra, Italia, Alemania, Francia, Portugal y Países Bajos son reales; las categorías inferiores e Irlanda son generadas.</p>':'')+'</section>'+
-  '<div class="setup-cols"><section class="card"><h3>Jugador</h3>'+
-  '<label for="nm">Nombre</label><input id="nm" maxlength="24" placeholder="Tu nombre" autocomplete="off" value="'+esc(setupState.name)+'" aria-describedby="nmerr">'+
-  (setupErr?'<p id="nmerr" class="bad small" role="alert">'+setupErr+'</p>':'<span id="nmerr"></span>')+
-  '<label for="na">Nacionalidad (tu selección)</label><select id="na">'+na+'</select>'+
-  '<label for="co">País donde empiezas</label><select id="co" aria-describedby="cohelp">'+co+'</select><p id="cohelp" class="small mut" style="margin:6px 0 0">Te toca un club al azar de la última división: será tu cantera.</p>'+
-  '<label for="ps">Posición</label><select id="ps">'+po+'</select>'+
-  '<label for="tp">Rasgo principal (+8 a sus habilidades)</label><select id="tp" aria-describedby="tphelp">'+opts(setupState.tp,'')+'</select><p id="tphelp" class="small mut" style="margin:6px 0 0">'+a.d+'</p>'+
-  '<label for="ts">Rasgo secundario (+4 a sus habilidades)</label><select id="ts" aria-describedby="tshelp">'+opts(setupState.ts,setupState.tp)+'</select><p id="tshelp" class="small mut" style="margin:6px 0 0">'+b.d+'</p>'+
-  '</section><section class="card"><div class="rowb"><h3 style="margin:0">Aspecto</h3><button class="chip" data-a="lookrnd">Aleatorio</button></div>'+lookEditor(setupState.look,'setup',{a:'#1565c0',b:'#ffffff',st:0})+'</section></div>'+
-  '<button class="go block big" data-a="start">Empezar carrera</button></div></div>';
+/* ---------- creación de carrera en 5 pasos ---------- */
+var SETUP_STEPS=['Versión','Datos','Rasgos','Aspecto','Resumen'];
+var FXTXT={rate:'mejor nota en cada partido',gs:'más goles',as:'más asistencias',fk:'opción de gol de falta en cada partido',cancel:'evitas goles del rival',team:'tu equipo rinde más contigo',drain:'te cansas mucho menos',big:'rindes mucho más en partidos importantes'};
+function skApprox(pos,id,lvl){var all=pos==='POR'?SKG:SKO,s=all.filter(function(x){return x[0]===id;})[0];if(!s)return null;return Math.round(28+2*skW(pos,id,s[2])+(lvl-1)*5);}
+function traitInfo(t,role,pos){
+ var bonus=role==='tp'?8:4,off=role==='tp'?0:2,all=(pos==='POR'?SKG:SKO).map(function(x){return x[0];});
+ var up=t.sk.filter(function(id){return all.indexOf(id)>=0;}).map(function(id){return SKNAME[id]+' +'+bonus;});
+ var fx=Object.keys(t.fx).filter(function(k){return FXTXT[k];}).map(function(k){return FXTXT[k];});
+ var lim=Object.keys(t.lim||{}).filter(function(id){return all.indexOf(id)>=0;}).map(function(id){var l=t.lim[id]+off;return SKNAME[id]+': máx. nivel '+l+' (≈'+skApprox(pos,id,l)+')';});
+ return {up:up,fx:fx,lim:lim,con:t.con};
 }
-/* ---------- menú de partidas ---------- */
+function traitCard(t,role){
+ var on=setupState[role]===t.id,other=role==='tp'?setupState.ts:setupState.tp,dis=other===t.id,I=traitInfo(t,role,setupState.pos);
+ return '<button class="tcard'+(on?' on':'')+'" data-a="trait" data-k="'+role+'" data-id="'+t.id+'" aria-pressed="'+on+'"'+(dis?' disabled title="Ya es tu otro rasgo"':'')+'>'+
+  '<b>'+t.n+'</b><span class="mut">'+t.d+'</span>'+
+  '<span class="tup"><i aria-hidden="true">▲</i> Mejora: '+I.up.join(', ')+(I.fx.length?'; '+I.fx.join(', '):'')+'.</span>'+
+  (I.lim.length||I.con?'<span class="tdown"><i aria-hidden="true">▼</i> Limita: '+I.lim.join(', ')+(I.lim.length&&I.con?'. ':'')+(I.con||'')+'</span>':'')+'</button>';
+}
+function traitConflicts(){
+ var a=traitById(setupState.tp),b=traitById(setupState.ts),out=[];if(!a||!b)return out;
+ a.sk.forEach(function(id){if(b.lim&&b.lim[id]!=null)out.push(SKNAME[id]+': '+a.n+' la mejora, pero '+b.n+' la limita a nivel '+(b.lim[id]+2)+'.');});
+ b.sk.forEach(function(id){if(a.lim&&a.lim[id]!=null)out.push(SKNAME[id]+': '+b.n+' la mejora, pero '+a.n+' la limita a nivel '+a.lim[id]+'.');});
+ return out;
+}
+function setupHTML(){
+ var st=setupState;if(!st.step)st.step=1;if(!st.maxStep)st.maxStep=1;
+ var gk=st.pos==='POR',ts=TRAITS.filter(function(t){return !!t.gk===gk;});
+ if(!ts.some(function(t){return t.id===st.tp;}))st.tp=ts[0].id;
+ if(!ts.some(function(t){return t.id===st.ts;})||st.ts===st.tp)st.ts=ts.filter(function(t){return t.id!==st.tp;})[0].id;
+ if(!st.look)st.look=randomLook(st.pos);
+ var hasReal=typeof REALDATA!=='undefined';if(!hasReal)st.ver='fic';var real=st.ver==='real';
+ var h='<div class="setup"><div class="setup-in">'+
+  '<div class="rowb"><h1>Nueva carrera</h1><button class="go alt" data-a="menu">Cancelar</button></div>'+
+  '<ol class="stepper" aria-label="Pasos">'+SETUP_STEPS.map(function(s,i){var n=i+1,cur=n===st.step,ok=n<=st.maxStep;return '<li><button data-a="step" data-n="'+n+'"'+(cur?' aria-current="step"':'')+(ok?'':' disabled')+' class="'+(cur?'cur':n<st.step?'done':'')+'"><span class="sn">'+n+'</span><span class="sl">'+s+'</span></button></li>';}).join('')+'</ol>';
+ h+='<section class="card wizard">';
+ if(st.step===1){
+  var verCard=function(id,tit,txt,dis){var on=st.ver===id;return '<button class="vcard'+(on?' on':'')+'" data-a="ver" data-id="'+id+'" aria-pressed="'+on+'"'+(dis?' disabled':'')+'><b>'+tit+'</b><span>'+txt+'</span></button>';};
+  h+='<h2>¿Con qué versión quieres jugar?</h2><div class="vcards">'+verCard('fic','Ficticia','Clubes con nombres inspirados en los reales y jugadores inventados.')+verCard('real','Real','Clubes, jugadores y valores de mercado reales'+(hasReal?' de la temporada '+REALDATA.temporada:'')+'.',!hasReal)+'</div>'+
+   (!hasReal?'<p class="small mut">Versión real no disponible en esta copia.</p>':'')+
+   (real?'<p class="small notice"><b class="star">Aviso.</b> '+REAL_NOTE+' Las primeras divisiones de España, Inglaterra, Italia, Alemania, Francia, Portugal y Países Bajos son reales; las categorías inferiores e Irlanda son generadas.</p>':'');
+ }
+ else if(st.step===2){
+  var groups=[['Portería',['POR']],['Defensa',['DFC','LI','LD']],['Medio campo',['MCD','MC','VI','VD','MP']],['Ataque',['SD','DC','EI','ED']]];
+  var po=groups.map(function(g){return '<optgroup label="'+g[0]+'">'+g[1].map(function(c){return '<option value="'+c+'"'+(c===st.pos?' selected':'')+'>'+POS[c]+'</option>';}).join('')+'</optgroup>';}).join('');
+  var na=NATIONS.slice().sort(function(a,b){return a.n.localeCompare(b.n);}).map(function(n){return '<option value="'+n.id+'"'+(n.id===st.nat?' selected':'')+'>'+n.n+'</option>';}).join('');
+  var co=COUNTRIES.map(function(c){var low=(real&&c.rn?c.rn[c.rn.length-1]:c.lg[c.lg.length-1][0]);return '<option value="'+c.id+'"'+(c.id===st.co?' selected':'')+'>'+c.n+' · empiezas en '+low+'</option>';}).join('');
+  h+='<h2>Tu jugador</h2><div class="formgrid"><div><label for="nm">Nombre</label><input id="nm" maxlength="24" placeholder="Tu nombre" autocomplete="off" value="'+esc(st.name)+'" aria-describedby="nmerr" aria-invalid="'+!!setupErr+'">'+
+   (setupErr?'<p id="nmerr" class="bad small" role="alert">'+setupErr+'</p>':'<span id="nmerr"></span>')+'</div>'+
+   '<div><label for="ps">Posición</label><select id="ps">'+po+'</select></div>'+
+   '<div><label for="na">Nacionalidad (tu selección)</label><select id="na">'+na+'</select></div>'+
+   '<div><label for="co">País donde empiezas</label><select id="co" aria-describedby="cohelp">'+co+'</select><p id="cohelp" class="small mut" style="margin:6px 0 0">Te toca un club al azar de la última división: será tu cantera.</p></div></div>';
+ }
+ else if(st.step===3){
+  var cf=traitConflicts();
+  h+='<h2>Rasgos especiales</h2><p class="mut small" style="margin-top:0">Cada rasgo te hace especial en algo y te limita en otra cosa. El principal da +8 a sus habilidades y el secundario +4. Las habilidades que no mejora ningún rasgo llegan como mucho al nivel 11 (el máximo es 14). Los límites del rasgo secundario son 2 niveles más suaves.</p>'+
+   '<h3>Rasgo principal</h3><div class="tcards">'+ts.map(function(t){return traitCard(t,'tp');}).join('')+'</div>'+
+   '<h3 style="margin-top:16px">Rasgo secundario</h3><div class="tcards">'+ts.map(function(t){return traitCard(t,'ts');}).join('')+'</div>'+
+   (cf.length?'<p class="small notice" role="status"><b class="star">Ojo.</b> '+cf.join(' ')+'</p>':'');
+ }
+ else if(st.step===4){
+  h+='<div class="rowb"><h2 style="margin:0">Aspecto</h2><button class="chip" data-a="lookrnd">Aleatorio</button></div>'+lookEditor(st.look,'setup',{a:'#1565c0',b:'#ffffff',st:0});
+ }
+ else{
+  var A=traitById(st.tp),B=traitById(st.ts),IA=traitInfo(A,'tp',st.pos),IB=traitInfo(B,'ts',st.pos),cf2=traitConflicts();
+  h+='<h2>Resumen</h2><div class="summary"><div class="lookfig">'+portraitSVG(st.look,{a:'#1565c0',b:'#ffffff',st:0},170)+'</div><div>'+
+   '<p style="margin:0"><b style="font-size:22px">'+esc(st.name||'Sin nombre')+'</b></p><p class="mut" style="margin:4px 0 12px">'+POS[st.pos]+' · '+nation(st.nat).n+' · empiezas en '+country(st.co).n+' · versión '+(real?'real':'ficticia')+'</p>'+
+   '<p style="margin:0 0 4px"><b>'+A.n+'</b> <span class="mut small">(principal)</span></p><p class="small" style="margin:0 0 4px"><span class="good">▲</span> '+IA.up.join(', ')+'</p>'+(IA.lim.length||IA.con?'<p class="small" style="margin:0 0 10px"><span class="bad">▼</span> '+IA.lim.join(', ')+(IA.con?' '+IA.con:'')+'</p>':'')+
+   '<p style="margin:0 0 4px"><b>'+B.n+'</b> <span class="mut small">(secundario)</span></p><p class="small" style="margin:0 0 4px"><span class="good">▲</span> '+IB.up.join(', ')+'</p>'+(IB.lim.length||IB.con?'<p class="small" style="margin:0"><span class="bad">▼</span> '+IB.lim.join(', ')+(IB.con?' '+IB.con:'')+'</p>':'')+
+   (cf2.length?'<p class="small notice">'+cf2.join(' ')+'</p>':'')+(real?'<p class="small notice">'+REAL_NOTE+'</p>':'')+'</div></div>';
+ }
+ h+='</section><div class="wiznav">'+(st.step>1?'<button class="go alt" data-a="step" data-n="'+(st.step-1)+'">Atrás</button>':'<span></span>')+
+  (st.step<5?'<button class="go" data-a="step" data-n="'+(st.step+1)+'">Siguiente: '+SETUP_STEPS[st.step]+'</button>':'<button class="go big" data-a="start">Empezar carrera</button>')+'</div></div></div>';
+ return h;
+}/* ---------- menú de partidas ---------- */
 function menuHTML(){
  if(!UI.booted)return '<div class="setup"><div class="setup-in"><p class="mut">Cargando partidas…</p></div></div>';
  var m=metaAll(),h='<div class="setup"><div class="setup-in">'+

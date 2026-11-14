@@ -63,31 +63,36 @@ function catName(c){if(S&&S.pos==='POR'){if(c==='def')return 'Portería';if(c===
 function newSkills(pos){return (pos==='POR'?SKG:SKO).map(function(s){var w=skW(pos,s[0],s[2]);return {id:s[0],n:s[1],cat:s[2],w:w,lvl:1,prog:0,pen:0,base:Math.round(22+Math.random()*12+w*2)};});}
 
 /* ---------- rasgos ---------- */
+/* Rasgos. sk: habilidades que mejora (+8 si es el principal, +4 si es el secundario) y que pueden llegar al nivel 14.
+   fx: efectos en partido. lim: habilidades que limita (nivel máximo; como secundario, 2 niveles más).
+   con: desventaja en partido, si la tiene. */
 var TRAITS=[
- {id:'reg',n:'Regateador excepcional',d:'Desborda con facilidad. Más ocasiones y mejor nota.',sk:['reg','ctl','agi'],fx:{rate:.2,gs:.1,as:.1}},
- {id:'tl',n:'Tirador de larga distancia',d:'Más goles desde fuera del área.',sk:['tir','fin'],fx:{gs:.25}},
- {id:'fk',n:'Lanzador de faltas',d:'Cada partido tienes opción de marcar de falta directa.',sk:['bpa','tir'],fx:{fk:1}},
- {id:'muro',n:'Muro de hierro',d:'Evitas goles rivales con más frecuencia.',sk:['mar','ent','fue'],fx:{cancel:.14}},
- {id:'mago',n:'Mago del balón',d:'Muchas más asistencias.',sk:['ctl','pas','vis'],fx:{as:.5}},
- {id:'killer',n:'Killer del área',d:'Más goles dentro del área.',sk:['fin','des','cab'],fx:{gs:.35}},
- {id:'rayo',n:'Velocista',d:'Ganas todas las carreras. Algo más de nota y asistencias.',sk:['ace','vel','agi'],fx:{rate:.15,as:.15}},
- {id:'aereo',n:'Rey del juego aéreo',d:'Dominas el área en el juego aéreo.',sk:['cab','sal','fue'],fx:{gs:.2,cancel:.06}},
- {id:'capi',n:'Líder nato',d:'Tu equipo juega mejor contigo en el campo.',sk:['lid','con','cfz'],fx:{team:1.5}},
- {id:'pulmon',n:'Pulmón infinito',d:'Te cansas mucho menos en cada partido.',sk:['res','fue'],fx:{drain:-.3,rate:.1}},
- {id:'pase',n:'Pase milimétrico',d:'Asistencias con pases largos y filtrados.',sk:['pal','vis','pas'],fx:{as:.4}},
- {id:'centr',n:'Centrador letal',d:'Tus centros acaban en gol.',sk:['cen','pal'],fx:{as:.45}},
- {id:'lector',n:'Lector del juego',d:'Te adelantas a las jugadas. Evitas goles y mejoras la nota.',sk:['ant','pos','dec'],fx:{cancel:.1,rate:.1}},
- {id:'grande',n:'Jugador de partidos grandes',d:'Subes tu nivel cuando más importa.',sk:['cfz','cst','dec'],fx:{rate:.25,big:.08}},
- {id:'gato',n:'Gato bajo palos',d:'Paradas imposibles. Evitas más goles.',gk:1,sk:['ref','agi','arr'],fx:{cancel:.15}},
- {id:'libero',n:'Portero líbero',d:'Juegas con los pies y mejoras tu nota.',gk:1,sk:['sac','pal','pas'],fx:{rate:.2}},
- {id:'paran',n:'Parapenaltis',d:'Dominas el uno contra uno.',gk:1,sk:['uno','ref','cfz'],fx:{cancel:.12}},
- {id:'gral',n:'General de la defensa',d:'Ordenas a tu defensa y mejora tu equipo.',gk:1,sk:['com','pos','aer'],fx:{cancel:.08,team:1.2}}
-];
-function traitById(id){return byId(TRAITS,id);}
+ {id:'reg',n:'Regateador excepcional',d:'Desborda con facilidad: más ocasiones y mejor nota.',sk:['reg','ctl','agi'],fx:{rate:.2,gs:.1,as:.1,inj:.3},lim:{fue:8,cab:8,mar:8},con:'Los rivales te entran más fuerte: más riesgo de lesión.'},
+ {id:'tl',n:'Tirador de larga distancia',d:'Más goles desde fuera del área.',sk:['tir','fin'],fx:{gs:.25},lim:{cab:8,des:9}},
+ {id:'fk',n:'Lanzador de faltas',d:'Cada partido tienes opción de marcar de falta directa.',sk:['bpa','tir'],fx:{fk:1},lim:{vel:9,ace:9}},
+ {id:'muro',n:'Muro de hierro',d:'Evitas goles rivales con más frecuencia.',sk:['mar','ent','fue'],fx:{cancel:.14},lim:{vel:8,ace:8,reg:7}},
+ {id:'mago',n:'Mago del balón',d:'Muchas más asistencias.',sk:['ctl','pas','vis'],fx:{as:.5},lim:{fue:7,ent:8,cab:8}},
+ {id:'killer',n:'Killer del área',d:'Más goles dentro del área.',sk:['fin','des','cab'],fx:{gs:.35},lim:{pal:8,vis:8,res:9}},
+ {id:'rayo',n:'Velocista',d:'Ganas todas las carreras. Algo más de nota y asistencias.',sk:['ace','vel','agi'],fx:{rate:.15,as:.15,inj:.2},lim:{fue:8,cab:8,vis:9},con:'Más lesiones musculares.'},
+ {id:'aereo',n:'Rey del juego aéreo',d:'Dominas el área en el juego aéreo.',sk:['cab','sal','fue'],fx:{gs:.2,cancel:.06},lim:{agi:8,ace:8,reg:8}},
+ {id:'capi',n:'Líder nato',d:'Tu equipo juega mejor contigo en el campo.',sk:['lid','con','cfz'],fx:{team:1.5,pressure:1},lim:{agi:9,ace:9},con:'Todo el mundo te mira: tras un mal partido la prensa y tu moral lo notan más.'},
+ {id:'pulmon',n:'Pulmón infinito',d:'Te cansas mucho menos en cada partido.',sk:['res','fue'],fx:{drain:-.3,rate:.1},lim:{reg:8,fin:9,tir:9}},
+ {id:'pase',n:'Pase milimétrico',d:'Asistencias con pases largos y filtrados.',sk:['pal','vis','pas'],fx:{as:.4},lim:{vel:9,fue:8,fin:9}},
+ {id:'centr',n:'Centrador letal',d:'Tus centros acaban en gol.',sk:['cen','pal'],fx:{as:.45},lim:{fin:8,cab:8}},
+ {id:'lector',n:'Lector del juego',d:'Te adelantas a las jugadas. Evitas goles y mejoras la nota.',sk:['ant','pos','dec'],fx:{cancel:.1,rate:.1},lim:{ace:8,vel:9}},
+ {id:'grande',n:'Jugador de partidos grandes',d:'Subes tu nivel en finales, eliminatorias, Europa y selección.',sk:['cfz','cst','dec'],fx:{big:.1,small:-.15},lim:{res:9},con:'Te cuesta concentrarte en partidos menores: algo menos de nota en ellos.'},
+ {id:'gato',n:'Gato bajo palos',d:'Paradas imposibles. Evitas más goles.',gk:1,sk:['ref','agi','arr'],fx:{cancel:.15},lim:{sac:8,pal:8,pas:8}},
+ {id:'libero',n:'Portero líbero',d:'Juegas con los pies y mejoras tu nota.',gk:1,sk:['sac','pal','pas'],fx:{rate:.2,risk:.04},lim:{aer:9,cap:9},con:'A veces te pillan fuera de la portería y encajas un gol.'},
+ {id:'paran',n:'Parapenaltis',d:'Dominas el uno contra uno.',gk:1,sk:['uno','ref','cfz'],fx:{cancel:.12},lim:{aer:8,com:9}},
+ {id:'gral',n:'General de la defensa',d:'Ordenas a tu defensa y mejora tu equipo.',gk:1,sk:['com','pos','aer'],fx:{cancel:.08,team:1.2},lim:{agi:8,ref:9}}
+];function traitById(id){return byId(TRAITS,id);}
 function trW(id){return S.tp===id?1:S.ts===id?0.5:0;}
 function tx(key){var s=0;TRAITS.forEach(function(t){var w=trW(t.id);if(w&&t.fx[key])s+=t.fx[key]*w;});return s;}
 function tb(id){var b=0;TRAITS.forEach(function(t){var w=trW(t.id);if(w&&t.sk.indexOf(id)>=0)b+=8*w;});return b;}
-function capFor(k){return tb(k.id)>0?MAXL:MAXL-3;}
+/* límite de nivel que imponen los rasgos a una habilidad: {cap, by} */
+function traitCapOf(tp,ts,id){var cap=MAXL,by=null;[[tp,0],[ts,2]].forEach(function(z){var t=traitById(z[0]);if(!t||!t.lim||t.lim[id]==null)return;var c=t.lim[id]+z[1];if(c<cap){cap=c;by=t;}});return {cap:cap,by:by};}
+function traitCap(id){return traitCapOf(S.tp,S.ts,id);}
+function capFor(k){return Math.min(tb(k.id)>0?MAXL:MAXL-3,traitCap(k.id).cap);}
 function traitDec(o){var b=0;TRAITS.forEach(function(t){var w=trW(t.id);if(w&&t.sk.some(function(id){return o.sk.indexOf(id)>=0;}))b+=0.06*w;});return Math.min(b,0.12);}
 function traitLine(){var a=traitById(S.tp),b=traitById(S.ts);return 'Rasgos: '+(a?a.n:'-')+' (principal) · '+(b?b.n:'-')+' (secundario)';}
 function defCat(pos){var w=CATW[pos],b=0;for(var i=1;i<5;i++)if(w[i]>=w[b])b=i;return ['men','fis','def','med','ata'][b];}
