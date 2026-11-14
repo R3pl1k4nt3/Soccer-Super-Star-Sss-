@@ -51,6 +51,8 @@ function render(){
  UI.lastTab=S.tab;
  /* mantener el foco del teclado tras repintar */
  if(fid){var sel='[data-a="'+fid[0]+'"]'+(fid[1]!=null?'[data-id="'+fid[1]+'"]':'');try{var el=document.querySelector('.modal '+sel)||document.querySelector('#view '+sel)||document.querySelector(sel);if(el)el.focus({preventScroll:true});}catch(x){}}
+ Array.prototype.forEach.call(document.querySelectorAll('.dis'),function(el){el.setAttribute('aria-disabled','true');});
+ Array.prototype.forEach.call(document.querySelectorAll('.bar'),function(el){el.setAttribute('aria-hidden','true');});
  var m=document.querySelector('.modal .card');if(m&&!m.contains(document.activeElement)){m.setAttribute('tabindex','-1');m.focus({preventScroll:true});}
 }
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&UI.sq){UI.sq=null;render();}});document.addEventListener('click',function(e){

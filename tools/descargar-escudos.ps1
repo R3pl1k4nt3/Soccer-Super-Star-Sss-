@@ -1,4 +1,4 @@
-# Descarga los escudos de los clubes de la versión real desde TheSportsDB (API v1 gratuita, clave pública 123)
+﻿# Descarga los escudos de los clubes de la versión real desde TheSportsDB (API v1 gratuita, clave pública 123)
 # y crea js/escudos-reales.js para que el juego los use. Solo para pruebas y uso particular: los escudos son de los clubes.
 # Uso (desde la carpeta del juego, después de convertir-datos.ps1):
 #   powershell -ExecutionPolicy Bypass -File tools\descargar-escudos.ps1
@@ -6,7 +6,7 @@
 param(
   [string]$Juego = (Join-Path $PSScriptRoot '..'),
   [string]$Clave = '123',
-  [double]$Pausa = 2.5
+  [double]$Pausa = 3
 )
 $ErrorActionPreference = 'Stop'
 $api = "https://www.thesportsdb.com/api/v1/json/$Clave"
@@ -23,7 +23,13 @@ Write-Host ("Clubes en el juego: {0}" -f $clubes.Count)
 $buscadas = @('Spanish La Liga','English Premier League','Italian Serie A','German Bundesliga','French Ligue 1','Portuguese Primeira Liga','Dutch Eredivisie',
   'Turkish Super Lig','Scottish Premier League','Belgian Pro League','Austrian Bundesliga','Greek Superleague Greece','Swiss Super League','Czech First League',
   'Danish Superliga','Norwegian Eliteserien','Swedish Allsvenskan','Croatian First Football League','Serbian Super Liga','Ukrainian Premier League','Polish Ekstraklasa','Romanian Liga I')
-function Get-Api($url) { Start-Sleep -Seconds $Pausa; return Invoke-RestMethod -Uri $url -UseBasicParsing -TimeoutSec 30 }
+function Get-Api($url) {
+  for ($i = 1; $i -le 4; $i++) {
+    Start-Sleep -Seconds $Pausa
+    try { return Invoke-RestMethod -Uri $url -UseBasicParsing -TimeoutSec 30 }
+    catch { if ($i -eq 4) { throw }; Write-Host "  La API pide esperar (límite de peticiones). Reintento en $(60*$i) s..."; Start-Sleep -Seconds (60*$i) }
+  }
+}
 $todas = (Get-Api "$api/all_leagues.php").leagues | Where-Object { $_.strSport -eq 'Soccer' }
 function Norm([string]$s) {
   $s = $s.Normalize([Text.NormalizationForm]::FormD) -replace '\p{Mn}', ''
@@ -35,6 +41,9 @@ function Score($a, $b) {
   $ta = (Norm $a) -split ' '; $tb = (Norm $b) -split ' '
   if (-not $ta -or -not $tb) { return 0 }
   $comun = @($ta | Where-Object { $tb -contains $_ }).Count
+  if (($ta -join ' ') -eq ($tb -join ' ')) { return 1 }
+  # todas las palabras del nombre más corto deben estar en el otro (evita 'Real Madrid' = 'Atlético Madrid')
+  if ($comun -lt [math]::Min($ta.Count, $tb.Count)) { return 0 }
   return $comun / [math]::Max($ta.Count, $tb.Count)
 }
 $equipos = @()
@@ -65,6 +74,27 @@ foreach ($c in $clubes) {
     $mapa[$c] = "escudos/$slug.png"
   } else { $sin += $c }
 }
+# segunda pasada: los que faltan se buscan uno a uno (la clave gratuita solo da 10 equipos por liga)
+$quedan = @()
+foreach ($c in $sin) {
+  $q = ($c -replace '\b(FC|CF|SC|AC|AS|AFC|SL|CD|UD|RCD|SSC|US|KV|RSC|KRC|GNK|HNK|FK|SK)\b', '' -replace '\s+', ' ').Trim()
+  try { $r = Get-Api ("$api/searchteams.php?t=" + [uri]::EscapeDataString($q)) } catch { $quedan += $c; continue }
+  $mejor = $null; $ms = 0
+  foreach ($e in @($r.teams)) {
+    if (-not $e -or $e.strSport -ne 'Soccer' -or -not $e.strBadge) { continue }
+    foreach ($x in (@($e.strTeam) + (@($e.strTeamAlternate) -split ','))) { if ($x) { $s = Score $c $x; if ($s -gt $ms) { $ms = $s; $mejor = $e } } }
+  }
+  if ($mejor -and $ms -ge 0.5) {
+    $slug = ((Norm $c) -replace ' ', '-'); if (-not $slug) { $slug = 'club' + $mapa.Count }
+    $archivo = Join-Path $dir "$slug.png"
+    if (-not (Test-Path $archivo)) {
+      try { Invoke-WebRequest -Uri ($mejor.strBadge + '/small') -OutFile $archivo -UseBasicParsing -TimeoutSec 30 }
+      catch { try { Invoke-WebRequest -Uri $mejor.strBadge -OutFile $archivo -UseBasicParsing -TimeoutSec 30 } catch { $quedan += $c; continue } }
+    }
+    $mapa[$c] = "escudos/$slug.png"
+  } else { $quedan += $c }
+}
+$sin = $quedan
 $js = "/* Generado por tools/descargar-escudos.ps1 desde TheSportsDB. Solo para pruebas y uso particular. Los escudos pertenecen a sus clubes. */`nvar ESCUDOS={" +
   (($mapa.Keys | ForEach-Object { '"' + ($_ -replace '"','\"') + '":"' + $mapa[$_] + '"' }) -join ",`n") + "};`n"
 [IO.File]::WriteAllText((Join-Path $Juego 'js\escudos-reales.js'), $js, (New-Object Text.UTF8Encoding $false))

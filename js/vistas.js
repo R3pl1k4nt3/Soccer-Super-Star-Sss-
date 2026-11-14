@@ -6,7 +6,7 @@ function myClub(){return S.clubs[S.pl[S.me].c];}
 function natName(id){var n=nation(id);return n?n.n:id;}
 function teamN(id,nat){return nat?natName(id):S.clubs[id].n;}
 function pName(p){return p.me?esc(S.name)+' (tú)':esc(p.n);}
-function chip(on,a,id,txt,n){return '<button class="chip '+(on?'on':'')+'" data-a="'+a+'"'+(id!=null?' data-id="'+esc(id)+'"':'')+(n!=null?' data-n="'+n+'"':'')+'>'+txt+'</button>';}
+function chip(on,a,id,txt,n){return '<button class="chip '+(on?'on':'')+'" aria-pressed="'+!!on+'" data-a="'+a+'"'+(id!=null?' data-id="'+esc(id)+'"':'')+(n!=null?' data-n="'+n+'"':'')+'>'+txt+'</button>';}
 
 /* ---------- Partido ---------- */
 function pressCard(){
@@ -331,7 +331,7 @@ function viewShop(){
 /* ---------- Carrera ---------- */
 function viewCareer(){
  var st=S.stats,me=S.pl[S.me];
- var h='<div class="card"><div class="rowb"><h3 style="margin:0">Tu aspecto</h3><button class="chip" data-a="lookedit" aria-expanded="'+(!!UI.lookEdit)+'">'+(UI.lookEdit?'Cerrar editor':'Cambiar aspecto')+'</button></div>'+(UI.lookEdit?lookEditor(S.look,'game',clubColors(myClub())):'<div style="display:flex;justify-content:center">'+avatarSVG(S.look,clubColors(myClub()),130)+'</div>')+'</div>';
+ var h='<div class="card"><div class="rowb"><h3 style="margin:0">Tu aspecto</h3><button class="chip" data-a="lookedit" aria-expanded="'+(!!UI.lookEdit)+'">'+(UI.lookEdit?'Cerrar editor':'Cambiar aspecto')+'</button></div>'+(UI.lookEdit?lookEditor(S.look,'game',clubColors(myClub())):'<div class="lookfig" style="flex-direction:row;justify-content:center">'+portraitSVG(S.look,clubColors(myClub()),180,'Retrato de '+S.name)+bodySVG(S.look,clubColors(myClub()),84)+'</div>')+'</div>';
  h+='<div class="card"><h3>'+esc(S.name)+'</h3><div class="small mut">'+POS[S.pos]+' · '+S.age+' años · '+natName(me.nat)+' · '+esc(myClub().n)+'</div><div class="small" style="margin-top:4px;color:var(--gold)">'+traitLine()+'</div>'+
   '<div class="kv"><div><b class="num">'+st.pj+'</b><span>Partidos</span></div><div><b class="num">'+(S.pos==='POR'?st.sv:st.g)+'</b><span>'+(S.pos==='POR'?'Paradas':'Goles')+'</span></div><div><b class="num">'+(S.pos==='POR'?st.cs:st.a)+'</b><span>'+(S.pos==='POR'?'Porterías a cero':'Asistencias')+'</span></div>'+
   '<div><b class="num">'+(st.rn?ds(st.rsum/st.rn):'-')+'</b><span>Nota media</span></div><div><b class="num">'+S.trophies.filter(function(t){return t.k!=='ind';}).length+'</b><span>Títulos</span></div><div><b class="num">'+S.trophies.filter(function(t){return t.k==='ind';}).length+'</b><span>Premios</span></div><div><b class="num good">'+fmv(mv(me))+'</b><span>Valor de mercado</span></div></div></div>';
@@ -351,17 +351,17 @@ function viewCareer(){
 /* ---------- Entreno ---------- */
 function viewTrain(){
  var ov=overall(),a=traitById(S.tp),b=traitById(S.ts);
- var h='<div class="card"><div class="rowb"><b>Valoración total</b><b class="star num">★ '+ds(ov)+'</b></div><div class="bar big"><i style="width:'+clamp(ov,0,100)+'%"></i></div>'+
+ var h='<div class="card wide"><div class="rowb"><b>Valoración total</b><b class="star num">★ '+ds(ov)+'</b></div><div class="bar big"><i style="width:'+clamp(ov,0,100)+'%"></i></div>'+
   '<div class="small mut" style="margin-top:8px"><span class="star">◆</span> '+(a?a.n:'-')+' (+8) · <span class="star">◆</span> '+(b?b.n:'-')+' (+4). Las demás habilidades llegan hasta el nivel '+(MAXL-3)+'. El material suma aparte.</div>'+
   '<div class="mults">Puntos por pulsación: '+[1,5,25].map(function(m){return chip(S.mult===m,'mult',null,'×'+m,m);}).join('')+'</div></div>';
  h+='<div class="card wide"><div class="cats" role="group" aria-label="Categoría">'+CATS.filter(function(c){return catAvg(c[0])>0;}).map(function(c){return chip(S.cat===c[0],'cat',c[0],catName(c[0])+' <span class="num">'+Math.round(catAvg(c[0]))+'</span>');}).join('')+'</div>';
  h+='<div class="hdr"><span>Entrenar</span><span>Habilidad</span><span>Promoción</span></div>';
  S.skills.filter(function(k){return k.cat===S.cat;}).forEach(function(k){
   var cap=capFor(k),max=k.lvl>=cap,nd=need(k.lvl),cost=costFor(k,S.mult),pc=nd-k.prog,mark=tb(k.id)>0?'<span class="star" title="Rasgo">◆</span> ':'',gb=gearB(k.id);
-  h+='<div class="sk"><button class="tr '+(max||S.money<pointCost(k,k.lvl)?'dis':'')+'" data-a="train" data-id="'+k.id+'"><span class="star">★</span><span class="num">'+(max?'MAX':fmt(cost))+'</span></button>'+
+  h+='<div class="sk"><button class="tr '+(max||S.money<pointCost(k,k.lvl)?'dis':'')+'" data-a="train" data-id="'+k.id+'" aria-label="Entrenar '+k.n+(max?' (al máximo)':' por '+fmt(cost))+'"><span class="star">★</span><span class="num">'+(max?'MAX':fmt(cost))+'</span></button>'+
    '<div class="mid"><div class="nm">'+mark+k.n+' <span class="stars">'+stars(k.lvl)+'</span><span class="lv">Nv '+k.lvl+'/'+cap+'</span><span class="val num">★ '+Math.round(skVal(k))+(gb?' <span class="small good">(+'+gb+')</span>':'')+'</span></div>'+
    '<div class="bar"><i style="width:'+(max?100:k.prog/nd*100)+'%"></i><span class="num">'+(max?'MAX':k.prog+'/'+nd)+'</span></div></div>'+
-   '<button class="pr '+(max||S.medals<pc?'dis':'')+'" data-a="promo" data-id="'+k.id+'"><span class="medal"></span><span class="num">'+(max?'-':pc)+'</span></button></div>';
+   '<button class="pr '+(max||S.medals<pc?'dis':'')+'" data-a="promo" data-id="'+k.id+'" aria-label="Subir '+k.n+' de nivel con '+(max?'medallas (al máximo)':pc+' medallas')+'"><span class="medal"></span><span class="num">'+(max?'-':pc)+'</span></button></div>';
  });
  h+='<div class="bono"><div class="mid"><div class="rowb"><b>Bono '+(S.pos==='POR'?'1v1':'de duelo')+'</b><span class="good num">+'+S.bono+' / 70</span></div><div class="bar big"><i style="width:'+(S.bono/70*100)+'%"></i></div><div class="small mut" style="margin-top:4px">Mejora tu nota en cada partido. Cada subida suma 2.</div></div>'+
   '<button class="go" data-a="bono">'+(S.bono>=70?'MAX':fmt(bonoCost()))+'</button></div></div>';

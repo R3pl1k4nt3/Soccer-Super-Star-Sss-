@@ -211,3 +211,16 @@ tr:hover td{background:rgba(148,163,184,.07)}
 .clublnk{display:inline-flex;align-items:center;gap:8px;text-decoration:none}
 .clublnk span{text-decoration:underline dotted rgba(159,176,200,.6);text-underline-offset:3px}
 .vs b .crest{margin-bottom:4px}
+/* el editor de aspecto se adapta al ancho de su tarjeta */
+.card{container-type:inline-size}
+@container (max-width:680px){.look{grid-template-columns:1fr}.lookfig{position:static;flex-direction:row;justify-content:center}.lookrow{grid-template-columns:1fr;gap:6px}}
+@media (min-width:900px){.setup-cols{grid-template-columns:minmax(300px,380px) 1fr}}
+/* escritorio: columnas tipo masonry (sin huecos entre tarjetas de distinta altura) */
+@media (min-width:1024px){
+ .page{display:block;column-count:2;column-gap:18px}
+ .page>*{break-inside:avoid;margin:0 0 18px;width:100%}
+ .page>.cats,.page>.wide>.cats{display:flex}
+ .page>.wide,.page>.pagehead{column-span:all}
+ .page>.pagehead{display:flex}
+}
+@media (min-width:1500px){.page{column-count:3}}
