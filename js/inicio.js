@@ -9,6 +9,7 @@ var SUBS={
 /* pestañas antiguas (partidas guardadas) → pestaña y sección nuevas */
 var OLDTAB={train:['player','train'],shop:['player','shop'],comp:['career','comp'],club:['career','club'],money:['life','money']};
 function normTab(){
+ if(S.pot==null||S.val==null)initProgress();
  if(OLDTAB[S.tab]){var o=OLDTAB[S.tab];S.tab=o[0];subSet(o[0],o[1]);}
  if(S.tab==='career'&&!S.sub)subSet('career','hist');
  if(['home','match','player','career','life'].indexOf(S.tab)<0)S.tab='home';

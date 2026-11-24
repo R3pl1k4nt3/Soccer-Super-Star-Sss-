@@ -20,7 +20,7 @@ function decisionCard(){
  var M=S.match,d=nextDec(M),sc=scoreAt(M,d.min),main=S.pl[d.main];
  var h='<div class="card wide hl"><div class="rowb"><h3 style="margin:0">Minuto '+d.min+"'"+(d.dec?' · <span class="bad">JUGADA DECISIVA</span>':'')+'</h3><b class="num">'+esc(M.hn)+' '+sc[0]+' - '+sc[1]+' '+esc(M.an)+'</b></div>';
  h+='<p style="margin:8px 0 4px">'+d.sit+'</p><div class="small" style="margin-bottom:10px">Te enfrentas a <b class="star">'+esc(main.n)+'</b> <span class="mut">('+POS[main.p]+', '+main.a+' años, valoración '+main.o+')</span>'+(d.dec?'. Si sale bien o mal, pesa el doble en tu nota y en el resultado.':'')+'</div>';
- h+='<div class="duel"><div>';
+ h+='<div class="duel"><div>'+pitchSVG(M,d)+momentumBar(M,d);
  d.opts.forEach(function(o,i){var pr=duelP(o),rk=['bajo','medio','alto'][o.rk],op=S.pl[o.op];
   var mine=o.sk.map(function(id){return (SKNAME[id]||id)+' '+Math.round(skv(id));}).join(' · ');
   var his=oppVals(o).map(function(x){return x[0]+' '+x[1];}).join(' · ');
@@ -81,7 +81,7 @@ function viewMatch(){
  else h+='<div class="btns" style="margin-top:12px"><button class="go full" data-a="play" data-n="1">'+(S.injured>0?'Descansar':'Jugar siguiente partido')+'</button><button class="go alt" data-a="play" data-n="5">Jugar 5 partidos</button><button class="go alt" data-a="play" data-n="99">Hasta fin de temporada</button></div></div>';
  var r=S.last;
  if(r){
-  h+='<div class="card"><h3>Último partido · '+esc(r.comp)+'</h3><div class="vs"><b>'+esc(r.home)+'</b><span class="score num">'+r.gh+' - '+r.ga+'</span><b>'+esc(r.away)+'</b></div>'+(r.pw?'<div class="small mut" style="text-align:center">Gana en los penaltis '+esc(r.pw==='h'?r.home:r.away)+'</div>':'');
+  h+='<div class="card"><h3>Último partido · '+esc(r.comp)+'</h3>'+(r.moments&&r.moments.length?r.moments.map(function(x){return '<div class="moment '+(x.k==='star'?'mstar':'mblack')+'"><b>'+(x.k==='star'?'★ Momento estrella':'✖ Momento negro')+'</b> '+esc(x.t)+'</div>';}).join(''):'')+'<div class="vs"><b>'+esc(r.home)+'</b><span class="score num">'+r.gh+' - '+r.ga+'</span><b>'+esc(r.away)+'</b></div>'+(r.pw?'<div class="small mut" style="text-align:center">Gana en los penaltis '+esc(r.pw==='h'?r.home:r.away)+'</div>':'');
   h+='<div class="small mut" style="text-align:center">'+(r.role==='titular'?'Titular, 90 minutos':r.role==='suplente'?'Entras de suplente, '+r.mins+' minutos':r.role==='lesionado'?'Lesionado, no juegas':'No juegas, estás en el banquillo')+'</div>';
   r.evs.forEach(function(e){h+='<div class="ev"><b class="num">'+e.min+"'</b><span class='"+(e.me?'me':'')+"'>"+e.txt+'</span></div>';});
   if(r.decs&&r.decs.length){h+='<h3 style="margin-top:10px">Tus duelos</h3>';r.decs.forEach(function(d){h+='<div class="ev"><b class="num">'+d.min+"'</b><span>"+(d.dec?'<span class="star">◆</span> ':'')+d.n+': <b class="'+(d.ok?'good':'bad')+'">'+esc(d.res)+'</b></span></div>';});}
@@ -333,7 +333,7 @@ function viewShop(){
 /* ---------- Carrera ---------- */
 function viewCareer(){
  var st=S.stats,me=S.pl[S.me];
- var h='';
+ var h=progressCard()+momentsCard();
  h+='<div class="card"><h3>'+esc(S.name)+'</h3><div class="small mut">'+POS[S.pos]+' · '+S.age+' años · '+natName(me.nat)+' · '+esc(myClub().n)+'</div><div class="small" style="margin-top:4px;color:var(--gold)">'+traitLine()+'</div>'+
   '<div class="kv"><div><b class="num">'+st.pj+'</b><span>Partidos</span></div><div><b class="num">'+(S.pos==='POR'?st.sv:st.g)+'</b><span>'+(S.pos==='POR'?'Paradas':'Goles')+'</span></div><div><b class="num">'+(S.pos==='POR'?st.cs:st.a)+'</b><span>'+(S.pos==='POR'?'Porterías a cero':'Asistencias')+'</span></div>'+
   '<div><b class="num">'+(st.rn?ds(st.rsum/st.rn):'-')+'</b><span>Nota media</span></div><div><b class="num">'+S.trophies.filter(function(t){return t.k!=='ind';}).length+'</b><span>Títulos</span></div><div><b class="num">'+S.trophies.filter(function(t){return t.k==='ind';}).length+'</b><span>Premios</span></div><div><b class="num good">'+fmv(mv(me))+'</b><span>Valor de mercado</span></div></div></div>';
@@ -355,6 +355,7 @@ function viewTrain(){
  var ov=overall(),a=traitById(S.tp),b=traitById(S.ts);
  var h='<div class="card wide"><div class="rowb"><b>Valoración total</b><b class="star num">★ '+ds(ov)+'</b></div><div class="bar big"><i style="width:'+clamp(ov,0,100)+'%"></i></div>'+
   '<div class="small mut" style="margin-top:8px"><span class="star">◆</span> '+(a?a.n:'-')+' (+8) · <span class="star">◆</span> '+(b?b.n:'-')+' (+4). Las demás habilidades llegan hasta el nivel '+(MAXL-3)+'. El material suma aparte.</div>'+
+  '<div class="small" style="margin-top:8px">Potencial: <b>'+potBand()+'</b> · '+growthTxt()+' · forma: '+formTxt()+'</div>'+((S.weekTrain||0)>0?'<div class="small warn">Has entrenado '+S.weekTrain+' puntos esta semana: cada punto extra cuesta un 4 % más hasta la semana que viene. Jugar hace crecer más que entrenar.</div>':'')+
   '<div class="mults">Puntos por pulsación: '+[1,5,25].map(function(m){return chip(S.mult===m,'mult',null,'×'+m,m);}).join('')+'</div></div>';
  h+='<div class="card wide"><div class="cats" role="group" aria-label="Categoría">'+CATS.filter(function(c){return catAvg(c[0])>0;}).map(function(c){return chip(S.cat===c[0],'cat',c[0],catName(c[0])+' <span class="num">'+Math.round(catAvg(c[0]))+'</span>');}).join('')+'</div>';
  h+='<div class="hdr"><span>Entrenar</span><span>Habilidad</span><span>Promoción</span></div>';
@@ -503,4 +504,43 @@ function menuHTML(){
   '<label class="go alt filebtn" style="margin:0">Importar partida<input id="imp" type="file" accept=".json,application/json" class="sr"></label></div></section>'+
   '<p class="small mut">Versión ficticia con clubes inspirados en los reales. La versión real es solo para pruebas y uso particular, no comercial.</p></div></div>';
  return h;
+}
+
+/* ---------- Trayectoria: valor, potencial y momentos ---------- */
+function progressCard(){
+ var me=S.pl[S.me],last=(S.vhist||[]).slice(-2),d=last.length===2?last[1].v-last[0].v:0;
+ return '<div class="card wide"><h3>Valor y progresión</h3><div class="kv"><div><b class="num good">'+fmv(mv(me))+'</b><span>Valor de mercado'+(d?' ('+(d>0?'+':'−')+fmv(Math.abs(d))+')':'')+'</span></div>'+
+  '<div><b class="num star">'+ds(overall())+'</b><span>Valoración</span></div><div><b>'+potBand()+'</b><span>Potencial</span></div><div><b>'+growthTxt()+'</b><span>Crecimiento a los '+S.age+' años</span></div><div><b>'+formTxt()+'</b><span>Forma (últimos 5)</span></div></div>'+
+  '<p class="small mut">El valor se actualiza a final de cada mes según tu nivel, edad, forma, minutos, fama, selección, premios, contrato y tus momentos estrella o negros. Creces sobre todo jugando: rápido hasta los 23, estable hasta los 28 y cada vez menos después. Cerca de tu potencial cuesta mucho más mejorar.</p>'+valueChart()+'</div>';
+}
+function momentsCard(){
+ var M=S.moments||[];
+ return '<div class="card"><h3>Momentos de mi carrera</h3>'+(M.length?M.slice(0,15).map(function(x){return '<div class="ev"><b class="num" style="min-width:40px">T'+x.s+'</b><span class="'+(x.k==='star'?'star':'bad')+'">'+(x.k==='star'?'★ ':'✖ ')+'</span><span>'+esc(x.t)+'</span></div>';}).join(''):'<p class="small mut">Tus debuts, goles decisivos, hat-tricks, títulos, penaltis y errores importantes aparecerán aquí.</p>')+'</div>';
+}
+/* ---------- partido visual: minicampo de la jugada y dominio ---------- */
+var PITCH_X={POR:8,DEF:28,MED:52,DEL:76};
+function pitchSVG(M,d){
+ var W=320,H=200,me=S.pl[S.me],P=POSD[S.pos],line=P.line,att=d.opts.filter(function(o){return o.ef==='att';}).length>=d.opts.length/2;
+ var side=/I$/.test(S.pos)?-1:/D$/.test(S.pos)&&S.pos!=='MCD'?1:0;
+ var x=att?{POR:20,DEF:62,MED:72,DEL:84}[line]:{POR:8,DEF:18,MED:32,DEL:45}[line],y=50+side*30+((hashStr(d.sit)%9)-4);
+ var mx=W*x/100,my=H*y/100,ox=mx+(att?28:-28),oy=my+(att?-8:8),main=S.pl[d.main],kit=clubColors(myClub());
+ var tx=att?W-6:6,ty=H/2;
+ var h='<svg class="pitch" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Jugada: tú contra '+esc(main.n)+(att?', atacando':', defendiendo')+'">'+
+  '<defs><pattern id="grass" width="40" height="'+H+'" patternUnits="userSpaceOnUse"><rect width="20" height="'+H+'" fill="#1f7a46"/><rect x="20" width="20" height="'+H+'" fill="#23884e"/></pattern><marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#fff"/></marker></defs>'+
+  '<rect width="'+W+'" height="'+H+'" rx="10" fill="url(#grass)"/>'+
+  '<g fill="none" stroke="rgba(255,255,255,.7)" stroke-width="1.5"><rect x="6" y="6" width="'+(W-12)+'" height="'+(H-12)+'"/><line x1="'+W/2+'" y1="6" x2="'+W/2+'" y2="'+(H-6)+'"/><circle cx="'+W/2+'" cy="'+H/2+'" r="24"/>'+
+  '<rect x="6" y="'+(H/2-40)+'" width="44" height="80"/><rect x="'+(W-50)+'" y="'+(H/2-40)+'" width="44" height="80"/><rect x="6" y="'+(H/2-16)+'" width="14" height="32"/><rect x="'+(W-20)+'" y="'+(H/2-16)+'" width="14" height="32"/></g>'+
+  '<line x1="'+mx+'" y1="'+my+'" x2="'+(att?tx:mx-40)+'" y2="'+(att?ty:my)+'" stroke="#fff" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#arr)" opacity=".85"/>'+
+  '<g><circle cx="'+ox+'" cy="'+oy+'" r="11" fill="#e53935" stroke="#fff" stroke-width="2"/><text x="'+ox+'" y="'+(oy+4)+'" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">'+esc(main.p)+'</text></g>'+
+  '<g class="mepin"><circle cx="'+mx+'" cy="'+my+'" r="13" fill="'+kit.a+'" stroke="#f5c542" stroke-width="3"/><text x="'+mx+'" y="'+(my+4)+'" text-anchor="middle" font-size="11" font-weight="700" fill="'+kit.b+'">'+(S.look&&S.look.num||10)+'</text></g>'+
+  '<circle cx="'+(mx+(att?10:-10))+'" cy="'+(my+11)+'" r="4.5" fill="#fff" stroke="#111"/>'+
+  '<text x="10" y="'+(H-12)+'" font-size="11" fill="rgba(255,255,255,.85)">'+(att?'Atacas →':'← Defiendes')+'</text>'+
+  '<text x="'+(W-10)+'" y="'+(H-12)+'" text-anchor="end" font-size="11" fill="rgba(255,255,255,.85)">Min '+d.min+"'</text></svg>";
+ return h;
+}
+/* dominio: fuerza de los equipos y marcador en ese minuto */
+function momentumBar(M,d){
+ var sc=scoreAt(M,d.min),my=M.home?M.hs:M.as,op=M.home?M.as:M.hs,diff=(M.home?sc[0]-sc[1]:sc[1]-sc[0]);
+ var v=clamp(50+(my-op)*1.2+diff*8,8,92);
+ return '<div class="mom" aria-label="Dominio del partido: '+Math.round(v)+' % tu equipo"><div class="rowb small"><span>Tu equipo</span><span class="mut">Dominio</span><span>Rival</span></div><div class="mombar"><i style="width:'+v+'%"></i></div></div>';
 }

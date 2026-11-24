@@ -293,3 +293,15 @@ tr:hover td{background:rgba(148,163,184,.07)}
  .hero2{grid-template-columns:90px 1fr 220px}.hfig svg{width:90px;height:99px}.hbars{grid-column:auto}
  .modal .card{max-height:96vh}
 }
+.moment{margin:6px 0;padding:8px 12px;border-radius:10px;font-size:14px}
+.moment.mstar{background:rgba(245,197,66,.12);border:1px solid rgba(245,197,66,.5)}
+.moment.mstar b{color:var(--gold)}
+.moment.mblack{background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.45)}
+.moment.mblack b{color:var(--bad)}
+.chart{width:100%;height:auto;margin-top:8px;background:var(--s2);border-radius:10px}
+.pitch{width:100%;height:auto;border-radius:10px;display:block;margin-bottom:8px}
+.pitch .mepin{animation:pulse 1.6s ease-in-out infinite;transform-origin:center;transform-box:fill-box}
+@keyframes pulse{50%{transform:scale(1.12)}}
+.mom{margin:4px 0 12px}
+.mombar{height:8px;border-radius:999px;background:#e53935;overflow:hidden;margin-top:4px}
+.mombar i{display:block;height:100%;background:var(--acc)}

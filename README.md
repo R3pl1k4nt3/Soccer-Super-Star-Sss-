@@ -64,6 +64,13 @@ Al abrir el juego aparece el **menú de partidas**: tres huecos para tener varia
 - **Aspecto del jugador:** piel, cara, ojos, cejas, pelo, barba, complexión, camiseta por dentro o por fuera, manga, altura de las medias, cinta, muñequera y dorsal. Se cambia en cualquier momento desde Carrera. La altura y los tatuajes se eligen al crear el jugador: luego se pueden añadir tatuajes, pero no quitar.
 - **Cantera y relevo generacional:** cada verano cada club sube de 1 a 3 juveniles; los veteranos se retiran según edad y nivel, y las plantillas se mantienen entre 22 y 26 jugadores.
 - **Diseño adaptable:** en ordenador, menú lateral y contenido en columnas; en tablet y móvil, barra superior y pestañas abajo.
+- **Inicio y bandeja:** resumen del jugador (valoración, valor, forma, energía, moral), próximo partido, todo lo pendiente (jugadas, prensa, eventos, ofertas, marcas, acciones) y novedades sin leer. Cinco pestañas: Inicio, Partido, Jugador (entreno, material, aspecto), Carrera (club, competiciones, trayectoria) y Vida (relaciones y redes, negocio).
+- **Acciones con límites:** consejo del entrenador cada 4 semanas, cena de equipo cada 8, mejora de contrato una vez por temporada y con el mercado abierto, pedir minutos solo si juegas poco; entrevistas y polémicas rinden menos si se repiten.
+- **Progresión realista:** potencial oculto (se ve como un rango), crecimiento rápido hasta los 23, estable hasta los 28 y menor después; cerca del techo cuesta más; jugar hace crecer más que entrenar (cada punto entrenado en la misma semana cuesta un 4 % más). La forma (últimas 5 notas) afecta a la nota, a la titularidad y al valor.
+- **Valor de mercado mensual** con aviso de subidas y bajadas y gráfico de evolución en Trayectoria.
+- **Momentos estrella y momentos negros:** debut, primer gol, hat-trick, gol decisivo, títulos, partido perfecto, penalti decisivo en una tanda, jugada decisiva fallada, expulsión… Suben o bajan tu valor, seguidores, moral y relación con la prensa, y quedan en «Momentos de mi carrera».
+- **Partido más visual:** minicampo con tu posición, el rival del duelo y la dirección de la jugada, y barra de dominio.
+- **Móvil en horizontal:** menú lateral de iconos y contenido a dos columnas; la jugada y la ficha del rival, lado a lado.
 - **Relaciones, moral, eventos, economía, envejecimiento y retirada.**
 
 ## Estructura del repositorio
@@ -89,6 +96,9 @@ Al abrir el juego aparece el **menú de partidas**: tres huecos para tener varia
 | `js/entorno.js` | Representante, redes, material, patrocinios, prensa, eventos y dinero |
 | `js/vistas.js` | Pantallas |
 | `js/app.js` | Pintado y eventos |
+| `js/inicio.js` | Pestaña Inicio, bandeja y secciones agrupadas |
+| `js/progresion.js` | Potencial, curva de edad, forma, valor mensual, momentos y gráfico |
+| `diseno/` | Encargos (prompts, guía de estilo e inventario) para pedir gráficos a herramientas de diseño |
 | `TECNOLOGIA.md` | Arquitectura, modelo de datos y fórmulas |
 | `tests/bot.js` | Bot que juega carreras completas |
 | `tests/simulacion.js` | Ejecuta el bot en Node con varias posiciones y países |

@@ -121,7 +121,7 @@ function oppVals(o){var p=S.pl[o.op];return o.ok.map(function(id){return [SKNAME
 
 /* rol del jugador en el partido */
 function rivalFor(c){var best=null,g=posGroup(S.pos);c.ros.forEach(function(id){var p=S.pl[id];if(p.me)return;if(posGroup(p.p)===g&&(!best||p.o>best.o))best=p;});return best;}
-function starterP(c){var rv=rivalFor(c),ref=rv?rv.o:c.str+2;return clamp(0.5+(overall()-ref+4)/22+(S.rel.coach-50)*0.004+(S.moral-50)*0.002,0.04,1);}
+function starterP(c){var rv=rivalFor(c),ref=rv?rv.o:c.str+2;return clamp(0.5+(overall()-ref+4)/22+(S.rel.coach-50)*0.004+(S.moral-50)*0.002+formF()*0.04,0.04,1);}
 function ntStarterP(){var me=S.pl[S.me],pool=natPool(me.nat).map(function(i){return S.pl[i];}).filter(function(p){return posGroup(p.p)===posGroup(S.pos);});
  var ref=pool.length?pool[0].o:nation(me.nat).str-6;return clamp(0.5+(overall()-ref+2)/14,0.05,0.97);}
 
@@ -178,7 +178,8 @@ function resolveDec(M,d,oi){
    else if(Math.random()<[0.2,0.35,0.5][o.rk]){d.res='Frenas a '+opp.n+' y evitas una ocasión clara';M.dgc=(M.dgc||0)+1;}
    else d.res='Ganas el duelo a '+opp.n;}}
  else{M.dr-=LOSS[o.rk]*mult;d.res=opp.n+' te gana el duelo';
-  if(o.ef==='def'&&o.rk===2&&Math.random()<0.3){M.ev.push({min:d.min,side:os,sc:o.op,as:-1,pen:1});d.res='Penalti en contra: lo marca '+opp.n;}
+  if(o.ef==='def'&&o.rk===2&&!M.red&&Math.random()<0.07){M.red=d.min;d.res='Entrada a destiempo: tarjeta roja';}
+  else if(o.ef==='def'&&o.rk===2&&Math.random()<0.3){M.ev.push({min:d.min,side:os,sc:o.op,as:-1,pen:1});d.res='Penalti en contra: lo marca '+opp.n;}
   else if(o.ef==='def'&&Math.random()<[0.1,0.2,0.3][o.rk]){M.ev.push({min:Math.min(90,d.min+1),side:os,sc:o.op,as:-1});d.res=opp.n+' te supera y marca';}
   else if(o.ef==='att'&&o.rk===2&&Math.random()<0.12){var cs=wpickXI(M.oxi,-1,'sg');M.ev.push({min:Math.min(90,d.min+2),side:os,sc:cs,as:o.op});d.res='Pierdes el balón y el rival marca a la contra';}}
  M.ev.sort(function(x,y){return x.min-y.min;});
@@ -212,6 +213,7 @@ function finishMatch(M){
   r=6+(ov-O.str)*0.015+(gf>gc?0.4:gf<gc?-0.4:0)+norm()*0.6+S.bono*0.008+(S.rel.team-50)*0.003+(S.moral-50)*0.006+tx('rate')+M.dr-(S.energy<30?0.6:0)+(M.imp>1.5?tx('big')*3:0)+(M.imp<=1.2?tx('small'):0);
   if(pos==='POR')r+=saves*0.18-gc*0.22+(gc===0?0.7:0);
   else{r+=g*1.1+asi*0.6;if(P.df)r+=(gc===0?0.6:-0.15*gc);else if(P.line==='MED'&&gf>gc)r+=0.1;}
+  r+=formF()*0.12;if(M.red)r-=1.5;
   if(mins<90)r=6+(r-6)*(0.4+0.6*mins/90);
   r=clamp(r,3.5,10);
  }
@@ -227,7 +229,7 @@ function finishMatch(M){
   return {min:e.min,me:e.sc===S.me?'g':e.as===S.me?'a':'',txt:'Gol de '+sc+(e.fk?', de falta directa':e.pen?', de penalti':'')+(as?' (asist. '+as+')':'')+(s===side?'':' · '+esc(tn))};});
  /* puntos de habilidad */
  var vis=nat?1.3:Math.exp((S.clubs[me.c].str-50)/40),pts;
- if(mins>0)pts=Math.round((1+Math.max(0,r-5)*0.9+(gf>gc?1:0))*(0.45+0.55*mins/90)*(S.skills.length/8)*(0.8+0.2*M.imp))+itemLvl('coach');
+ if(mins>0)pts=Math.round((1+Math.max(0,r-5)*0.9+(gf>gc?1:0))*(0.45+0.55*mins/90)*(S.skills.length/8)*(0.8+0.2*M.imp)*growthF())+itemLvl('coach');
  else pts=Math.round(S.skills.length/8)+itemLvl('coach');
  var gains={},ups=[],tw=0;S.skills.forEach(function(k){tw+=k.w;});
  for(var j=0;j<pts;j++){var x=Math.random()*tw,k=null,acc=0;for(var q=0;q<S.skills.length;q++){acc+=S.skills[q].w;if(x<acc){k=S.skills[q];break;}}
@@ -264,7 +266,9 @@ function finishMatch(M){
   if((pos==='POR'||P.df)&&gc===0&&mins>=60){st.cs++;ss.cs=(ss.cs||0)+1;}}
  var decs=M.decs.map(function(d){return {min:d.min,n:d.opts[d.done].n,ok:d.ok,res:d.res,dec:d.dec};});
  var comp=compName(desc.ck)+(desc.rn?' · '+desc.rn:'');
- return {home:H.n,away:A.n,gh:gh,ga:ga,pw:pw,role:M.role,mins:mins,r:r,g:g,a:asi,saves:saves,gains:gains,pts:pts,bonus:bonus,medals:medals,evs:evs,inj:inj,comp:comp,decs:decs,imp:M.imp,nat:nat,win:gf>gc||(pw===side),lose:gf<gc||(pw&&pw!==side),gf:gf,gc:gc};
+ var rep={home:H.n,away:A.n,gh:gh,ga:ga,pw:pw,role:M.role,mins:mins,r:r,g:g,a:asi,saves:saves,gains:gains,pts:pts,bonus:bonus,medals:medals,evs:evs,inj:inj,comp:comp,decs:decs,imp:M.imp,nat:nat,win:gf>gc||(pw===side),lose:gf<gc||(pw&&pw!==side),gf:gf,gc:gc,red:M.red||0};
+ rep.moments=checkMoments(M,rep);
+ return rep;
 }
 
 /* ---------- semanas ---------- */
@@ -343,7 +347,7 @@ function weekly(rep){
  if(!rep){var k=pick(S.skills);if(addProg(k,1))logm(k.n+' sube a nivel '+k.lvl+'.');}
  cmWeekly();
  moral((50-S.moral)*0.05);
- S.acts=2;S.post=0;S.wk=(S.wk||0)+1;
+ S.acts=2;S.post=0;S.wk=(S.wk||0)+1;S.weekTrain=0;
  if(!S.event&&Math.random()<0.25)newEvent();
 }
 function playN(n){
@@ -379,7 +383,7 @@ function endSeason(){
  /* edad */
  S.age++;
  Object.keys(S.rel).forEach(function(k){S.rel[k]=Math.round((S.rel[k]+(50-S.rel[k])*0.15)*10)/10;});
- if(S.age>=31)S.skills.forEach(function(k){if(PHYS[k.id])k.pen+=Math.round((S.age-30)*0.8*10)/10;});
+ if(S.age>=31)S.skills.forEach(function(k){k.pen+=Math.round((S.age-30)*(PHYS[k.id]?0.8:0.3)*10)/10;});
  ageRosters();
  sm.transfers=aiTransfers().slice(0,6);
  /* contrato */
@@ -415,6 +419,7 @@ function newGame(name,pos,tp,ts,nat,co,real,look){
  S.euq=euQualify(false);
  startSeason();
  S.contract.wage=Math.round(wageFor(start.str)*0.8/100)*100;
+ initProgress();
  logm('Sales de la cantera de '+start.n+' ('+low.n+') a los 16 años. Salario semanal: '+fmt(S.contract.wage)+'.');
  genOffers();
  save();
@@ -425,7 +430,7 @@ function train(id){
  var k=mySk(id);
  if(k.lvl>=capFor(k)){var tcp=traitCap(k.id);toast(k.lvl>=MAXL?'Habilidad al máximo.':tcp.by&&tcp.cap===capFor(k)?'Tu rasgo '+tcp.by.n+' limita '+k.n+' al nivel '+tcp.cap+'.':'Solo las habilidades de tus rasgos pasan del nivel '+capFor(k)+'.',1);return;}
  var n=S.mult,done=0,up=0;
- for(var i=0;i<n;i++){var c=pointCost(k,k.lvl);if(S.money<c)break;S.money-=c;up+=addProg(k,1);done++;if(k.lvl>=capFor(k))break;}
+ for(var i=0;i<n;i++){var c=pointCost(k,k.lvl);if(S.money<c)break;S.money-=c;up+=addProg(k,1);done++;S.weekTrain=(S.weekTrain||0)+1;if(k.lvl>=capFor(k))break;}
  if(!done){toast('No tienes dinero para entrenar '+k.n+'.',1);return;}
  if(up){toast(k.n+' sube a nivel '+k.lvl,0);logm(k.n+' sube a nivel '+k.lvl+'.');}
  save();render();

@@ -106,7 +106,7 @@ function mySk(id){for(var i=0;i<S.skills.length;i++)if(S.skills[i].id===id)retur
 function overall(){var sw=0,s=0;S.skills.forEach(function(k){sw+=k.w;s+=k.w*skVal(k);});return s/sw;}
 function skAvg(sk){var s=0,n=0;sk.forEach(function(id){var k=mySk(id);if(k){s+=skVal(k);n++;}});return n?s/n:30;}
 function catAvg(c){var s=0,n=0;S.skills.forEach(function(k){if(k.cat===c){s+=skVal(k);n++;}});return n?s/n:0;}
-function pointCost(k,lvl){return (k.w>=3?12000:4000)*(1+0.25*(lvl-1));}
+function pointCost(k,lvl){return (k.w>=3?12000:4000)*(1+0.25*(lvl-1))*(typeof trainSurcharge==='function'&&S?trainSurcharge():1);}
 function costFor(k,n){var cap=capFor(k),l=k.lvl,p=k.prog,sum=0;for(var i=0;i<n;i++){if(l>=cap)break;sum+=pointCost(k,l);p++;if(p>=need(l)){p=0;l++;}}return Math.round(sum);}
 function addProg(k,n){var cap=capFor(k),up=0;while(n>0&&k.lvl<cap){k.prog++;n--;if(k.prog>=need(k.lvl)){k.prog=0;k.lvl++;up++;}}if(k.lvl>=cap)k.prog=0;return up;}
 /* bonus del material equipado */
@@ -133,6 +133,7 @@ function mvRound(v){var s=v<1e6?25000:v<1e7?100000:500000;return Math.max(10000,
 function oFromValue(v,a,pos,co,t){return clamp(Math.round(90+8*Math.log(v/(1e8*ageF(a)*POSF[pos]*lvf(co,t)))),15,97);}
 function mv(p){
  if(!p)return 0;var c=p.c>=0&&S.clubs[p.c]?S.clubs[p.c]:null,co=c?c.co:'ESP',t=c?c.t:4;
+ if(p.me&&S.val!=null)return S.val;
  if(p.me){var f=S.ss&&S.ss.rn>=5?clamp(1+(S.ss.rsum/S.ss.rn-6.5)*0.15,0.8,1.3):1;var fame=1+Math.min(0.3,Math.log10(Math.max(1,S.fol))/30);return mvRound(mvBase(overall(),S.age,S.pos,co,t)*f*fame);}
  return mvRound(mvBase(p.o,p.a,p.p,co,t)*(p.vk||1));
 }

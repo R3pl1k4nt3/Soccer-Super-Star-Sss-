@@ -1,0 +1,3063 @@
+{
+ "nota": "Generado desde el juego (versión ficticia). Material: 6 marcas ficticias por tipo y gama. Escudos: primeras divisiones ficticias e invitados europeos; el resto de clubes usa el sistema modular (opción A).",
+ "material": [
+  {
+   "archivo": "bota-tribanda-velocidad-pro.png",
+   "marca": "Tribanda",
+   "pieza": "botas",
+   "tipo": "Velocidad",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "bota-tribanda-precision-pro.png",
+   "marca": "Tribanda",
+   "pieza": "botas",
+   "tipo": "Precisión",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "bota-tribanda-control-pro.png",
+   "marca": "Tribanda",
+   "pieza": "botas",
+   "tipo": "Control",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "bota-tribanda-pase-pro.png",
+   "marca": "Tribanda",
+   "pieza": "botas",
+   "tipo": "Pase",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "bota-tribanda-agarre-pro.png",
+   "marca": "Tribanda",
+   "pieza": "botas",
+   "tipo": "Agarre",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "bota-tribanda-velocidad-elite.png",
+   "marca": "Tribanda",
+   "pieza": "botas",
+   "tipo": "Velocidad",
+   "gama": "Élite"
+  },
+  {
+   "archivo": "bota-tribanda-precision-elite.png",
+   "marca": "Tribanda",
+   "pieza": "botas",
+   "tipo": "Precisión",
+   "gama": "Élite"
+  },
+  {
+   "archivo": "bota-tribanda-control-elite.png",
+   "marca": "Tribanda",
+   "pieza": "botas",
+   "tipo": "Control",
+   "gama": "Élite"
+  },
+  {
+   "archivo": "bota-tribanda-pase-elite.png",
+   "marca": "Tribanda",
+   "pieza": "botas",
+   "tipo": "Pase",
+   "gama": "Élite"
+  },
+  {
+   "archivo": "bota-tribanda-agarre-elite.png",
+   "marca": "Tribanda",
+   "pieza": "botas",
+   "tipo": "Agarre",
+   "gama": "Élite"
+  },
+  {
+   "archivo": "bota-arco-velocidad-pro.png",
+   "marca": "Arco",
+   "pieza": "botas",
+   "tipo": "Velocidad",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "bota-arco-precision-pro.png",
+   "marca": "Arco",
+   "pieza": "botas",
+   "tipo": "Precisión",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "bota-arco-control-pro.png",
+   "marca": "Arco",
+   "pieza": "botas",
+   "tipo": "Control",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "bota-arco-pase-pro.png",
+   "marca": "Arco",
+   "pieza": "botas",
+   "tipo": "Pase",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "bota-arco-agarre-pro.png",
+   "marca": "Arco",
+   "pieza": "botas",
+   "tipo": "Agarre",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "bota-arco-velocidad-elite.png",
+   "marca": "Arco",
+   "pieza": "botas",
+   "tipo": "Velocidad",
+   "gama": "Élite"
+  },
+  {
+   "archivo": "bota-arco-precision-elite.png",
+   "marca": "Arco",
+   "pieza": "botas",
+   "tipo": "Precisión",
+   "gama": "Élite"
+  },
+  {
+   "archivo": "bota-arco-control-elite.png",
+   "marca": "Arco",
+   "pieza": "botas",
+   "tipo": "Control",
+   "gama": "Élite"
+  },
+  {
+   "archivo": "bota-arco-pase-elite.png",
+   "marca": "Arco",
+   "pieza": "botas",
+   "tipo": "Pase",
+   "gama": "Élite"
+  },
+  {
+   "archivo": "bota-arco-agarre-elite.png",
+   "marca": "Arco",
+   "pieza": "botas",
+   "tipo": "Agarre",
+   "gama": "Élite"
+  },
+  {
+   "archivo": "bota-felino-velocidad-pro.png",
+   "marca": "Felino",
+   "pieza": "botas",
+   "tipo": "Velocidad",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "bota-felino-precision-pro.png",
+   "marca": "Felino",
+   "pieza": "botas",
+   "tipo": "Precisión",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "bota-felino-control-pro.png",
+   "marca": "Felino",
+   "pieza": "botas",
+   "tipo": "Control",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "bota-felino-pase-pro.png",
+   "marca": "Felino",
+   "pieza": "botas",
+   "tipo": "Pase",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "bota-felino-agarre-pro.png",
+   "marca": "Felino",
+   "pieza": "botas",
+   "tipo": "Agarre",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "bota-felino-velocidad-elite.png",
+   "marca": "Felino",
+   "pieza": "botas",
+   "tipo": "Velocidad",
+   "gama": "Élite"
+  },
+  {
+   "archivo": "bota-felino-precision-elite.png",
+   "marca": "Felino",
+   "pieza": "botas",
+   "tipo": "Precisión",
+   "gama": "Élite"
+  },
+  {
+   "archivo": "bota-felino-control-elite.png",
+   "marca": "Felino",
+   "pieza": "botas",
+   "tipo": "Control",
+   "gama": "Élite"
+  },
+  {
+   "archivo": "bota-felino-pase-elite.png",
+   "marca": "Felino",
+   "pieza": "botas",
+   "tipo": "Pase",
+   "gama": "Élite"
+  },
+  {
+   "archivo": "bota-felino-agarre-elite.png",
+   "marca": "Felino",
+   "pieza": "botas",
+   "tipo": "Agarre",
+   "gama": "Élite"
+  },
+  {
+   "archivo": "bota-kaizen-velocidad-media.png",
+   "marca": "Kaizen",
+   "pieza": "botas",
+   "tipo": "Velocidad",
+   "gama": "Media"
+  },
+  {
+   "archivo": "bota-kaizen-precision-media.png",
+   "marca": "Kaizen",
+   "pieza": "botas",
+   "tipo": "Precisión",
+   "gama": "Media"
+  },
+  {
+   "archivo": "bota-kaizen-control-media.png",
+   "marca": "Kaizen",
+   "pieza": "botas",
+   "tipo": "Control",
+   "gama": "Media"
+  },
+  {
+   "archivo": "bota-kaizen-pase-media.png",
+   "marca": "Kaizen",
+   "pieza": "botas",
+   "tipo": "Pase",
+   "gama": "Media"
+  },
+  {
+   "archivo": "bota-kaizen-agarre-media.png",
+   "marca": "Kaizen",
+   "pieza": "botas",
+   "tipo": "Agarre",
+   "gama": "Media"
+  },
+  {
+   "archivo": "bota-kaizen-velocidad-pro.png",
+   "marca": "Kaizen",
+   "pieza": "botas",
+   "tipo": "Velocidad",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "bota-kaizen-precision-pro.png",
+   "marca": "Kaizen",
+   "pieza": "botas",
+   "tipo": "Precisión",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "bota-kaizen-control-pro.png",
+   "marca": "Kaizen",
+   "pieza": "botas",
+   "tipo": "Control",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "bota-kaizen-pase-pro.png",
+   "marca": "Kaizen",
+   "pieza": "botas",
+   "tipo": "Pase",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "bota-kaizen-agarre-pro.png",
+   "marca": "Kaizen",
+   "pieza": "botas",
+   "tipo": "Agarre",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "bota-nordika-velocidad-media.png",
+   "marca": "Nordika",
+   "pieza": "botas",
+   "tipo": "Velocidad",
+   "gama": "Media"
+  },
+  {
+   "archivo": "bota-nordika-precision-media.png",
+   "marca": "Nordika",
+   "pieza": "botas",
+   "tipo": "Precisión",
+   "gama": "Media"
+  },
+  {
+   "archivo": "bota-nordika-control-media.png",
+   "marca": "Nordika",
+   "pieza": "botas",
+   "tipo": "Control",
+   "gama": "Media"
+  },
+  {
+   "archivo": "bota-nordika-pase-media.png",
+   "marca": "Nordika",
+   "pieza": "botas",
+   "tipo": "Pase",
+   "gama": "Media"
+  },
+  {
+   "archivo": "bota-nordika-agarre-media.png",
+   "marca": "Nordika",
+   "pieza": "botas",
+   "tipo": "Agarre",
+   "gama": "Media"
+  },
+  {
+   "archivo": "bota-nordika-velocidad-pro.png",
+   "marca": "Nordika",
+   "pieza": "botas",
+   "tipo": "Velocidad",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "bota-nordika-precision-pro.png",
+   "marca": "Nordika",
+   "pieza": "botas",
+   "tipo": "Precisión",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "bota-nordika-control-pro.png",
+   "marca": "Nordika",
+   "pieza": "botas",
+   "tipo": "Control",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "bota-nordika-pase-pro.png",
+   "marca": "Nordika",
+   "pieza": "botas",
+   "tipo": "Pase",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "bota-nordika-agarre-pro.png",
+   "marca": "Nordika",
+   "pieza": "botas",
+   "tipo": "Agarre",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "bota-leona-velocidad-basica.png",
+   "marca": "Leona",
+   "pieza": "botas",
+   "tipo": "Velocidad",
+   "gama": "Básica"
+  },
+  {
+   "archivo": "bota-leona-precision-basica.png",
+   "marca": "Leona",
+   "pieza": "botas",
+   "tipo": "Precisión",
+   "gama": "Básica"
+  },
+  {
+   "archivo": "bota-leona-control-basica.png",
+   "marca": "Leona",
+   "pieza": "botas",
+   "tipo": "Control",
+   "gama": "Básica"
+  },
+  {
+   "archivo": "bota-leona-pase-basica.png",
+   "marca": "Leona",
+   "pieza": "botas",
+   "tipo": "Pase",
+   "gama": "Básica"
+  },
+  {
+   "archivo": "bota-leona-agarre-basica.png",
+   "marca": "Leona",
+   "pieza": "botas",
+   "tipo": "Agarre",
+   "gama": "Básica"
+  },
+  {
+   "archivo": "bota-leona-velocidad-media.png",
+   "marca": "Leona",
+   "pieza": "botas",
+   "tipo": "Velocidad",
+   "gama": "Media"
+  },
+  {
+   "archivo": "bota-leona-precision-media.png",
+   "marca": "Leona",
+   "pieza": "botas",
+   "tipo": "Precisión",
+   "gama": "Media"
+  },
+  {
+   "archivo": "bota-leona-control-media.png",
+   "marca": "Leona",
+   "pieza": "botas",
+   "tipo": "Control",
+   "gama": "Media"
+  },
+  {
+   "archivo": "bota-leona-pase-media.png",
+   "marca": "Leona",
+   "pieza": "botas",
+   "tipo": "Pase",
+   "gama": "Media"
+  },
+  {
+   "archivo": "bota-leona-agarre-media.png",
+   "marca": "Leona",
+   "pieza": "botas",
+   "tipo": "Agarre",
+   "gama": "Media"
+  },
+  {
+   "archivo": "ropa-leona-ropa-de-compresion-basica.png",
+   "marca": "Leona",
+   "pieza": "ropa",
+   "tipo": "Ropa de compresión",
+   "gama": "Básica"
+  },
+  {
+   "archivo": "ropa-leona-ropa-de-potencia-basica.png",
+   "marca": "Leona",
+   "pieza": "ropa",
+   "tipo": "Ropa de potencia",
+   "gama": "Básica"
+  },
+  {
+   "archivo": "ropa-kaizen-ropa-de-compresion-media.png",
+   "marca": "Kaizen",
+   "pieza": "ropa",
+   "tipo": "Ropa de compresión",
+   "gama": "Media"
+  },
+  {
+   "archivo": "ropa-kaizen-ropa-de-potencia-media.png",
+   "marca": "Kaizen",
+   "pieza": "ropa",
+   "tipo": "Ropa de potencia",
+   "gama": "Media"
+  },
+  {
+   "archivo": "ropa-felino-ropa-de-compresion-pro.png",
+   "marca": "Felino",
+   "pieza": "ropa",
+   "tipo": "Ropa de compresión",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "ropa-felino-ropa-de-potencia-pro.png",
+   "marca": "Felino",
+   "pieza": "ropa",
+   "tipo": "Ropa de potencia",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "ropa-tribanda-ropa-de-compresion-elite.png",
+   "marca": "Tribanda",
+   "pieza": "ropa",
+   "tipo": "Ropa de compresión",
+   "gama": "Élite"
+  },
+  {
+   "archivo": "ropa-tribanda-ropa-de-potencia-elite.png",
+   "marca": "Tribanda",
+   "pieza": "ropa",
+   "tipo": "Ropa de potencia",
+   "gama": "Élite"
+  },
+  {
+   "archivo": "bota-tribanda-saque-pro.png",
+   "marca": "Tribanda",
+   "pieza": "botas",
+   "tipo": "Saque",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "guantes-tribanda-agarre-pro.png",
+   "marca": "Tribanda",
+   "pieza": "guantes",
+   "tipo": "Agarre",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "guantes-tribanda-reflejos-pro.png",
+   "marca": "Tribanda",
+   "pieza": "guantes",
+   "tipo": "Reflejos",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "guantes-tribanda-juego-aereo-pro.png",
+   "marca": "Tribanda",
+   "pieza": "guantes",
+   "tipo": "Juego aéreo",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "bota-tribanda-saque-elite.png",
+   "marca": "Tribanda",
+   "pieza": "botas",
+   "tipo": "Saque",
+   "gama": "Élite"
+  },
+  {
+   "archivo": "guantes-tribanda-agarre-elite.png",
+   "marca": "Tribanda",
+   "pieza": "guantes",
+   "tipo": "Agarre",
+   "gama": "Élite"
+  },
+  {
+   "archivo": "guantes-tribanda-reflejos-elite.png",
+   "marca": "Tribanda",
+   "pieza": "guantes",
+   "tipo": "Reflejos",
+   "gama": "Élite"
+  },
+  {
+   "archivo": "guantes-tribanda-juego-aereo-elite.png",
+   "marca": "Tribanda",
+   "pieza": "guantes",
+   "tipo": "Juego aéreo",
+   "gama": "Élite"
+  },
+  {
+   "archivo": "bota-arco-saque-pro.png",
+   "marca": "Arco",
+   "pieza": "botas",
+   "tipo": "Saque",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "guantes-arco-agarre-pro.png",
+   "marca": "Arco",
+   "pieza": "guantes",
+   "tipo": "Agarre",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "guantes-arco-reflejos-pro.png",
+   "marca": "Arco",
+   "pieza": "guantes",
+   "tipo": "Reflejos",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "guantes-arco-juego-aereo-pro.png",
+   "marca": "Arco",
+   "pieza": "guantes",
+   "tipo": "Juego aéreo",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "bota-arco-saque-elite.png",
+   "marca": "Arco",
+   "pieza": "botas",
+   "tipo": "Saque",
+   "gama": "Élite"
+  },
+  {
+   "archivo": "guantes-arco-agarre-elite.png",
+   "marca": "Arco",
+   "pieza": "guantes",
+   "tipo": "Agarre",
+   "gama": "Élite"
+  },
+  {
+   "archivo": "guantes-arco-reflejos-elite.png",
+   "marca": "Arco",
+   "pieza": "guantes",
+   "tipo": "Reflejos",
+   "gama": "Élite"
+  },
+  {
+   "archivo": "guantes-arco-juego-aereo-elite.png",
+   "marca": "Arco",
+   "pieza": "guantes",
+   "tipo": "Juego aéreo",
+   "gama": "Élite"
+  },
+  {
+   "archivo": "bota-felino-saque-pro.png",
+   "marca": "Felino",
+   "pieza": "botas",
+   "tipo": "Saque",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "guantes-felino-agarre-pro.png",
+   "marca": "Felino",
+   "pieza": "guantes",
+   "tipo": "Agarre",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "guantes-felino-reflejos-pro.png",
+   "marca": "Felino",
+   "pieza": "guantes",
+   "tipo": "Reflejos",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "guantes-felino-juego-aereo-pro.png",
+   "marca": "Felino",
+   "pieza": "guantes",
+   "tipo": "Juego aéreo",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "bota-felino-saque-elite.png",
+   "marca": "Felino",
+   "pieza": "botas",
+   "tipo": "Saque",
+   "gama": "Élite"
+  },
+  {
+   "archivo": "guantes-felino-agarre-elite.png",
+   "marca": "Felino",
+   "pieza": "guantes",
+   "tipo": "Agarre",
+   "gama": "Élite"
+  },
+  {
+   "archivo": "guantes-felino-reflejos-elite.png",
+   "marca": "Felino",
+   "pieza": "guantes",
+   "tipo": "Reflejos",
+   "gama": "Élite"
+  },
+  {
+   "archivo": "guantes-felino-juego-aereo-elite.png",
+   "marca": "Felino",
+   "pieza": "guantes",
+   "tipo": "Juego aéreo",
+   "gama": "Élite"
+  },
+  {
+   "archivo": "bota-kaizen-saque-media.png",
+   "marca": "Kaizen",
+   "pieza": "botas",
+   "tipo": "Saque",
+   "gama": "Media"
+  },
+  {
+   "archivo": "guantes-kaizen-agarre-media.png",
+   "marca": "Kaizen",
+   "pieza": "guantes",
+   "tipo": "Agarre",
+   "gama": "Media"
+  },
+  {
+   "archivo": "guantes-kaizen-reflejos-media.png",
+   "marca": "Kaizen",
+   "pieza": "guantes",
+   "tipo": "Reflejos",
+   "gama": "Media"
+  },
+  {
+   "archivo": "guantes-kaizen-juego-aereo-media.png",
+   "marca": "Kaizen",
+   "pieza": "guantes",
+   "tipo": "Juego aéreo",
+   "gama": "Media"
+  },
+  {
+   "archivo": "bota-kaizen-saque-pro.png",
+   "marca": "Kaizen",
+   "pieza": "botas",
+   "tipo": "Saque",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "guantes-kaizen-agarre-pro.png",
+   "marca": "Kaizen",
+   "pieza": "guantes",
+   "tipo": "Agarre",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "guantes-kaizen-reflejos-pro.png",
+   "marca": "Kaizen",
+   "pieza": "guantes",
+   "tipo": "Reflejos",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "guantes-kaizen-juego-aereo-pro.png",
+   "marca": "Kaizen",
+   "pieza": "guantes",
+   "tipo": "Juego aéreo",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "bota-nordika-saque-media.png",
+   "marca": "Nordika",
+   "pieza": "botas",
+   "tipo": "Saque",
+   "gama": "Media"
+  },
+  {
+   "archivo": "guantes-nordika-agarre-media.png",
+   "marca": "Nordika",
+   "pieza": "guantes",
+   "tipo": "Agarre",
+   "gama": "Media"
+  },
+  {
+   "archivo": "guantes-nordika-reflejos-media.png",
+   "marca": "Nordika",
+   "pieza": "guantes",
+   "tipo": "Reflejos",
+   "gama": "Media"
+  },
+  {
+   "archivo": "guantes-nordika-juego-aereo-media.png",
+   "marca": "Nordika",
+   "pieza": "guantes",
+   "tipo": "Juego aéreo",
+   "gama": "Media"
+  },
+  {
+   "archivo": "bota-nordika-saque-pro.png",
+   "marca": "Nordika",
+   "pieza": "botas",
+   "tipo": "Saque",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "guantes-nordika-agarre-pro.png",
+   "marca": "Nordika",
+   "pieza": "guantes",
+   "tipo": "Agarre",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "guantes-nordika-reflejos-pro.png",
+   "marca": "Nordika",
+   "pieza": "guantes",
+   "tipo": "Reflejos",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "guantes-nordika-juego-aereo-pro.png",
+   "marca": "Nordika",
+   "pieza": "guantes",
+   "tipo": "Juego aéreo",
+   "gama": "Pro"
+  },
+  {
+   "archivo": "bota-leona-saque-basica.png",
+   "marca": "Leona",
+   "pieza": "botas",
+   "tipo": "Saque",
+   "gama": "Básica"
+  },
+  {
+   "archivo": "guantes-leona-agarre-basica.png",
+   "marca": "Leona",
+   "pieza": "guantes",
+   "tipo": "Agarre",
+   "gama": "Básica"
+  },
+  {
+   "archivo": "guantes-leona-reflejos-basica.png",
+   "marca": "Leona",
+   "pieza": "guantes",
+   "tipo": "Reflejos",
+   "gama": "Básica"
+  },
+  {
+   "archivo": "guantes-leona-juego-aereo-basica.png",
+   "marca": "Leona",
+   "pieza": "guantes",
+   "tipo": "Juego aéreo",
+   "gama": "Básica"
+  },
+  {
+   "archivo": "bota-leona-saque-media.png",
+   "marca": "Leona",
+   "pieza": "botas",
+   "tipo": "Saque",
+   "gama": "Media"
+  },
+  {
+   "archivo": "guantes-leona-agarre-media.png",
+   "marca": "Leona",
+   "pieza": "guantes",
+   "tipo": "Agarre",
+   "gama": "Media"
+  },
+  {
+   "archivo": "guantes-leona-reflejos-media.png",
+   "marca": "Leona",
+   "pieza": "guantes",
+   "tipo": "Reflejos",
+   "gama": "Media"
+  },
+  {
+   "archivo": "guantes-leona-juego-aereo-media.png",
+   "marca": "Leona",
+   "pieza": "guantes",
+   "tipo": "Juego aéreo",
+   "gama": "Media"
+  }
+ ],
+ "escudos": [
+  {
+   "club": "Chamartín CF",
+   "pais": "España",
+   "colores": [
+    "#ffffff",
+    "#1b2a6b"
+   ],
+   "rayas": false,
+   "iniciales": "CHA",
+   "archivo": "club-chamartin-cf.svg"
+  },
+  {
+   "club": "Blaugrana FC",
+   "pais": "España",
+   "colores": [
+    "#a50044",
+    "#004d98"
+   ],
+   "rayas": true,
+   "iniciales": "BLA",
+   "archivo": "club-blaugrana-fc.svg"
+  },
+  {
+   "club": "Atlético Manzanares",
+   "pais": "España",
+   "colores": [
+    "#cb3524",
+    "#ffffff"
+   ],
+   "rayas": true,
+   "iniciales": "AM",
+   "archivo": "club-atletico-manzanares.svg"
+  },
+  {
+   "club": "Athletic Leones",
+   "pais": "España",
+   "colores": [
+    "#ee2523",
+    "#ffffff"
+   ],
+   "rayas": true,
+   "iniciales": "AL",
+   "archivo": "club-athletic-leones.svg"
+  },
+  {
+   "club": "Submarino Amarillo CF",
+   "pais": "España",
+   "colores": [
+    "#ffe667",
+    "#005187"
+   ],
+   "rayas": false,
+   "iniciales": "SA",
+   "archivo": "club-submarino-amarillo-cf.svg"
+  },
+  {
+   "club": "Real Verdiblanco",
+   "pais": "España",
+   "colores": [
+    "#00954c",
+    "#ffffff"
+   ],
+   "rayas": true,
+   "iniciales": "RV",
+   "archivo": "club-real-verdiblanco.svg"
+  },
+  {
+   "club": "Celeste de Vigo",
+   "pais": "España",
+   "colores": [
+    "#8ac3ee",
+    "#ffffff"
+   ],
+   "rayas": false,
+   "iniciales": "CV",
+   "archivo": "club-celeste-de-vigo.svg"
+  },
+  {
+   "club": "Rayo de Vallekas",
+   "pais": "España",
+   "colores": [
+    "#283593",
+    "#ad1457"
+   ],
+   "rayas": false,
+   "iniciales": "RV",
+   "archivo": "club-rayo-de-vallekas.svg"
+  },
+  {
+   "club": "Pamplona Rojillos",
+   "pais": "España",
+   "colores": [
+    "#6a1b9a",
+    "#ffffff"
+   ],
+   "rayas": false,
+   "iniciales": "PR",
+   "archivo": "club-pamplona-rojillos.svg"
+  },
+  {
+   "club": "Real Mallorca Isla",
+   "pais": "España",
+   "colores": [
+    "#00838f",
+    "#8d6e63"
+   ],
+   "rayas": false,
+   "iniciales": "RMI",
+   "archivo": "club-real-mallorca-isla.svg"
+  },
+  {
+   "club": "Real Donostia",
+   "pais": "España",
+   "colores": [
+    "#0067b1",
+    "#ffffff"
+   ],
+   "rayas": true,
+   "iniciales": "RD",
+   "archivo": "club-real-donostia.svg"
+  },
+  {
+   "club": "Mestalla CF",
+   "pais": "España",
+   "colores": [
+    "#ffffff",
+    "#111111"
+   ],
+   "rayas": false,
+   "iniciales": "MES",
+   "archivo": "club-mestalla-cf.svg"
+  },
+  {
+   "club": "Getafe Azulón",
+   "pais": "España",
+   "colores": [
+    "#f9a825",
+    "#ad1457"
+   ],
+   "rayas": true,
+   "iniciales": "GA",
+   "archivo": "club-getafe-azulon.svg"
+  },
+  {
+   "club": "Periquitos de Barcelona",
+   "pais": "España",
+   "colores": [
+    "#a50044",
+    "#004d98"
+   ],
+   "rayas": true,
+   "iniciales": "PB",
+   "archivo": "club-periquitos-de-barcelona.svg"
+  },
+  {
+   "club": "Babazorros de Vitoria",
+   "pais": "España",
+   "colores": [
+    "#00838f",
+    "#ef6c00"
+   ],
+   "rayas": false,
+   "iniciales": "BV",
+   "archivo": "club-babazorros-de-vitoria.svg"
+  },
+  {
+   "club": "Girona Blanquivermell",
+   "pais": "España",
+   "colores": [
+    "#f9a825",
+    "#00838f"
+   ],
+   "rayas": true,
+   "iniciales": "GB",
+   "archivo": "club-girona-blanquivermell.svg"
+  },
+  {
+   "club": "Sevilla Nervión",
+   "pais": "España",
+   "colores": [
+    "#ffffff",
+    "#d71920"
+   ],
+   "rayas": false,
+   "iniciales": "SN",
+   "archivo": "club-sevilla-nervion.svg"
+  },
+  {
+   "club": "Ilicitano CF",
+   "pais": "España",
+   "colores": [
+    "#8d6e63",
+    "#f9a825"
+   ],
+   "rayas": false,
+   "iniciales": "ILI",
+   "archivo": "club-ilicitano-cf.svg"
+  },
+  {
+   "club": "Levante Granota",
+   "pais": "España",
+   "colores": [
+    "#f9a825",
+    "#1565c0"
+   ],
+   "rayas": true,
+   "iniciales": "LG",
+   "archivo": "club-levante-granota.svg"
+  },
+  {
+   "club": "Real Carbayón",
+   "pais": "España",
+   "colores": [
+    "#f9a825",
+    "#c62828"
+   ],
+   "rayas": false,
+   "iniciales": "RC",
+   "archivo": "club-real-carbayon.svg"
+  },
+  {
+   "club": "Merseyside Reds",
+   "pais": "Inglaterra",
+   "colores": [
+    "#c8102e",
+    "#ffffff"
+   ],
+   "rayas": false,
+   "iniciales": "MR",
+   "archivo": "club-merseyside-reds.svg"
+  },
+  {
+   "club": "North London Gunners",
+   "pais": "Inglaterra",
+   "colores": [
+    "#ef0107",
+    "#ffffff"
+   ],
+   "rayas": false,
+   "iniciales": "NLG",
+   "archivo": "club-north-london-gunners.svg"
+  },
+  {
+   "club": "Manchester Celeste",
+   "pais": "Inglaterra",
+   "colores": [
+    "#6cabdd",
+    "#ffffff"
+   ],
+   "rayas": false,
+   "iniciales": "MC",
+   "archivo": "club-manchester-celeste.svg"
+  },
+  {
+   "club": "London Blues",
+   "pais": "Inglaterra",
+   "colores": [
+    "#034694",
+    "#ffffff"
+   ],
+   "rayas": false,
+   "iniciales": "LB",
+   "archivo": "club-london-blues.svg"
+  },
+  {
+   "club": "Tyneside Magpies",
+   "pais": "Inglaterra",
+   "colores": [
+    "#111111",
+    "#ffffff"
+   ],
+   "rayas": true,
+   "iniciales": "TM",
+   "archivo": "club-tyneside-magpies.svg"
+  },
+  {
+   "club": "Villa Lions",
+   "pais": "Inglaterra",
+   "colores": [
+    "#283593",
+    "#8d6e63"
+   ],
+   "rayas": false,
+   "iniciales": "VL",
+   "archivo": "club-villa-lions.svg"
+  },
+  {
+   "club": "Forest Garibaldis",
+   "pais": "Inglaterra",
+   "colores": [
+    "#ef6c00",
+    "#6a1b9a"
+   ],
+   "rayas": false,
+   "iniciales": "FG",
+   "archivo": "club-forest-garibaldis.svg"
+  },
+  {
+   "club": "Brighton Seagulls",
+   "pais": "Inglaterra",
+   "colores": [
+    "#ffffff",
+    "#6a1b9a"
+   ],
+   "rayas": true,
+   "iniciales": "BS",
+   "archivo": "club-brighton-seagulls.svg"
+  },
+  {
+   "club": "Bournemouth Cherries",
+   "pais": "Inglaterra",
+   "colores": [
+    "#ef6c00",
+    "#2e7d32"
+   ],
+   "rayas": false,
+   "iniciales": "BC",
+   "archivo": "club-bournemouth-cherries.svg"
+  },
+  {
+   "club": "Brentford Bees",
+   "pais": "Inglaterra",
+   "colores": [
+    "#283593",
+    "#8d6e63"
+   ],
+   "rayas": false,
+   "iniciales": "BB",
+   "archivo": "club-brentford-bees.svg"
+  },
+  {
+   "club": "Fulham Cottagers",
+   "pais": "Inglaterra",
+   "colores": [
+    "#8d6e63",
+    "#ad1457"
+   ],
+   "rayas": true,
+   "iniciales": "FC",
+   "archivo": "club-fulham-cottagers.svg"
+  },
+  {
+   "club": "Palace Eagles",
+   "pais": "Inglaterra",
+   "colores": [
+    "#ffffff",
+    "#2e7d32"
+   ],
+   "rayas": false,
+   "iniciales": "PE",
+   "archivo": "club-palace-eagles.svg"
+  },
+  {
+   "club": "Everton Toffees",
+   "pais": "Inglaterra",
+   "colores": [
+    "#283593",
+    "#111111"
+   ],
+   "rayas": false,
+   "iniciales": "ET",
+   "archivo": "club-everton-toffees.svg"
+  },
+  {
+   "club": "East London Hammers",
+   "pais": "Inglaterra",
+   "colores": [
+    "#558b2f",
+    "#1565c0"
+   ],
+   "rayas": false,
+   "iniciales": "ELH",
+   "archivo": "club-east-london-hammers.svg"
+  },
+  {
+   "club": "Manchester Red Devils",
+   "pais": "Inglaterra",
+   "colores": [
+    "#da291c",
+    "#111111"
+   ],
+   "rayas": false,
+   "iniciales": "MRD",
+   "archivo": "club-manchester-red-devils.svg"
+  },
+  {
+   "club": "Wolverhampton Wolves",
+   "pais": "Inglaterra",
+   "colores": [
+    "#c62828",
+    "#558b2f"
+   ],
+   "rayas": false,
+   "iniciales": "WW",
+   "archivo": "club-wolverhampton-wolves.svg"
+  },
+  {
+   "club": "Spurs Lilywhites",
+   "pais": "Inglaterra",
+   "colores": [
+    "#ffffff",
+    "#132257"
+   ],
+   "rayas": false,
+   "iniciales": "SL",
+   "archivo": "club-spurs-lilywhites.svg"
+  },
+  {
+   "club": "Leeds Peacocks",
+   "pais": "Inglaterra",
+   "colores": [
+    "#2e7d32",
+    "#6a1b9a"
+   ],
+   "rayas": false,
+   "iniciales": "LP",
+   "archivo": "club-leeds-peacocks.svg"
+  },
+  {
+   "club": "Burnley Clarets",
+   "pais": "Inglaterra",
+   "colores": [
+    "#283593",
+    "#2e7d32"
+   ],
+   "rayas": false,
+   "iniciales": "BC",
+   "archivo": "club-burnley-clarets.svg"
+  },
+  {
+   "club": "Wearside Black Cats",
+   "pais": "Inglaterra",
+   "colores": [
+    "#111111",
+    "#2e7d32"
+   ],
+   "rayas": false,
+   "iniciales": "WBC",
+   "archivo": "club-wearside-black-cats.svg"
+  },
+  {
+   "club": "Partenopei Napoli",
+   "pais": "Italia",
+   "colores": [
+    "#12a0d7",
+    "#ffffff"
+   ],
+   "rayas": false,
+   "iniciales": "PN",
+   "archivo": "club-partenopei-napoli.svg"
+  },
+  {
+   "club": "Inter Nerazzurri",
+   "pais": "Italia",
+   "colores": [
+    "#0068a8",
+    "#111111"
+   ],
+   "rayas": true,
+   "iniciales": "IN",
+   "archivo": "club-inter-nerazzurri.svg"
+  },
+  {
+   "club": "Bergamo Dea",
+   "pais": "Italia",
+   "colores": [
+    "#37474f",
+    "#111111"
+   ],
+   "rayas": false,
+   "iniciales": "BD",
+   "archivo": "club-bergamo-dea.svg"
+  },
+  {
+   "club": "Vecchia Signora",
+   "pais": "Italia",
+   "colores": [
+    "#111111",
+    "#ffffff"
+   ],
+   "rayas": true,
+   "iniciales": "VS",
+   "archivo": "club-vecchia-signora.svg"
+  },
+  {
+   "club": "Giallorossi Roma",
+   "pais": "Italia",
+   "colores": [
+    "#8e1f2f",
+    "#f0bc42"
+   ],
+   "rayas": false,
+   "iniciales": "GR",
+   "archivo": "club-giallorossi-roma.svg"
+  },
+  {
+   "club": "Viola Firenze",
+   "pais": "Italia",
+   "colores": [
+    "#558b2f",
+    "#f9a825"
+   ],
+   "rayas": false,
+   "iniciales": "VF",
+   "archivo": "club-viola-firenze.svg"
+  },
+  {
+   "club": "Aquile Biancocelesti",
+   "pais": "Italia",
+   "colores": [
+    "#6a1b9a",
+    "#8d6e63"
+   ],
+   "rayas": false,
+   "iniciales": "AB",
+   "archivo": "club-aquile-biancocelesti.svg"
+  },
+  {
+   "club": "Rossoneri Milano",
+   "pais": "Italia",
+   "colores": [
+    "#fb090b",
+    "#111111"
+   ],
+   "rayas": true,
+   "iniciales": "RM",
+   "archivo": "club-rossoneri-milano.svg"
+  },
+  {
+   "club": "Rossoblù Bologna",
+   "pais": "Italia",
+   "colores": [
+    "#1565c0",
+    "#f9a825"
+   ],
+   "rayas": false,
+   "iniciales": "RB",
+   "archivo": "club-rossoblu-bologna.svg"
+  },
+  {
+   "club": "Lariani Como",
+   "pais": "Italia",
+   "colores": [
+    "#00838f",
+    "#f9a825"
+   ],
+   "rayas": true,
+   "iniciales": "LC",
+   "archivo": "club-lariani-como.svg"
+  },
+  {
+   "club": "Granata Torino",
+   "pais": "Italia",
+   "colores": [
+    "#8d6e63",
+    "#37474f"
+   ],
+   "rayas": false,
+   "iniciales": "GT",
+   "archivo": "club-granata-torino.svg"
+  },
+  {
+   "club": "Friulani Udine",
+   "pais": "Italia",
+   "colores": [
+    "#ffffff",
+    "#2e7d32"
+   ],
+   "rayas": false,
+   "iniciales": "FU",
+   "archivo": "club-friulani-udine.svg"
+  },
+  {
+   "club": "Grifone Genova",
+   "pais": "Italia",
+   "colores": [
+    "#6a1b9a",
+    "#558b2f"
+   ],
+   "rayas": false,
+   "iniciales": "GG",
+   "archivo": "club-grifone-genova.svg"
+  },
+  {
+   "club": "Scaligeri Verona",
+   "pais": "Italia",
+   "colores": [
+    "#111111",
+    "#37474f"
+   ],
+   "rayas": false,
+   "iniciales": "SV",
+   "archivo": "club-scaligeri-verona.svg"
+  },
+  {
+   "club": "Sardi Cagliari",
+   "pais": "Italia",
+   "colores": [
+    "#8d6e63",
+    "#f9a825"
+   ],
+   "rayas": false,
+   "iniciales": "SC",
+   "archivo": "club-sardi-cagliari.svg"
+  },
+  {
+   "club": "Crociati Parma",
+   "pais": "Italia",
+   "colores": [
+    "#f9a825",
+    "#ffffff"
+   ],
+   "rayas": false,
+   "iniciales": "CP",
+   "archivo": "club-crociati-parma.svg"
+  },
+  {
+   "club": "Salentini Lecce",
+   "pais": "Italia",
+   "colores": [
+    "#ef6c00",
+    "#ad1457"
+   ],
+   "rayas": false,
+   "iniciales": "SL",
+   "archivo": "club-salentini-lecce.svg"
+  },
+  {
+   "club": "Neroverdi Sassuolo",
+   "pais": "Italia",
+   "colores": [
+    "#f9a825",
+    "#ef6c00"
+   ],
+   "rayas": false,
+   "iniciales": "NS",
+   "archivo": "club-neroverdi-sassuolo.svg"
+  },
+  {
+   "club": "Nerazzurri Pisani",
+   "pais": "Italia",
+   "colores": [
+    "#2e7d32",
+    "#6a1b9a"
+   ],
+   "rayas": true,
+   "iniciales": "NP",
+   "archivo": "club-nerazzurri-pisani.svg"
+  },
+  {
+   "club": "Grigiorossi Cremona",
+   "pais": "Italia",
+   "colores": [
+    "#ad1457",
+    "#37474f"
+   ],
+   "rayas": false,
+   "iniciales": "GC",
+   "archivo": "club-grigiorossi-cremona.svg"
+  },
+  {
+   "club": "Múnich Rojo FC",
+   "pais": "Alemania",
+   "colores": [
+    "#dc052d",
+    "#ffffff"
+   ],
+   "rayas": false,
+   "iniciales": "MR",
+   "archivo": "club-munich-rojo-fc.svg"
+  },
+  {
+   "club": "Leverkusen Werkself",
+   "pais": "Alemania",
+   "colores": [
+    "#e32221",
+    "#111111"
+   ],
+   "rayas": false,
+   "iniciales": "LW",
+   "archivo": "club-leverkusen-werkself.svg"
+  },
+  {
+   "club": "Frankfurt Adler",
+   "pais": "Alemania",
+   "colores": [
+    "#f9a825",
+    "#111111"
+   ],
+   "rayas": true,
+   "iniciales": "FA",
+   "archivo": "club-frankfurt-adler.svg"
+  },
+  {
+   "club": "Dortmund Schwarzgelb",
+   "pais": "Alemania",
+   "colores": [
+    "#fde100",
+    "#111111"
+   ],
+   "rayas": false,
+   "iniciales": "DS",
+   "archivo": "club-dortmund-schwarzgelb.svg"
+  },
+  {
+   "club": "Freiburg Breisgau",
+   "pais": "Alemania",
+   "colores": [
+    "#558b2f",
+    "#8d6e63"
+   ],
+   "rayas": true,
+   "iniciales": "FB",
+   "archivo": "club-freiburg-breisgau.svg"
+  },
+  {
+   "club": "Mainz Nullfünfer",
+   "pais": "Alemania",
+   "colores": [
+    "#8d6e63",
+    "#00838f"
+   ],
+   "rayas": false,
+   "iniciales": "MN",
+   "archivo": "club-mainz-nullfunfer.svg"
+  },
+  {
+   "club": "Leipzig Toros",
+   "pais": "Alemania",
+   "colores": [
+    "#ef6c00",
+    "#558b2f"
+   ],
+   "rayas": false,
+   "iniciales": "LT",
+   "archivo": "club-leipzig-toros.svg"
+  },
+  {
+   "club": "Bremen Fischköppe",
+   "pais": "Alemania",
+   "colores": [
+    "#2e7d32",
+    "#00838f"
+   ],
+   "rayas": true,
+   "iniciales": "BF",
+   "archivo": "club-bremen-fischkoppe.svg"
+  },
+  {
+   "club": "Stuttgart Suabos",
+   "pais": "Alemania",
+   "colores": [
+    "#8d6e63",
+    "#f9a825"
+   ],
+   "rayas": false,
+   "iniciales": "SS",
+   "archivo": "club-stuttgart-suabos.svg"
+  },
+  {
+   "club": "Gladbach Fohlen",
+   "pais": "Alemania",
+   "colores": [
+    "#00838f",
+    "#37474f"
+   ],
+   "rayas": false,
+   "iniciales": "GF",
+   "archivo": "club-gladbach-fohlen.svg"
+  },
+  {
+   "club": "Wolfsburg Lobos",
+   "pais": "Alemania",
+   "colores": [
+    "#c62828",
+    "#ad1457"
+   ],
+   "rayas": true,
+   "iniciales": "WL",
+   "archivo": "club-wolfsburg-lobos.svg"
+  },
+  {
+   "club": "Augsburg Fuggerstädter",
+   "pais": "Alemania",
+   "colores": [
+    "#111111",
+    "#ffffff"
+   ],
+   "rayas": true,
+   "iniciales": "AF",
+   "archivo": "club-augsburg-fuggerstadter.svg"
+  },
+  {
+   "club": "Union Köpenick",
+   "pais": "Alemania",
+   "colores": [
+    "#c62828",
+    "#ad1457"
+   ],
+   "rayas": false,
+   "iniciales": "UK",
+   "archivo": "club-union-kopenick.svg"
+  },
+  {
+   "club": "St. Pauli Piratas",
+   "pais": "Alemania",
+   "colores": [
+    "#00838f",
+    "#6a1b9a"
+   ],
+   "rayas": true,
+   "iniciales": "SPP",
+   "archivo": "club-st-pauli-piratas.svg"
+  },
+  {
+   "club": "Sinsheim Kraichgau",
+   "pais": "Alemania",
+   "colores": [
+    "#ef6c00",
+    "#f9a825"
+   ],
+   "rayas": false,
+   "iniciales": "SK",
+   "archivo": "club-sinsheim-kraichgau.svg"
+  },
+  {
+   "club": "Heidenheim Brenz",
+   "pais": "Alemania",
+   "colores": [
+    "#37474f",
+    "#ffffff"
+   ],
+   "rayas": false,
+   "iniciales": "HB",
+   "archivo": "club-heidenheim-brenz.svg"
+  },
+  {
+   "club": "Köln Geißböcke",
+   "pais": "Alemania",
+   "colores": [
+    "#00838f",
+    "#2e7d32"
+   ],
+   "rayas": false,
+   "iniciales": "KG",
+   "archivo": "club-koln-gei-bocke.svg"
+  },
+  {
+   "club": "Hamburgo Rothosen",
+   "pais": "Alemania",
+   "colores": [
+    "#37474f",
+    "#1565c0"
+   ],
+   "rayas": false,
+   "iniciales": "HR",
+   "archivo": "club-hamburgo-rothosen.svg"
+  },
+  {
+   "club": "París Rouge et Bleu",
+   "pais": "Francia",
+   "colores": [
+    "#004170",
+    "#da291c"
+   ],
+   "rayas": false,
+   "iniciales": "PRE",
+   "archivo": "club-paris-rouge-et-bleu.svg"
+  },
+  {
+   "club": "Olympique Phocéen",
+   "pais": "Francia",
+   "colores": [
+    "#ffffff",
+    "#2faee0"
+   ],
+   "rayas": false,
+   "iniciales": "OP",
+   "archivo": "club-olympique-phoceen.svg"
+  },
+  {
+   "club": "Monaco Principado",
+   "pais": "Francia",
+   "colores": [
+    "#6a1b9a",
+    "#ef6c00"
+   ],
+   "rayas": false,
+   "iniciales": "MP",
+   "archivo": "club-monaco-principado.svg"
+  },
+  {
+   "club": "Niza Aiglons",
+   "pais": "Francia",
+   "colores": [
+    "#1565c0",
+    "#558b2f"
+   ],
+   "rayas": false,
+   "iniciales": "NA",
+   "archivo": "club-niza-aiglons.svg"
+  },
+  {
+   "club": "Lille Dogues",
+   "pais": "Francia",
+   "colores": [
+    "#8d6e63",
+    "#ffffff"
+   ],
+   "rayas": false,
+   "iniciales": "LD",
+   "archivo": "club-lille-dogues.svg"
+  },
+  {
+   "club": "Lyon Gones",
+   "pais": "Francia",
+   "colores": [
+    "#6a1b9a",
+    "#2e7d32"
+   ],
+   "rayas": false,
+   "iniciales": "LG",
+   "archivo": "club-lyon-gones.svg"
+  },
+  {
+   "club": "Estrasburgo Racing",
+   "pais": "Francia",
+   "colores": [
+    "#ffffff",
+    "#37474f"
+   ],
+   "rayas": false,
+   "iniciales": "ER",
+   "archivo": "club-estrasburgo-racing.svg"
+  },
+  {
+   "club": "Lens Sang et Or",
+   "pais": "Francia",
+   "colores": [
+    "#37474f",
+    "#2e7d32"
+   ],
+   "rayas": false,
+   "iniciales": "LSE",
+   "archivo": "club-lens-sang-et-or.svg"
+  },
+  {
+   "club": "Brest Pirates",
+   "pais": "Francia",
+   "colores": [
+    "#558b2f",
+    "#ef6c00"
+   ],
+   "rayas": false,
+   "iniciales": "BP",
+   "archivo": "club-brest-pirates.svg"
+  },
+  {
+   "club": "Toulouse Violets",
+   "pais": "Francia",
+   "colores": [
+    "#111111",
+    "#ffffff"
+   ],
+   "rayas": true,
+   "iniciales": "TV",
+   "archivo": "club-toulouse-violets.svg"
+  },
+  {
+   "club": "Auxerre Bourgogne",
+   "pais": "Francia",
+   "colores": [
+    "#00838f",
+    "#f9a825"
+   ],
+   "rayas": true,
+   "iniciales": "AB",
+   "archivo": "club-auxerre-bourgogne.svg"
+  },
+  {
+   "club": "Rennes Rouge et Noir",
+   "pais": "Francia",
+   "colores": [
+    "#ad1457",
+    "#f9a825"
+   ],
+   "rayas": false,
+   "iniciales": "RRE",
+   "archivo": "club-rennes-rouge-et-noir.svg"
+  },
+  {
+   "club": "Nantes Canaris",
+   "pais": "Francia",
+   "colores": [
+    "#558b2f",
+    "#ffffff"
+   ],
+   "rayas": false,
+   "iniciales": "NC",
+   "archivo": "club-nantes-canaris.svg"
+  },
+  {
+   "club": "Angers Scoïstes",
+   "pais": "Francia",
+   "colores": [
+    "#1565c0",
+    "#8d6e63"
+   ],
+   "rayas": false,
+   "iniciales": "AS",
+   "archivo": "club-angers-scoistes.svg"
+  },
+  {
+   "club": "Le Havre Ciel et Marine",
+   "pais": "Francia",
+   "colores": [
+    "#1565c0",
+    "#558b2f"
+   ],
+   "rayas": true,
+   "iniciales": "LHC",
+   "archivo": "club-le-havre-ciel-et-marine.svg"
+  },
+  {
+   "club": "Lorient Merlus",
+   "pais": "Francia",
+   "colores": [
+    "#f9a825",
+    "#1565c0"
+   ],
+   "rayas": true,
+   "iniciales": "LM",
+   "archivo": "club-lorient-merlus.svg"
+  },
+  {
+   "club": "París Ciudad FC",
+   "pais": "Francia",
+   "colores": [
+    "#558b2f",
+    "#f9a825"
+   ],
+   "rayas": false,
+   "iniciales": "PC",
+   "archivo": "club-paris-ciudad-fc.svg"
+  },
+  {
+   "club": "Metz Grenats",
+   "pais": "Francia",
+   "colores": [
+    "#558b2f",
+    "#283593"
+   ],
+   "rayas": false,
+   "iniciales": "MG",
+   "archivo": "club-metz-grenats.svg"
+  },
+  {
+   "club": "Águias da Luz",
+   "pais": "Portugal",
+   "colores": [
+    "#e83030",
+    "#ffffff"
+   ],
+   "rayas": false,
+   "iniciales": "ÁL",
+   "archivo": "club-aguias-da-luz.svg"
+  },
+  {
+   "club": "Dragões do Porto",
+   "pais": "Portugal",
+   "colores": [
+    "#003b8e",
+    "#ffffff"
+   ],
+   "rayas": true,
+   "iniciales": "DP",
+   "archivo": "club-dragoes-do-porto.svg"
+  },
+  {
+   "club": "Leões de Alvalade",
+   "pais": "Portugal",
+   "colores": [
+    "#008057",
+    "#ffffff"
+   ],
+   "rayas": true,
+   "iniciales": "LA",
+   "archivo": "club-leoes-de-alvalade.svg"
+  },
+  {
+   "club": "Guerreiros de Braga",
+   "pais": "Portugal",
+   "colores": [
+    "#1565c0",
+    "#37474f"
+   ],
+   "rayas": false,
+   "iniciales": "GB",
+   "archivo": "club-guerreiros-de-braga.svg"
+  },
+  {
+   "club": "Vitória Conquistadores",
+   "pais": "Portugal",
+   "colores": [
+    "#111111",
+    "#00838f"
+   ],
+   "rayas": false,
+   "iniciales": "VC",
+   "archivo": "club-vitoria-conquistadores.svg"
+  },
+  {
+   "club": "Famalicão Minho",
+   "pais": "Portugal",
+   "colores": [
+    "#c62828",
+    "#1565c0"
+   ],
+   "rayas": false,
+   "iniciales": "FM",
+   "archivo": "club-famalicao-minho.svg"
+  },
+  {
+   "club": "Gil Vicente Galos",
+   "pais": "Portugal",
+   "colores": [
+    "#ad1457",
+    "#00838f"
+   ],
+   "rayas": true,
+   "iniciales": "GVG",
+   "archivo": "club-gil-vicente-galos.svg"
+  },
+  {
+   "club": "Moreirense Cónegos",
+   "pais": "Portugal",
+   "colores": [
+    "#ffffff",
+    "#6a1b9a"
+   ],
+   "rayas": false,
+   "iniciales": "MC",
+   "archivo": "club-moreirense-conegos.svg"
+  },
+  {
+   "club": "Estoril Canarinhos",
+   "pais": "Portugal",
+   "colores": [
+    "#111111",
+    "#1565c0"
+   ],
+   "rayas": false,
+   "iniciales": "EC",
+   "archivo": "club-estoril-canarinhos.svg"
+  },
+  {
+   "club": "Rio Ave Vila do Conde",
+   "pais": "Portugal",
+   "colores": [
+    "#c62828",
+    "#8d6e63"
+   ],
+   "rayas": false,
+   "iniciales": "RAV",
+   "archivo": "club-rio-ave-vila-do-conde.svg"
+  },
+  {
+   "club": "Arouca Lobos",
+   "pais": "Portugal",
+   "colores": [
+    "#111111",
+    "#283593"
+   ],
+   "rayas": true,
+   "iniciales": "AL",
+   "archivo": "club-arouca-lobos.svg"
+  },
+  {
+   "club": "Casa Pia Gansos",
+   "pais": "Portugal",
+   "colores": [
+    "#8d6e63",
+    "#00838f"
+   ],
+   "rayas": false,
+   "iniciales": "CPG",
+   "archivo": "club-casa-pia-gansos.svg"
+  },
+  {
+   "club": "Santa Clara Açores",
+   "pais": "Portugal",
+   "colores": [
+    "#ffffff",
+    "#6a1b9a"
+   ],
+   "rayas": false,
+   "iniciales": "SCA",
+   "archivo": "club-santa-clara-acores.svg"
+  },
+  {
+   "club": "Nacional Madeira",
+   "pais": "Portugal",
+   "colores": [
+    "#2e7d32",
+    "#f9a825"
+   ],
+   "rayas": false,
+   "iniciales": "NM",
+   "archivo": "club-nacional-madeira.svg"
+  },
+  {
+   "club": "Estrela Amadora",
+   "pais": "Portugal",
+   "colores": [
+    "#f9a825",
+    "#283593"
+   ],
+   "rayas": false,
+   "iniciales": "EA",
+   "archivo": "club-estrela-amadora.svg"
+  },
+  {
+   "club": "Alverca Ribatejo",
+   "pais": "Portugal",
+   "colores": [
+    "#558b2f",
+    "#283593"
+   ],
+   "rayas": false,
+   "iniciales": "AR",
+   "archivo": "club-alverca-ribatejo.svg"
+  },
+  {
+   "club": "Tondela Auriverdes",
+   "pais": "Portugal",
+   "colores": [
+    "#283593",
+    "#ffffff"
+   ],
+   "rayas": false,
+   "iniciales": "TA",
+   "archivo": "club-tondela-auriverdes.svg"
+  },
+  {
+   "club": "Aves Vila das Aves",
+   "pais": "Portugal",
+   "colores": [
+    "#ad1457",
+    "#c62828"
+   ],
+   "rayas": false,
+   "iniciales": "AVD",
+   "archivo": "club-aves-vila-das-aves.svg"
+  },
+  {
+   "club": "Eindhoven Lichtstad",
+   "pais": "Países Bajos",
+   "colores": [
+    "#ed1c24",
+    "#ffffff"
+   ],
+   "rayas": true,
+   "iniciales": "EL",
+   "archivo": "club-eindhoven-lichtstad.svg"
+  },
+  {
+   "club": "Ámsterdam Godenzonen",
+   "pais": "Países Bajos",
+   "colores": [
+    "#ffffff",
+    "#d2122e"
+   ],
+   "rayas": false,
+   "iniciales": "ÁG",
+   "archivo": "club-amsterdam-godenzonen.svg"
+  },
+  {
+   "club": "Rotterdam Stadionclub",
+   "pais": "Países Bajos",
+   "colores": [
+    "#111111",
+    "#00838f"
+   ],
+   "rayas": true,
+   "iniciales": "RS",
+   "archivo": "club-rotterdam-stadionclub.svg"
+  },
+  {
+   "club": "Alkmaar Kaaskoppen",
+   "pais": "Países Bajos",
+   "colores": [
+    "#6a1b9a",
+    "#283593"
+   ],
+   "rayas": false,
+   "iniciales": "AK",
+   "archivo": "club-alkmaar-kaaskoppen.svg"
+  },
+  {
+   "club": "Enschede Tukkers",
+   "pais": "Países Bajos",
+   "colores": [
+    "#c62828",
+    "#1565c0"
+   ],
+   "rayas": false,
+   "iniciales": "ET",
+   "archivo": "club-enschede-tukkers.svg"
+  },
+  {
+   "club": "Utrecht Domstad",
+   "pais": "Países Bajos",
+   "colores": [
+    "#37474f",
+    "#2e7d32"
+   ],
+   "rayas": false,
+   "iniciales": "UD",
+   "archivo": "club-utrecht-domstad.svg"
+  },
+  {
+   "club": "Nijmegen Nijmegenaren",
+   "pais": "Países Bajos",
+   "colores": [
+    "#558b2f",
+    "#37474f"
+   ],
+   "rayas": false,
+   "iniciales": "NN",
+   "archivo": "club-nijmegen-nijmegenaren.svg"
+  },
+  {
+   "club": "Deventer Eagles",
+   "pais": "Países Bajos",
+   "colores": [
+    "#c62828",
+    "#ad1457"
+   ],
+   "rayas": false,
+   "iniciales": "DE",
+   "archivo": "club-deventer-eagles.svg"
+  },
+  {
+   "club": "Heerenveen Friesland",
+   "pais": "Países Bajos",
+   "colores": [
+    "#ffffff",
+    "#111111"
+   ],
+   "rayas": false,
+   "iniciales": "HF",
+   "archivo": "club-heerenveen-friesland.svg"
+  },
+  {
+   "club": "Sparta Kasteel",
+   "pais": "Países Bajos",
+   "colores": [
+    "#00838f",
+    "#f9a825"
+   ],
+   "rayas": true,
+   "iniciales": "SK",
+   "archivo": "club-sparta-kasteel.svg"
+  },
+  {
+   "club": "Sittard Fortuna",
+   "pais": "Países Bajos",
+   "colores": [
+    "#c62828",
+    "#6a1b9a"
+   ],
+   "rayas": false,
+   "iniciales": "SF",
+   "archivo": "club-sittard-fortuna.svg"
+  },
+  {
+   "club": "Groningen Trots",
+   "pais": "Países Bajos",
+   "colores": [
+    "#1565c0",
+    "#c62828"
+   ],
+   "rayas": true,
+   "iniciales": "GT",
+   "archivo": "club-groningen-trots.svg"
+  },
+  {
+   "club": "Zwolle Blauwvingers",
+   "pais": "Países Bajos",
+   "colores": [
+    "#00838f",
+    "#558b2f"
+   ],
+   "rayas": false,
+   "iniciales": "ZB",
+   "archivo": "club-zwolle-blauwvingers.svg"
+  },
+  {
+   "club": "Almelo Heraclieden",
+   "pais": "Países Bajos",
+   "colores": [
+    "#ad1457",
+    "#ffffff"
+   ],
+   "rayas": false,
+   "iniciales": "AH",
+   "archivo": "club-almelo-heraclieden.svg"
+  },
+  {
+   "club": "Breda Brabant",
+   "pais": "Países Bajos",
+   "colores": [
+    "#111111",
+    "#283593"
+   ],
+   "rayas": false,
+   "iniciales": "BB",
+   "archivo": "club-breda-brabant.svg"
+  },
+  {
+   "club": "Kralingen Excelsior",
+   "pais": "Países Bajos",
+   "colores": [
+    "#ffffff",
+    "#283593"
+   ],
+   "rayas": true,
+   "iniciales": "KE",
+   "archivo": "club-kralingen-excelsior.svg"
+  },
+  {
+   "club": "Volendam Palingboeren",
+   "pais": "Países Bajos",
+   "colores": [
+    "#00838f",
+    "#37474f"
+   ],
+   "rayas": true,
+   "iniciales": "VP",
+   "archivo": "club-volendam-palingboeren.svg"
+  },
+  {
+   "club": "Velsen Witte Leeuwen",
+   "pais": "Países Bajos",
+   "colores": [
+    "#1565c0",
+    "#558b2f"
+   ],
+   "rayas": false,
+   "iniciales": "VWL",
+   "archivo": "club-velsen-witte-leeuwen.svg"
+  },
+  {
+   "club": "Tallaght Hoops",
+   "pais": "Irlanda",
+   "colores": [
+    "#c62828",
+    "#2e7d32"
+   ],
+   "rayas": false,
+   "iniciales": "TH",
+   "archivo": "club-tallaght-hoops.svg"
+  },
+  {
+   "club": "Derry Candystripes",
+   "pais": "Irlanda",
+   "colores": [
+    "#37474f",
+    "#00838f"
+   ],
+   "rayas": false,
+   "iniciales": "DC",
+   "archivo": "club-derry-candystripes.svg"
+  },
+  {
+   "club": "Dublin Reds",
+   "pais": "Irlanda",
+   "colores": [
+    "#ad1457",
+    "#558b2f"
+   ],
+   "rayas": false,
+   "iniciales": "DR",
+   "archivo": "club-dublin-reds.svg"
+  },
+  {
+   "club": "Dalymount Gypsies",
+   "pais": "Irlanda",
+   "colores": [
+    "#f9a825",
+    "#1565c0"
+   ],
+   "rayas": false,
+   "iniciales": "DG",
+   "archivo": "club-dalymount-gypsies.svg"
+  },
+  {
+   "club": "Inchicore Saints",
+   "pais": "Irlanda",
+   "colores": [
+    "#00838f",
+    "#1565c0"
+   ],
+   "rayas": false,
+   "iniciales": "IS",
+   "archivo": "club-inchicore-saints.svg"
+  },
+  {
+   "club": "Drogheda Drogs",
+   "pais": "Irlanda",
+   "colores": [
+    "#ffffff",
+    "#00838f"
+   ],
+   "rayas": false,
+   "iniciales": "DD",
+   "archivo": "club-drogheda-drogs.svg"
+  },
+  {
+   "club": "Sligo Bit o' Red",
+   "pais": "Irlanda",
+   "colores": [
+    "#c62828",
+    "#1565c0"
+   ],
+   "rayas": false,
+   "iniciales": "SBO",
+   "archivo": "club-sligo-bit-o-red.svg"
+  },
+  {
+   "club": "Galway Tribesmen",
+   "pais": "Irlanda",
+   "colores": [
+    "#2e7d32",
+    "#37474f"
+   ],
+   "rayas": true,
+   "iniciales": "GT",
+   "archivo": "club-galway-tribesmen.svg"
+  },
+  {
+   "club": "Waterford Blues",
+   "pais": "Irlanda",
+   "colores": [
+    "#1565c0",
+    "#2e7d32"
+   ],
+   "rayas": true,
+   "iniciales": "WB",
+   "archivo": "club-waterford-blues.svg"
+  },
+  {
+   "club": "Cork Rebels",
+   "pais": "Irlanda",
+   "colores": [
+    "#558b2f",
+    "#ad1457"
+   ],
+   "rayas": false,
+   "iniciales": "CR",
+   "archivo": "club-cork-rebels.svg"
+  },
+  {
+   "club": "Estambul Leones",
+   "pais": "Turquía",
+   "colores": [
+    "#a90432",
+    "#fdb912"
+   ],
+   "rayas": true,
+   "iniciales": "EL",
+   "archivo": "club-estambul-leones.svg"
+  },
+  {
+   "club": "Kadıköy Canarios",
+   "pais": "Turquía",
+   "colores": [
+    "#f9a825",
+    "#1565c0"
+   ],
+   "rayas": false,
+   "iniciales": "KC",
+   "archivo": "club-kad-koy-canarios.svg"
+  },
+  {
+   "club": "Beşiktaş Águilas",
+   "pais": "Turquía",
+   "colores": [
+    "#6a1b9a",
+    "#ef6c00"
+   ],
+   "rayas": false,
+   "iniciales": "BÁ",
+   "archivo": "club-besiktas-aguilas.svg"
+  },
+  {
+   "club": "Trebisonda Tormenta",
+   "pais": "Turquía",
+   "colores": [
+    "#37474f",
+    "#111111"
+   ],
+   "rayas": false,
+   "iniciales": "TT",
+   "archivo": "club-trebisonda-tormenta.svg"
+  },
+  {
+   "club": "Başakşehir Búhos",
+   "pais": "Turquía",
+   "colores": [
+    "#ffffff",
+    "#c62828"
+   ],
+   "rayas": true,
+   "iniciales": "BB",
+   "archivo": "club-basaksehir-buhos.svg"
+  },
+  {
+   "club": "Glasgow Celtas",
+   "pais": "Escocia",
+   "colores": [
+    "#8ac3ee",
+    "#ffffff"
+   ],
+   "rayas": false,
+   "iniciales": "GC",
+   "archivo": "club-glasgow-celtas.svg"
+  },
+  {
+   "club": "Ibrox Azules",
+   "pais": "Escocia",
+   "colores": [
+    "#6a1b9a",
+    "#f9a825"
+   ],
+   "rayas": false,
+   "iniciales": "IA",
+   "archivo": "club-ibrox-azules.svg"
+  },
+  {
+   "club": "Aberdeen Dons",
+   "pais": "Escocia",
+   "colores": [
+    "#2e7d32",
+    "#6a1b9a"
+   ],
+   "rayas": false,
+   "iniciales": "AD",
+   "archivo": "club-aberdeen-dons.svg"
+  },
+  {
+   "club": "Edimburgo Corazones",
+   "pais": "Escocia",
+   "colores": [
+    "#ad1457",
+    "#ffffff"
+   ],
+   "rayas": false,
+   "iniciales": "EC",
+   "archivo": "club-edimburgo-corazones.svg"
+  },
+  {
+   "club": "Brujas Azulnegro",
+   "pais": "Bélgica",
+   "colores": [
+    "#2e7d32",
+    "#ffffff"
+   ],
+   "rayas": false,
+   "iniciales": "BA",
+   "archivo": "club-brujas-azulnegro.svg"
+  },
+  {
+   "club": "Anderlecht Malvas",
+   "pais": "Bélgica",
+   "colores": [
+    "#558b2f",
+    "#6a1b9a"
+   ],
+   "rayas": false,
+   "iniciales": "AM",
+   "archivo": "club-anderlecht-malvas.svg"
+  },
+  {
+   "club": "Genk Pitufos",
+   "pais": "Bélgica",
+   "colores": [
+    "#ef6c00",
+    "#6a1b9a"
+   ],
+   "rayas": true,
+   "iniciales": "GP",
+   "archivo": "club-genk-pitufos.svg"
+  },
+  {
+   "club": "Gante Búfalos",
+   "pais": "Bélgica",
+   "colores": [
+    "#00838f",
+    "#f9a825"
+   ],
+   "rayas": false,
+   "iniciales": "GB",
+   "archivo": "club-gante-bufalos.svg"
+  },
+  {
+   "club": "Amberes Grandes",
+   "pais": "Bélgica",
+   "colores": [
+    "#1565c0",
+    "#2e7d32"
+   ],
+   "rayas": false,
+   "iniciales": "AG",
+   "archivo": "club-amberes-grandes.svg"
+  },
+  {
+   "club": "Bruselas Unión",
+   "pais": "Bélgica",
+   "colores": [
+    "#558b2f",
+    "#ffffff"
+   ],
+   "rayas": false,
+   "iniciales": "BU",
+   "archivo": "club-bruselas-union.svg"
+  },
+  {
+   "club": "Salzburgo Toros",
+   "pais": "Austria",
+   "colores": [
+    "#ad1457",
+    "#8d6e63"
+   ],
+   "rayas": false,
+   "iniciales": "ST",
+   "archivo": "club-salzburgo-toros.svg"
+  },
+  {
+   "club": "Viena Verdes",
+   "pais": "Austria",
+   "colores": [
+    "#ad1457",
+    "#00838f"
+   ],
+   "rayas": false,
+   "iniciales": "VV",
+   "archivo": "club-viena-verdes.svg"
+  },
+  {
+   "club": "Graz Negros",
+   "pais": "Austria",
+   "colores": [
+    "#6a1b9a",
+    "#283593"
+   ],
+   "rayas": false,
+   "iniciales": "GN",
+   "archivo": "club-graz-negros.svg"
+  },
+  {
+   "club": "Linz Atléticos",
+   "pais": "Austria",
+   "colores": [
+    "#ffffff",
+    "#c62828"
+   ],
+   "rayas": false,
+   "iniciales": "LA",
+   "archivo": "club-linz-atleticos.svg"
+  },
+  {
+   "club": "Pireo Leyendas",
+   "pais": "Grecia",
+   "colores": [
+    "#111111",
+    "#f9a825"
+   ],
+   "rayas": false,
+   "iniciales": "PL",
+   "archivo": "club-pireo-leyendas.svg"
+  },
+  {
+   "club": "Trébol de Atenas",
+   "pais": "Grecia",
+   "colores": [
+    "#1565c0",
+    "#37474f"
+   ],
+   "rayas": false,
+   "iniciales": "TA",
+   "archivo": "club-trebol-de-atenas.svg"
+  },
+  {
+   "club": "Salónica Águila",
+   "pais": "Grecia",
+   "colores": [
+    "#1565c0",
+    "#c62828"
+   ],
+   "rayas": false,
+   "iniciales": "SÁ",
+   "archivo": "club-salonica-aguila.svg"
+  },
+  {
+   "club": "Atenas Unión",
+   "pais": "Grecia",
+   "colores": [
+    "#f9a825",
+    "#111111"
+   ],
+   "rayas": true,
+   "iniciales": "AU",
+   "archivo": "club-atenas-union.svg"
+  },
+  {
+   "club": "Basilea Rojiazul",
+   "pais": "Suiza",
+   "colores": [
+    "#ef6c00",
+    "#00838f"
+   ],
+   "rayas": false,
+   "iniciales": "BR",
+   "archivo": "club-basilea-rojiazul.svg"
+  },
+  {
+   "club": "Berna Jóvenes",
+   "pais": "Suiza",
+   "colores": [
+    "#c62828",
+    "#283593"
+   ],
+   "rayas": false,
+   "iniciales": "BJ",
+   "archivo": "club-berna-jovenes.svg"
+  },
+  {
+   "club": "Zúrich Leones",
+   "pais": "Suiza",
+   "colores": [
+    "#6a1b9a",
+    "#8d6e63"
+   ],
+   "rayas": true,
+   "iniciales": "ZL",
+   "archivo": "club-zurich-leones.svg"
+  },
+  {
+   "club": "Lugano Bianconeri",
+   "pais": "Suiza",
+   "colores": [
+    "#c62828",
+    "#ffffff"
+   ],
+   "rayas": false,
+   "iniciales": "LB",
+   "archivo": "club-lugano-bianconeri.svg"
+  },
+  {
+   "club": "Praga Eslavos",
+   "pais": "Chequia",
+   "colores": [
+    "#c62828",
+    "#37474f"
+   ],
+   "rayas": true,
+   "iniciales": "PE",
+   "archivo": "club-praga-eslavos.svg"
+  },
+  {
+   "club": "Praga Esparta",
+   "pais": "Chequia",
+   "colores": [
+    "#283593",
+    "#ad1457"
+   ],
+   "rayas": false,
+   "iniciales": "PE",
+   "archivo": "club-praga-esparta.svg"
+  },
+  {
+   "club": "Pilsen Viktoria",
+   "pais": "Chequia",
+   "colores": [
+    "#6a1b9a",
+    "#2e7d32"
+   ],
+   "rayas": false,
+   "iniciales": "PV",
+   "archivo": "club-pilsen-viktoria.svg"
+  },
+  {
+   "club": "Copenhague Leones",
+   "pais": "Dinamarca",
+   "colores": [
+    "#283593",
+    "#00838f"
+   ],
+   "rayas": false,
+   "iniciales": "CL",
+   "archivo": "club-copenhague-leones.svg"
+  },
+  {
+   "club": "Herning Lobos",
+   "pais": "Dinamarca",
+   "colores": [
+    "#558b2f",
+    "#00838f"
+   ],
+   "rayas": false,
+   "iniciales": "HL",
+   "archivo": "club-herning-lobos.svg"
+  },
+  {
+   "club": "Brøndby Amarillos",
+   "pais": "Dinamarca",
+   "colores": [
+    "#1565c0",
+    "#111111"
+   ],
+   "rayas": false,
+   "iniciales": "BA",
+   "archivo": "club-br-ndby-amarillos.svg"
+  },
+  {
+   "club": "Bodø Relámpago",
+   "pais": "Noruega",
+   "colores": [
+    "#ef6c00",
+    "#2e7d32"
+   ],
+   "rayas": true,
+   "iniciales": "BR",
+   "archivo": "club-bod-relampago.svg"
+  },
+  {
+   "club": "Molde Azules",
+   "pais": "Noruega",
+   "colores": [
+    "#283593",
+    "#111111"
+   ],
+   "rayas": false,
+   "iniciales": "MA",
+   "archivo": "club-molde-azules.svg"
+  },
+  {
+   "club": "Malmö Celestes",
+   "pais": "Suecia",
+   "colores": [
+    "#1565c0",
+    "#558b2f"
+   ],
+   "rayas": false,
+   "iniciales": "MC",
+   "archivo": "club-malmo-celestes.svg"
+  },
+  {
+   "club": "Estocolmo Abejas",
+   "pais": "Suecia",
+   "colores": [
+    "#ffffff",
+    "#111111"
+   ],
+   "rayas": false,
+   "iniciales": "EA",
+   "archivo": "club-estocolmo-abejas.svg"
+  },
+  {
+   "club": "Solna Negros",
+   "pais": "Suecia",
+   "colores": [
+    "#ef6c00",
+    "#ad1457"
+   ],
+   "rayas": false,
+   "iniciales": "SN",
+   "archivo": "club-solna-negros.svg"
+  },
+  {
+   "club": "Zagreb Azules",
+   "pais": "Croacia",
+   "colores": [
+    "#ef6c00",
+    "#283593"
+   ],
+   "rayas": false,
+   "iniciales": "ZA",
+   "archivo": "club-zagreb-azules.svg"
+  },
+  {
+   "club": "Split Murciélagos",
+   "pais": "Croacia",
+   "colores": [
+    "#ef6c00",
+    "#8d6e63"
+   ],
+   "rayas": true,
+   "iniciales": "SM",
+   "archivo": "club-split-murcielagos.svg"
+  },
+  {
+   "club": "Rijeka Blancos",
+   "pais": "Croacia",
+   "colores": [
+    "#6a1b9a",
+    "#111111"
+   ],
+   "rayas": false,
+   "iniciales": "RB",
+   "archivo": "club-rijeka-blancos.svg"
+  },
+  {
+   "club": "Belgrado Estrellas",
+   "pais": "Serbia",
+   "colores": [
+    "#ef6c00",
+    "#ad1457"
+   ],
+   "rayas": true,
+   "iniciales": "BE",
+   "archivo": "club-belgrado-estrellas.svg"
+  },
+  {
+   "club": "Belgrado Partisanos",
+   "pais": "Serbia",
+   "colores": [
+    "#c62828",
+    "#2e7d32"
+   ],
+   "rayas": false,
+   "iniciales": "BP",
+   "archivo": "club-belgrado-partisanos.svg"
+  },
+  {
+   "club": "Donetsk Mineros",
+   "pais": "Ucrania",
+   "colores": [
+    "#8d6e63",
+    "#c62828"
+   ],
+   "rayas": true,
+   "iniciales": "DM",
+   "archivo": "club-donetsk-mineros.svg"
+  },
+  {
+   "club": "Kiev Blancos",
+   "pais": "Ucrania",
+   "colores": [
+    "#37474f",
+    "#f9a825"
+   ],
+   "rayas": false,
+   "iniciales": "KB",
+   "archivo": "club-kiev-blancos.svg"
+  },
+  {
+   "club": "Varsovia Legión",
+   "pais": "Polonia",
+   "colores": [
+    "#ef6c00",
+    "#37474f"
+   ],
+   "rayas": false,
+   "iniciales": "VL",
+   "archivo": "club-varsovia-legion.svg"
+  },
+  {
+   "club": "Poznań Ferroviarios",
+   "pais": "Polonia",
+   "colores": [
+    "#283593",
+    "#558b2f"
+   ],
+   "rayas": false,
+   "iniciales": "PF",
+   "archivo": "club-poznan-ferroviarios.svg"
+  },
+  {
+   "club": "Białystok Amarillos",
+   "pais": "Polonia",
+   "colores": [
+    "#2e7d32",
+    "#c62828"
+   ],
+   "rayas": false,
+   "iniciales": "BA",
+   "archivo": "club-bia-ystok-amarillos.svg"
+  },
+  {
+   "club": "Bucarest Militares",
+   "pais": "Rumanía",
+   "colores": [
+    "#8d6e63",
+    "#ffffff"
+   ],
+   "rayas": false,
+   "iniciales": "BM",
+   "archivo": "club-bucarest-militares.svg"
+  },
+  {
+   "club": "Cluj Ferroviarios",
+   "pais": "Rumanía",
+   "colores": [
+    "#283593",
+    "#8d6e63"
+   ],
+   "rayas": false,
+   "iniciales": "CF",
+   "archivo": "club-cluj-ferroviarios.svg"
+  },
+  {
+   "club": "Budapest Águilas",
+   "pais": "Hungría",
+   "colores": [
+    "#00838f",
+    "#111111"
+   ],
+   "rayas": false,
+   "iniciales": "BÁ",
+   "archivo": "club-budapest-aguilas.svg"
+  },
+  {
+   "club": "Nicosia Azules",
+   "pais": "Chipre",
+   "colores": [
+    "#111111",
+    "#1565c0"
+   ],
+   "rayas": false,
+   "iniciales": "NA",
+   "archivo": "club-nicosia-azules.svg"
+  },
+  {
+   "club": "Limasol Marineros",
+   "pais": "Chipre",
+   "colores": [
+    "#8d6e63",
+    "#ef6c00"
+   ],
+   "rayas": true,
+   "iniciales": "LM",
+   "archivo": "club-limasol-marineros.svg"
+  },
+  {
+   "club": "Pafos Ciudad",
+   "pais": "Chipre",
+   "colores": [
+    "#37474f",
+    "#f9a825"
+   ],
+   "rayas": false,
+   "iniciales": "PC",
+   "archivo": "club-pafos-ciudad.svg"
+  },
+  {
+   "club": "Tel Aviv Macabeos",
+   "pais": "Israel",
+   "colores": [
+    "#ad1457",
+    "#6a1b9a"
+   ],
+   "rayas": false,
+   "iniciales": "TAM",
+   "archivo": "club-tel-aviv-macabeos.svg"
+  },
+  {
+   "club": "Haifa Verdes",
+   "pais": "Israel",
+   "colores": [
+    "#111111",
+    "#6a1b9a"
+   ],
+   "rayas": true,
+   "iniciales": "HV",
+   "archivo": "club-haifa-verdes.svg"
+  },
+  {
+   "club": "Bratislava Eslovanes",
+   "pais": "Eslovaquia",
+   "colores": [
+    "#ef6c00",
+    "#558b2f"
+   ],
+   "rayas": false,
+   "iniciales": "BE",
+   "archivo": "club-bratislava-eslovanes.svg"
+  },
+  {
+   "club": "Razgrad Águilas",
+   "pais": "Bulgaria",
+   "colores": [
+    "#1565c0",
+    "#ffffff"
+   ],
+   "rayas": false,
+   "iniciales": "RÁ",
+   "archivo": "club-razgrad-aguilas.svg"
+  },
+  {
+   "club": "Celje Condes",
+   "pais": "Eslovenia",
+   "colores": [
+    "#1565c0",
+    "#2e7d32"
+   ],
+   "rayas": false,
+   "iniciales": "CC",
+   "archivo": "club-celje-condes.svg"
+  },
+  {
+   "club": "Bakú Caballos",
+   "pais": "Azerbaiyán",
+   "colores": [
+    "#f9a825",
+    "#2e7d32"
+   ],
+   "rayas": true,
+   "iniciales": "BC",
+   "archivo": "club-baku-caballos.svg"
+  },
+  {
+   "club": "Almaty Estepa",
+   "pais": "Kazajistán",
+   "colores": [
+    "#111111",
+    "#c62828"
+   ],
+   "rayas": false,
+   "iniciales": "AE",
+   "archivo": "club-almaty-estepa.svg"
+  },
+  {
+   "club": "Astaná Halcones",
+   "pais": "Kazajistán",
+   "colores": [
+    "#37474f",
+    "#111111"
+   ],
+   "rayas": false,
+   "iniciales": "AH",
+   "archivo": "club-astana-halcones.svg"
+  }
+ ]
+}

@@ -35,6 +35,7 @@ function lgOfPlayer(p){return p.c>=0?lgOf(p.c):null;}
 
 /* ---------- fin de mes: equipo del mes de cada liga ---------- */
 function monthEnd(m){
+ valuation();
  S.lgs.forEach(function(lg){
   var set={};lg.clubs.forEach(function(id){set[id]=1;});
   var c=S.pl.filter(function(p){return p&&set[p.c]&&p.ms[0]>=2;});
@@ -50,7 +51,7 @@ function monthEnd(m){
  sponsorMonth();
 }
 function myAward(t,medals,cash){S.medals+=medals||0;S.money+=cash||0;S.trophies.push({s:S.season,n:t,k:'ind'});logm('Premio: '+t+'.');toast('Premio: '+t);}
-function addTrophy(n,k){S.trophies.push({s:S.season,n:n,k:k||'copa'});S.stats.titles=(S.stats.titles||0)+1;logm('¡Título! '+n+'.');}
+function addTrophy(n,k){S.trophies.push({s:S.season,n:n,k:k||'copa'});S.stats.titles=(S.stats.titles||0)+1;logm('¡Título! '+n+'.');if(typeof titleMoment==='function')titleMoment(n);}
 function trophyCheck(kind,win,n){var me=S.pl[S.me];
  if(kind==='club'&&win===me.c)addTrophy(n,'copa');
  if(kind==='nat'&&win===me.nat&&S.tourCalled)addTrophy(n+' con '+nation(me.nat).n,'sel');}
