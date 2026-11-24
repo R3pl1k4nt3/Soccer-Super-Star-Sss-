@@ -17,6 +17,7 @@ var CREST_SHAPES=[
 ];
 function crestSVG(c,size){
  if(!c)return '';size=size||22;
+ if(typeof crestPlus==='function'){var cp=crestPlus(c,size);if(cp)return cp;}
  if(S&&S.real&&typeof ESCUDOS!=='undefined'&&ESCUDOS[c.n])return '<img class="crest" src="'+esc(ESCUDOS[c.n])+'" alt="" width="'+size+'" height="'+size+'" loading="lazy">';
  var k=clubColors(c),h=hashStr(c.n),shape=CREST_SHAPES[h%CREST_SHAPES.length],div=(h>>3)%6,id='cr'+(++AVN);
  var a=k.a,b=k.b;if(a===b)b=lum(a)>0.5?'#111':'#fff';

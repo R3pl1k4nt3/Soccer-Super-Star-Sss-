@@ -14,4 +14,4 @@
 
 > Diseña un set coherente de iconos para un videojuego de carrera de fútbol con interfaz oscura: {LISTA}. Estilo de línea redondeada de 2 px sobre cuadrícula de 24×24 con un acento de relleno en un solo color, legibles a 20 px, cada icono distinguible por su forma sin depender del color. Colores: línea #e8edf7 y acento #2bd47d (o #f5c542 para premios y momentos estrella, #ff6b6b para momentos negros y lesión). SVG con `currentColor` en la línea para que la interfaz pueda cambiarla. Sin texto.
 
-**Entrega:** `entregas/iconos/<grupo>-<nombre>.svg` (por ejemplo `rasgo-velocista.svg`).
+**Entrega:** `entregas/iconos/<grupo>-<nombre>.svg`. Navegación (ya los usa el juego): `nav-inicio.svg`, `nav-partido.svg`, `nav-jugador.svg`, `nav-carrera.svg`, `nav-vida.svg`. Resto, por ejemplo `rasgo-velocista.svg`, `accion-consejo.svg`, `momento-hat-trick.svg`.

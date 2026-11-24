@@ -14,7 +14,7 @@ var ICONS={
  shop:'<path d="M5 8h14l-1 12H6zM9 8V6a3 3 0 0 1 6 0v2"/>',
  career:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/>'
 };
-function ico(k){return '<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+ICONS[k]+'</svg>';}
+function ico(k){if(typeof icoPlus==='function'){var ip=icoPlus(k);if(ip)return ip;}return '<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+ICONS[k]+'</svg>';}
 /* título y subtítulo de cada página */
 function pageHead(){
  var sl=S.cal[Math.min(S.slot,S.cal.length-1)],c=myClub();
@@ -26,7 +26,7 @@ function pageHead(){
 function dots(){return {home:homeBadge(),life:!!S.event||S.sofs.length>0,match:!!(S.match||S.press)};}
 function sideHTML(){
  var c=myClub(),kit=clubColors(c),d=dots();
- return '<aside id="side" aria-label="Menú principal"><div class="brand"><svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.9L22 9.3l-5.5 4.8L18.2 21 12 17.3 5.8 21l1.7-6.9L2 9.3l7.1-.4z" fill="currentColor"/></svg>Estrella del Balón</div>'+
+ return '<aside id="side" aria-label="Menú principal"><div class="brand">'+(logoPlus(26)||'<svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.9L22 9.3l-5.5 4.8L18.2 21 12 17.3 5.8 21l1.7-6.9L2 9.3l7.1-.4z" fill="currentColor"/></svg>')+'Estrella del Balón</div>'+
   '<div class="me-card"><div class="face">'+faceSVG(S.look,kit,64)+'</div><div><b>'+esc(S.name)+'</b><span class="small mut">'+POS[S.pos]+' · '+S.age+' años</span><div class="small mut">'+esc(c.n)+'</div></div></div>'+
   '<div class="me-stats"><div><b class="star num">'+ds(overall())+'</b><span>Valoración</span></div><div><b class="money num">'+fmt(S.money)+'</b><span>Dinero</span></div><div><b class="num">'+S.medals+'</b><span>Medallas</span></div></div>'+
   '<nav class="sidenav" aria-label="Secciones">'+TABS.map(function(t){return '<button data-a="tab" data-id="'+t[0]+'"'+(S.tab===t[0]?' aria-current="page"':'')+'>'+ico(t[0])+'<span>'+t[1]+'</span>'+(d[t[0]]?'<span class="dot'+(typeof d[t[0]]==='number'?' n':'')+'" aria-label="Pendiente">'+(typeof d[t[0]]==='number'?d[t[0]]:'')+'</span>':'')+'</button>';}).join('')+'</nav>'+
@@ -70,6 +70,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&UI.sq){UI.s
  var b=e.target.closest&&e.target.closest('[data-a]');if(!b)return;
  var a=b.getAttribute('data-a'),id=b.getAttribute('data-id'),n=+b.getAttribute('data-n'),i=+b.getAttribute('data-i');
  if(a==='start'){var nm=(($('#nm')?$('#nm').value:setupState.name)||'').trim();if(!nm){setupErr='Escribe un nombre.';setupState.step=2;UI.focusName=1;render();return;}setupErr='';setupState.name=nm;newGame(nm,setupState.pos,setupState.tp,setupState.ts,setupState.nat,setupState.co,setupState.ver==='real',setupState.look);CUR=UI.newSlot||freeSlot()||1;saveNow();UI.comp=null;render();return;}
+ if(a==='gfx'){setGfxMode(id);render();return;}
  if(a==='ver'&&!S){setupState.ver=id;render();return;}
  if(a==='step'&&!S){var st=setupState;
   if(n>st.step&&st.step<=2&&n>2&&!(st.name||'').trim()){st.step=2;setupErr='Escribe un nombre para seguir.';UI.focusName=1;render();return;}
@@ -122,5 +123,6 @@ document.addEventListener('change',function(e){var t=e.target;if(!t)return;
  if(t.id==='ps')setupState.pos=t.value;else if(t.id==='tp')setupState.tp=t.value;else if(t.id==='ts')setupState.ts=t.value;else if(t.id==='na')setupState.nat=t.value;else if(t.id==='co')setupState.co=t.value;else return;render();});
 window.__dbg={get S(){return S;},set S(v){S=v;},newGame:newGame,playN:playN,playSlot:playSlot,choose:choose,pressAnswer:pressAnswer,doEvent:doEvent,doAct:doAct,train:train,promo:promo,render:render,UI:UI,
  overall:overall,leaders:leaders,genOffers:genOffers,accept:accept,signSponsor:signSponsor,buyGear:buyGear,gearCatalog:gearCatalog,hireAgent:hireAgent,hireCM:hireCM,sponsorPost:sponsorPost,squad:function(c,p){UI.sq={club:c,p:p};var h=squadHTML();UI.sq=null;return h;},views:VIEWS,viewComp:viewComp,doActCheck:actState,save:save,saveNow:saveNow,metaAll:metaAll,toMenu:toMenu,openSlot:openSlot};
+applyGfxBackground();
 bootSaves();
 render();

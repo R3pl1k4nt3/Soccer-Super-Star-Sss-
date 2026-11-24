@@ -9,8 +9,8 @@
 | Capa | Variantes | Color de referencia |
 | --- | --- | --- |
 | Cuerpo (piel) | `cuerpo-delgado`, `cuerpo-normal`, `cuerpo-fuerte` | piel `#d29a6e` |
-| Camiseta | `camiseta-fuera-manga-corta`, `camiseta-fuera-manga-larga`, `camiseta-dentro-manga-corta`, `camiseta-dentro-manga-larga` (× 3 complexiones) | `#1565c0` / `#ffffff` |
-| Pantalón | `pantalon` (× 3 complexiones) | `#ffffff` |
+| Camiseta | `camiseta-{fuera|dentro}-manga-{corta|larga}-{delgado|normal|fuerte}` (12 archivos, por ejemplo `camiseta-fuera-manga-corta-normal`) | `#1565c0` / `#ffffff` |
+| Pantalón | `pantalon-delgado`, `pantalon-normal`, `pantalon-fuerte` | `#ffffff` |
 | Medias | `medias-altas` (por encima de la rodilla), `medias-normales`, `medias-bajadas` (se ven las espinilleras) | `#ffffff` con franja `#1565c0` |
 | Botas | se toman del encargo 03 | — |
 | Muñequera | `munequera` | `#ffffff` |

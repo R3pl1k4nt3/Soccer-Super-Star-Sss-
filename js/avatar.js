@@ -74,6 +74,7 @@ function kitDefs(kit,uid){
 }
 /* retrato a medio cuerpo */
 function portraitSVG(L,kit,size,label){
+ if(typeof gfxOn==='function'&&gfxOn()){var gp=portraitPlus(L||defaultLook('DC'),kit||{a:'#1565c0',b:'#ffffff',st:0},size||160,label);if(gp)return gp;}
  L=L||defaultLook('DC');kit=kit||{a:'#1565c0',b:'#ffffff',st:0};var u=++AVN,P=headParts(L,u),bw=L.build==='de'?0.92:L.build==='fu'?1.08:1;
  var sh='<path d="M'+(100-92*bw)+' 220 C'+(100-88*bw)+' 182 '+(100-62*bw)+' 166 70 160 Q100 174 130 160 C'+(100+62*bw)+' 166 '+(100+88*bw)+' 182 '+(100+92*bw)+' 220 Z" fill="url(#ks'+u+')"/>';
  sh+='<path d="M'+(100-92*bw)+' 220 C'+(100-88*bw)+' 182 '+(100-62*bw)+' 166 70 160 Q100 174 130 160 C'+(100+62*bw)+' 166 '+(100+88*bw)+' 182 '+(100+92*bw)+' 220 Z" fill="url(#ko'+u+')"/>';
@@ -85,12 +86,14 @@ function portraitSVG(L,kit,size,label){
 }
 /* solo la cara, para miniaturas */
 function faceSVG(L,kit,size){
+ if(typeof gfxOn==='function'&&gfxOn()){var gp=facePlus(L||defaultLook('DC'),kit||{a:'#1565c0',b:'#fff',st:0},size);if(gp)return gp;}
  L=L||defaultLook('DC');var u=++AVN,P=headParts(L,u);kit=kit||{a:'#1565c0',b:'#fff',st:0};
  var sh='<path d="M10 220 C14 182 40 166 70 160 Q100 174 130 160 C160 166 186 182 190 220 Z" fill="'+kit.a+'"/><path d="M70 160 Q100 174 130 160 L124 157 Q100 168 76 157 Z" fill="'+kit.b+'"/>';
  return '<svg viewBox="30 24 140 140" width="'+size+'" height="'+size+'" aria-hidden="true"><defs>'+P.defs+'</defs>'+P.back+sh+P.head+P.front+'</svg>';
 }
 /* cuerpo entero: 8 cabezas de alto, camiseta por dentro o por fuera, medias, botas y tatuajes */
 function bodySVG(L,kit,size){
+ if(typeof gfxOn==='function'&&gfxOn()){var gp=bodyPlus(L||defaultLook('DC'),kit||{a:'#1565c0',b:'#ffffff',st:0},size||150);if(gp)return gp;}
  L=L||defaultLook('DC');kit=kit||{a:'#1565c0',b:'#ffffff',st:0};var u=++AVN,P=headParts(L,u);
  var sk=L.skin,ink='rgba(24,32,58,.75)',bw=L.build==='de'?0.9:L.build==='fu'?1.12:1,sy=clamp((L.alt||180)/180,0.93,1.08);
  var cx=100,sw=44*bw,hip=30*bw,y0=150,waist=300,hem=L.shirt==='de'?300:322,sl=L.sleeve==='la',h='';

@@ -324,7 +324,7 @@ function viewShop(){
  cat.sort(function(a,b){return a.c-b.c;});
  h+='<div>';
  cat.forEach(function(g){var b=byId(BRANDS,g.brand),lock=g.slot==='botas'&&bs&&g.brand!==bs;
-  h+='<div class="item"><div><b>'+esc(g.n)+'</b> <span class="lv">'+g.gama+' · '+'★'.repeat(b.tier)+'</span><p>'+g.sk.map(function(id){return (SKNAME[id]||id)+' +'+g.b;}).join(' · ')+' · dura '+g.dur+' partidos</p></div><button class="go '+(S.money>=g.c&&!lock?'':'dis')+'" data-a="gear" data-id="'+g.id+'">'+fmt(g.c)+'</button></div>';});
+  h+='<div class="item">'+gearImg(g)+'<div><b>'+esc(g.n)+'</b> <span class="lv">'+g.gama+' · '+'★'.repeat(b.tier)+'</span><p>'+g.sk.map(function(id){return (SKNAME[id]||id)+' +'+g.b;}).join(' · ')+' · dura '+g.dur+' partidos</p></div><button class="go '+(S.money>=g.c&&!lock?'':'dis')+'" data-a="gear" data-id="'+g.id+'">'+fmt(g.c)+'</button></div>';});
  h+='</div><div class="card"><h3>Servicios</h3>';
  SHOP.forEach(function(s){var l=itemLvl(s.id);h+='<div class="item"><div><b>'+s.n+' <span class="lv">Nv '+l+'/3</span></b><p>'+s.d+'</p></div>'+(l>=3?'<span class="good">Máximo</span>':'<button class="go '+(S.money>=s.c[l]?'':'dis')+'" data-a="buy" data-id="'+s.id+'">'+fmt(s.c[l])+'</button>')+'</div>';});
  return h+'</div>';
@@ -346,7 +346,8 @@ function viewCareer(){
  h+='<div class="card"><h3>Noticias</h3>';
  S.log.slice(0,20).forEach(function(l){h+='<div class="ev"><b style="width:74px;font-size:13px">'+l.t+'</b><span>'+esc(l.m)+'</span></div>';});
  if(S.real)h+='</div><div class="card small mut">'+REAL_NOTE+(S.realSeason?' Datos de la temporada '+S.realSeason+'.':'');
- h+='</div><div class="card"><h3>Partida</h3><p class="small mut" style="margin-top:0">Se guarda sola en este navegador'+(CUR?' (hueco '+CUR+')':'')+'. Exporta una copia para no perderla o para seguir en otro dispositivo.</p><div class="btns"><button class="go alt" data-a="export">Exportar a archivo</button><button class="go alt" data-a="menu">Menú de partidas</button>'+(UI.reset?'<p class="small bad full" style="margin:6px 0 0">Se borrará esta carrera para siempre. ¿Seguro?</p><button class="go" data-a="reset2">Sí, borrar</button><button class="go alt" data-a="reset0">Cancelar</button>':'<button class="go alt full" data-a="reset1">Borrar esta carrera</button>')+'</div></div>';
+ h+='</div><div class="card"><h3>Gráficos</h3>'+gfxSwitch()+'</div>';
+ h+='<div class="card"><h3>Partida</h3><p class="small mut" style="margin-top:0">Se guarda sola en este navegador'+(CUR?' (hueco '+CUR+')':'')+'. Exporta una copia para no perderla o para seguir en otro dispositivo.</p><div class="btns"><button class="go alt" data-a="export">Exportar a archivo</button><button class="go alt" data-a="menu">Menú de partidas</button>'+(UI.reset?'<p class="small bad full" style="margin:6px 0 0">Se borrará esta carrera para siempre. ¿Seguro?</p><button class="go" data-a="reset2">Sí, borrar</button><button class="go alt" data-a="reset0">Cancelar</button>':'<button class="go alt full" data-a="reset1">Borrar esta carrera</button>')+'</div></div>';
  return h;
 }
 
@@ -501,7 +502,7 @@ function menuHTML(){
    '<div class="slotbtns">'+(del?'<span class="small bad">¿Borrar para siempre?</span><button class="go" data-a="slotdel2" data-id="'+i+'">Sí, borrar</button><button class="go alt" data-a="slotdel0">No</button>':
    '<button class="go" data-a="slotopen" data-id="'+i+'">Continuar</button><button class="go alt" data-a="slotexp" data-id="'+i+'">Exportar</button><button class="go alt" data-a="slotdel1" data-id="'+i+'">Borrar</button>')+'</div></div>';}
  h+='</div><div class="rowb" style="margin-top:12px;flex-wrap:wrap"><p class="small mut" style="margin:0;max-width:560px">Las partidas se guardan solas en este navegador. Exporta una copia a un archivo para no perderla o para seguir en otro dispositivo.</p>'+
-  '<label class="go alt filebtn" style="margin:0">Importar partida<input id="imp" type="file" accept=".json,application/json" class="sr"></label></div></section>'+
+  '<div style="flex-basis:100%">'+gfxSwitch()+'</div><label class="go alt filebtn" style="margin:0">Importar partida<input id="imp" type="file" accept=".json,application/json" class="sr"></label></div></section>'+
   '<p class="small mut">Versión ficticia con clubes inspirados en los reales. La versión real es solo para pruebas y uso particular, no comercial.</p></div></div>';
  return h;
 }

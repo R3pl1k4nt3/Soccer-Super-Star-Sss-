@@ -15,4 +15,4 @@
 
 > Logotipo para el videojuego «Estrella del Balón»: una estrella de cinco puntas dorada (#f5c542) integrada con un balón de fútbol estilizado, moderno y plano, legible a 32 px. Versión de icono cuadrado sobre fondo #0a101d y versión horizontal con el nombre en una tipografía condensada y deportiva. SVG. Original, sin parecido con logotipos existentes.
 
-**Entrega:** `entregas/fondos/` e `entregas/logo/`.
+**Entrega:** `entregas/fondos/fondo-escritorio.jpg`, `entregas/fondos/fondo-movil.jpg`, `entregas/fondos/cabecera-menu.jpg`, `entregas/fondos/momento-estrella.jpg`, `entregas/fondos/momento-negro.jpg`, `entregas/logo/logo-icono.svg` y `entregas/logo/logo-horizontal.svg`.

@@ -2,12 +2,14 @@
 
 Esta carpeta reúne los encargos para pedir a herramientas de diseño o de imagen (generadores de imágenes, ilustradores, editores vectoriales) los gráficos que el juego hoy dibuja con SVG sencillos: jugadores, botas, guantes, equipaciones, escudos ficticios, iconos y fondos.
 
+**Empieza por `INSTRUCCIONES.md`:** qué va en cada carpeta, con qué nombre y cómo activarlo en el juego (Gráficos → Mejorados).
+
 ## Cómo usarla
 
 1. Lee `guia-de-estilo.md`: paleta, estilo, formatos y reglas comunes. Pégala siempre **antes** de cada encargo para que todo salga coherente.
 2. Elige el encargo en `prompts/` y copia el bloque «Prompt». Cada archivo indica tamaño, formato, fondo y nombres de archivo.
 3. Guarda lo que obtengas en `entregas/<tipo>/` con los nombres que pide `inventario.json`.
-4. Cuando haya entregas, el juego podrá usarlas en lugar de los dibujos actuales: avísame y hago el cambio (se cargan por nombre de archivo, como los escudos reales).
+4. Ejecuta `tools\registrar-graficos.ps1` y elige Gráficos → Mejorados en el juego. Lo que falte se sigue viendo con los gráficos clásicos.
 
 ## Encargos
 
