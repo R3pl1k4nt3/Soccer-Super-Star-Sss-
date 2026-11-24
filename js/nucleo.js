@@ -140,7 +140,7 @@ function fmv(v){return v>=1e6?(+(v/1e6).toFixed(v>=1e7?1:2)).toString().replace(
 
 /* ---------- guardado ---------- */
 var S=null, toasts=[];
-function logm(m){S.log.unshift({t:'T'+S.season+' · '+MONTHS[slotMonth(S.slot)].slice(0,3),m:m});if(S.log.length>60)S.log.length=60;}
+function logm(m){S.logN=(S.logN||0)+1;S.log.unshift({t:'T'+S.season+' · '+MONTHS[slotMonth(S.slot)].slice(0,3),m:m});if(S.log.length>60)S.log.length=60;}
 function toast(m,err){var t={m:m,err:!!err,id:Math.random()};toasts.push(t);if(toasts.length>3)toasts.shift();render();setTimeout(function(){toasts=toasts.filter(function(x){return x!==t;});render();},t.err?6000:4500);}
 function rel(k,v){S.rel[k]=clamp(Math.round((S.rel[k]+v)*10)/10,0,100);}
 function moral(v){S.moral=clamp(Math.round(S.moral+v),0,100);}

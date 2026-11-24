@@ -242,23 +242,43 @@ function doEvent(oi){if(!S.event)return;var ev=EVENTS[S.event.i];S.event=null;va
 
 /* ---------- acciones sociales ---------- */
 var ACTS=[
- {id:'consejo',w:'coach',n:'Pedir consejo al entrenador',d:'+4 relación y +2 puntos en una habilidad',cost:0,run:function(){rel('coach',4);var k=pick(S.skills);addProg(k,2);return 'El míster te da claves de '+k.n+': +2 puntos.';}},
- {id:'minutos',w:'coach',n:'Pedir más minutos',d:'Funciona si tu último partido fue bueno',cost:0,run:function(){if(S.last&&S.last.mins>0&&S.last.r>=6.5){rel('coach',5);return 'El míster valora tu actitud.';}rel('coach',-6);return 'No le ha sentado bien.';}},
- {id:'cena',w:'team',n:'Cena de equipo',d:'Cuesta '+fmt(5000)+', +5 relación',cost:5000,run:function(){rel('team',5);return 'Buen ambiente en el vestuario.';}},
- {id:'joven',w:'team',n:'Ayudar a un compañero joven',d:'+3 relación con el vestuario y con el míster',cost:0,run:function(){rel('team',3);rel('coach',1);return 'Te lo agradecen.';}},
- {id:'entrevista',w:'press',n:'Dar una entrevista',d:'+4 relación con la prensa y más seguidores',cost:0,run:function(){rel('press',4);S.fol=Math.round(S.fol*1.01);return 'Buena entrevista.';}},
- {id:'polemica',w:'press',n:'Declaraciones polémicas',d:'Muchos seguidores, pero riesgo con prensa y vestuario',cost:0,run:function(){S.fol=Math.round(S.fol*1.04);if(Math.random()<0.5){rel('press',3);return 'Los titulares te favorecen.';}rel('press',-4);rel('team',-3);return 'Los titulares te pasan factura.';}},
- {id:'autografos',w:'fans',n:'Firmar autógrafos',d:'+3 relación con la afición',cost:0,run:function(){rel('fans',3);S.fol=Math.round(S.fol*1.005);return 'La afición se va contenta.';}},
- {id:'dona',w:'fans',n:'Donar a una causa local',d:'Cuesta '+fmt(10000)+', +5 afición y +2 prensa',cost:10000,run:function(){rel('fans',5);rel('press',2);return 'Gran gesto con tu comunidad.';}},
- {id:'contrato',w:'board',n:'Pedir mejora de contrato',d:'Tu representante negocia una subida',cost:0,run:function(){var me=S.pl[S.me];var p=clamp(0.15+0.05*agentLvl()+(overall()-S.clubs[me.c].str)/100+(S.rel.board-50)/150,0.05,0.85);if(Math.random()<p){S.contract.wage=Math.round(S.contract.wage*(1.06+0.02*agentLvl())/100)*100;rel('board',2);return 'Aceptan. Tu salario sube a '+fmt(S.contract.wage)+'.';}rel('board',-4);return 'Dicen que no es el momento.';}}
+ {id:'consejo',w:'coach',n:'Pedir consejo al entrenador',d:'+4 relación y +2 puntos en una habilidad',cd:4,cost:0,run:function(){rel('coach',4);var k=pick(S.skills);addProg(k,2);return 'El míster te da claves de '+k.n+': +2 puntos.';}},
+ {id:'minutos',w:'coach',n:'Pedir más minutos',d:'Solo si estás jugando poco. Sale bien si tu último partido fue bueno',cd:4,cost:0,
+  cond:function(){return !S.last||S.last.mins<60?null:'Estás jugando: no tiene sentido pedir más minutos.';},
+  run:function(){if(S.last&&S.last.mins>0&&S.last.r>=6.5){rel('coach',5);return 'El míster valora tu actitud.';}rel('coach',-6);return 'No le ha sentado bien.';}},
+ {id:'cena',w:'team',n:'Cena de equipo',d:'Cuesta '+fmt(5000)+', +5 relación',cd:8,cost:5000,run:function(){rel('team',5);return 'Buen ambiente en el vestuario.';}},
+ {id:'joven',w:'team',n:'Ayudar a un compañero joven',d:'+3 relación con el vestuario y +1 con el míster',cd:3,cost:0,run:function(){rel('team',3);rel('coach',1);return 'Te lo agradecen.';}},
+ {id:'entrevista',w:'press',n:'Dar una entrevista',d:'+4 relación con la prensa y más seguidores. Rinde menos si das muchas',cd:2,dim:1,cost:0,run:function(f){rel('press',Math.round(4*f));S.fol=Math.round(S.fol*(1+0.01*f));return f<1?'Otra entrevista más: ya no despierta tanto interés.':'Buena entrevista.';}},
+ {id:'polemica',w:'press',n:'Declaraciones polémicas',d:'Muchos seguidores, pero riesgo con prensa y vestuario. Repetirlas sale cada vez peor',cd:3,dim:1,cost:0,run:function(f){S.fol=Math.round(S.fol*(1+0.04*f));if(Math.random()<0.5*f){rel('press',3);return 'Los titulares te favorecen.';}rel('press',-4-(f<1?2:0));rel('team',-3-(f<1?2:0));return f<1?'Otra polémica más: la prensa y el vestuario se cansan de ti.':'Los titulares te pasan factura.';}},
+ {id:'autografos',w:'fans',n:'Firmar autógrafos',d:'+3 relación con la afición',cd:1,cost:0,run:function(){rel('fans',3);S.fol=Math.round(S.fol*1.005);return 'La afición se va contenta.';}},
+ {id:'dona',w:'fans',n:'Donar a una causa local',d:'Cuesta '+fmt(10000)+', +5 afición y +2 prensa',cd:6,cost:10000,run:function(){rel('fans',5);rel('press',2);return 'Gran gesto con tu comunidad.';}},
+ {id:'contrato',w:'board',n:'Pedir mejora de contrato',d:'Tu representante negocia una subida. Una vez por temporada y con el mercado abierto',season:1,cost:0,
+  cond:function(){return windowOpen()?null:'Solo con el mercado abierto (inicio de temporada y enero).';},
+  run:function(){var me=S.pl[S.me];var p=clamp(0.15+0.05*agentLvl()+(overall()-S.clubs[me.c].str)/100+(S.rel.board-50)/150,0.05,0.85);if(Math.random()<p){S.contract.wage=Math.round(S.contract.wage*(1.06+0.02*agentLvl())/100)*100;rel('board',2);return 'Aceptan. Tu salario sube a '+fmt(S.contract.wage)+'.';}rel('board',-4);return 'Dicen que no es el momento.';}}
 ];
-function doAct(id){
- var a=byId(ACTS,id);
- if(S.acts<=0){toast('Ya has usado tus 2 acciones de esta semana.',1);return;}
- if(S.money<a.cost){toast('Te faltan '+fmt(a.cost-S.money)+'.',1);return;}
- S.money-=a.cost;S.acts--;var m=a.run();logm(m);toast(m);save();render();
+/* estado de una acción: si se puede hacer y, si no, por qué y cuándo */
+function actState(a){
+ var wk=S.wk||0,cd=S.actCd||{},ss=S.actSeason||{};
+ if(a.season&&ss[a.id]===S.season)return {ok:false,why:'Ya la has pedido esta temporada.',lbl:'Próxima temporada'};
+ if(cd[a.id]>wk){var w=cd[a.id]-wk;return {ok:false,why:'Disponible dentro de '+w+' semana'+(w>1?'s':'')+'.',lbl:'En '+w+' sem.'};}
+ var c=a.cond&&a.cond();if(c)return {ok:false,why:c,lbl:'No disponible'};
+ if(S.money<a.cost)return {ok:false,why:'Te faltan '+fmt(a.cost-S.money)+'.',lbl:fmt(a.cost)};
+ if(S.acts<=0)return {ok:false,why:'Ya has usado tus 2 acciones de esta semana.',lbl:'Sin agenda'};
+ return {ok:true,lbl:a.cost?'Hacer · '+fmt(a.cost):'Hacer'};
 }
-
+/* las acciones repetidas rinden menos: cada uso en las últimas 10 semanas resta un 30 % */
+function actFactor(a){if(!a.dim)return 1;var u=(S.actUse||{})[a.id]||[],wk=S.wk||0,n=u.filter(function(x){return wk-x<10;}).length;return Math.max(0.25,1-0.3*n);}
+function doAct(id){
+ var a=byId(ACTS,id),st=actState(a);
+ if(!st.ok){toast(st.why,1);return;}
+ var f=actFactor(a);
+ S.money-=a.cost;S.acts--;
+ S.actCd=S.actCd||{};S.actSeason=S.actSeason||{};S.actUse=S.actUse||{};
+ if(a.cd)S.actCd[id]=(S.wk||0)+a.cd;
+ if(a.season)S.actSeason[id]=S.season;
+ (S.actUse[id]=S.actUse[id]||[]).push(S.wk||0);if(S.actUse[id].length>6)S.actUse[id].shift();
+ var m=a.run(f);logm(m);toast(m);save();render();
+}
 /* ---------- tienda e inversiones ---------- */
 function buy(id){var it=byId(SHOP,id),l=itemLvl(id);if(l>=3)return;var c=it.c[l];if(S.money<c){toast('Te faltan '+fmt(c-S.money)+'.',1);return;}S.money-=c;S.items[id]=l+1;logm('Contratas: '+it.n+' (nivel '+(l+1)+').');save();render();}
 function invest(id){var v=byId(INVEST,id);if(S.invest[id])return;if(S.money<v.c){toast('Te faltan '+fmt(v.c-S.money)+'.',1);return;}S.money-=v.c;S.invest[id]=1;logm('Inviertes en: '+v.n+'.');save();render();}

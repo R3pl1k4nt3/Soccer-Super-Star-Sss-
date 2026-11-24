@@ -1,8 +1,10 @@
 /* Estrella del Balón · arranque, pintado y eventos. */
-var TABS=[['match','Partido'],['train','Entreno'],['comp','Competiciones'],['club','Club'],['life','Vida'],['money','Negocio'],['shop','Tienda'],['career','Carrera']];
-var TABSHORT={comp:'Compet.'};
-var VIEWS={train:viewTrain,match:viewMatch,comp:viewComp,club:viewClub,life:viewLife,money:viewMoney,shop:viewShop,career:viewCareer};
+var TABS=[['home','Inicio'],['match','Partido'],['player','Jugador'],['career','Carrera'],['life','Vida']];
+var TABSHORT={};
+var VIEWS={home:viewHome,match:viewMatch,player:viewPlayer,career:viewCareerHub,life:viewLifeHub};
 var ICONS={
+ home:'<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+ player:'<path d="M6 7v10M18 7v10M3 10v4M21 10v4M6 12h12"/>',
  match:'<circle cx="12" cy="12" r="9"/><path d="M12 7l4 3-1.5 4.5h-5L8 10z"/>',
  train:'<path d="M6 7v10M18 7v10M3 10v4M21 10v4M6 12h12"/>',
  comp:'<path d="M8 4h8v4a4 4 0 0 1-8 0zM8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4M12 12v5M9 20h6"/>',
@@ -16,18 +18,18 @@ function ico(k){return '<svg class="ico" viewBox="0 0 24 24" fill="none" stroke=
 /* título y subtítulo de cada página */
 function pageHead(){
  var sl=S.cal[Math.min(S.slot,S.cal.length-1)],c=myClub();
- var sub={match:slotLabel(sl)+' · semana '+(S.slot+1)+' de '+S.cal.length,train:'Valoración '+ds(overall())+' · '+POS[S.pos],comp:'Clasificaciones, estadísticas y premios',club:esc(c.n)+' · '+esc(lgName(c)),
-  life:'Relaciones, moral y redes sociales',money:'Ingresos, patrocinios e inversiones',shop:'Material y servicios',career:esc(S.name)+' · temporada '+S.season+(S.real?' · versión real':'')}[S.tab];
+ var sub={home:MONTHS[sl.m]+' · temporada '+S.season+' · '+slotLabel(sl),match:slotLabel(sl)+' · semana '+(S.slot+1)+' de '+S.cal.length,player:'Valoración '+ds(overall())+' · '+POS[S.pos]+' · valor '+fmv(mv(S.pl[S.me])),
+  career:esc(c.n)+' · '+esc(lgName(c)),life:'Relaciones, redes, patrocinios y dinero'}[S.tab];
  var t=TABS.filter(function(x){return x[0]===S.tab;})[0];
  return '<header class="pagehead"><div><h1>'+t[1]+'</h1><p>'+sub+'</p></div></header>';
 }
-function dots(){return {life:!!S.event,match:!!(S.match||S.press),money:S.sofs.length>0};}
+function dots(){return {home:homeBadge(),life:!!S.event||S.sofs.length>0,match:!!(S.match||S.press)};}
 function sideHTML(){
  var c=myClub(),kit=clubColors(c),d=dots();
  return '<aside id="side" aria-label="Menú principal"><div class="brand"><svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.9L22 9.3l-5.5 4.8L18.2 21 12 17.3 5.8 21l1.7-6.9L2 9.3l7.1-.4z" fill="currentColor"/></svg>Estrella del Balón</div>'+
   '<div class="me-card"><div class="face">'+faceSVG(S.look,kit,64)+'</div><div><b>'+esc(S.name)+'</b><span class="small mut">'+POS[S.pos]+' · '+S.age+' años</span><div class="small mut">'+esc(c.n)+'</div></div></div>'+
   '<div class="me-stats"><div><b class="star num">'+ds(overall())+'</b><span>Valoración</span></div><div><b class="money num">'+fmt(S.money)+'</b><span>Dinero</span></div><div><b class="num">'+S.medals+'</b><span>Medallas</span></div></div>'+
-  '<nav class="sidenav" aria-label="Secciones">'+TABS.map(function(t){return '<button data-a="tab" data-id="'+t[0]+'"'+(S.tab===t[0]?' aria-current="page"':'')+'>'+ico(t[0])+'<span>'+t[1]+'</span>'+(d[t[0]]?'<span class="dot" aria-label="Pendiente"></span>':'')+'</button>';}).join('')+'</nav>'+
+  '<nav class="sidenav" aria-label="Secciones">'+TABS.map(function(t){return '<button data-a="tab" data-id="'+t[0]+'"'+(S.tab===t[0]?' aria-current="page"':'')+'>'+ico(t[0])+'<span>'+t[1]+'</span>'+(d[t[0]]?'<span class="dot'+(typeof d[t[0]]==='number'?' n':'')+'" aria-label="Pendiente">'+(typeof d[t[0]]==='number'?d[t[0]]:'')+'</span>':'')+'</button>';}).join('')+'</nav>'+
   '<div class="side-foot">'+MONTHS[S.cal[Math.min(S.slot,S.cal.length-1)].m]+' · temporada '+S.season+(S.real?'<br>Versión real · no comercial, solo para pruebas y uso particular.':'')+'</div></aside>';
 }
 function topHTML(){
@@ -38,7 +40,7 @@ function topHTML(){
   '<div class="stat" title="Medallas"><span class="medal" aria-hidden="true"></span><span class="num">'+S.medals+'</span><span class="sr">medallas</span></div>'+
   '<div class="when"><b>'+esc(S.name)+'</b>'+S.age+' años · T'+S.season+' · '+MONTHS[sl.m]+'</div></header>';
 }
-function navHTML(){var d=dots();return '<nav id="nav" aria-label="Secciones">'+TABS.map(function(t){return '<button data-a="tab" data-id="'+t[0]+'"'+(S.tab===t[0]?' aria-current="page"':'')+'>'+ico(t[0])+'<span>'+(TABSHORT[t[0]]||t[1])+'</span>'+(d[t[0]]?'<span class="navdot" aria-label="Pendiente"></span>':'')+'</button>';}).join('')+'</nav>';}
+function navHTML(){var d=dots();return '<nav id="nav" aria-label="Secciones">'+TABS.map(function(t){return '<button data-a="tab" data-id="'+t[0]+'"'+(S.tab===t[0]?' aria-current="page"':'')+'>'+ico(t[0])+'<span>'+(TABSHORT[t[0]]||t[1])+'</span>'+(d[t[0]]?'<span class="navdot'+(typeof d[t[0]]==='number'?' n':'')+'" aria-label="Pendiente">'+(typeof d[t[0]]==='number'?d[t[0]]:'')+'</span>':'')+'</button>';}).join('')+'</nav>';}
 function toastsHTML(){return '<div id="toasts" role="status" aria-live="polite">'+toasts.map(function(t){return '<div class="toast '+(t.err?'err':'')+'">'+esc(t.m)+'</div>';}).join('')+'</div>';}
 function render(){
  var app=$('#app');if(!app)return;
@@ -52,7 +54,8 @@ function render(){
   if(setupErr&&scr==='new'&&$('#nm')&&UI.focusName){UI.focusName=0;$('#nm').focus();}
   return;}
  var sc=$('#view')?$('#view').scrollTop:0,fid=document.activeElement&&document.activeElement.getAttribute&&document.activeElement.getAttribute('data-a')?[document.activeElement.getAttribute('data-a'),document.activeElement.getAttribute('data-id')]:null;
- var v=(VIEWS[S.tab]||viewTrain)();
+ normTab();
+ var v=(VIEWS[S.tab]||viewHome)();
  app.innerHTML=sideHTML()+topHTML()+'<main id="view"><div class="page">'+pageHead()+v+'</div></main>'+navHTML()+(UI.sq?squadHTML():'')+modalHTML()+
   toastsHTML();
  if(UI.lastTab===S.tab&&$('#view'))$('#view').scrollTop=sc;else if($('#view'))$('#view').scrollTop=0;
@@ -81,7 +84,10 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&UI.sq){UI.s
  if(a==='lookrnd'&&!S){setupState.look=randomLook(setupState.pos);render();return;}
  if(!S)return;
  var A={
-  tab:function(){S.tab=id;save();render();},
+  tab:function(){if(S.tab==='home')S.logSeen=S.logN;S.tab=id;save();render();},
+  sub:function(){subSet(b.getAttribute('data-k'),id);save();render();},
+  go:function(){if(S.tab==='home')S.logSeen=S.logN;S.tab=id;var k=b.getAttribute('data-k');if(k)subSet(id,k);save();render();},
+  seen:function(){S.logSeen=S.logN;save();render();},
   mult:function(){S.mult=n;save();render();},
   train:function(){train(id);},promo:function(){promo(id);},bono:bono,
   play:function(){playN(n);},
@@ -115,6 +121,6 @@ document.addEventListener('change',function(e){var t=e.target;if(!t)return;
  if(S)return;
  if(t.id==='ps')setupState.pos=t.value;else if(t.id==='tp')setupState.tp=t.value;else if(t.id==='ts')setupState.ts=t.value;else if(t.id==='na')setupState.nat=t.value;else if(t.id==='co')setupState.co=t.value;else return;render();});
 window.__dbg={get S(){return S;},set S(v){S=v;},newGame:newGame,playN:playN,playSlot:playSlot,choose:choose,pressAnswer:pressAnswer,doEvent:doEvent,doAct:doAct,train:train,promo:promo,render:render,UI:UI,
- overall:overall,leaders:leaders,genOffers:genOffers,accept:accept,signSponsor:signSponsor,buyGear:buyGear,gearCatalog:gearCatalog,hireAgent:hireAgent,hireCM:hireCM,sponsorPost:sponsorPost,squad:function(c,p){UI.sq={club:c,p:p};var h=squadHTML();UI.sq=null;return h;},views:VIEWS,save:save,saveNow:saveNow,metaAll:metaAll,toMenu:toMenu,openSlot:openSlot};
+ overall:overall,leaders:leaders,genOffers:genOffers,accept:accept,signSponsor:signSponsor,buyGear:buyGear,gearCatalog:gearCatalog,hireAgent:hireAgent,hireCM:hireCM,sponsorPost:sponsorPost,squad:function(c,p){UI.sq={club:c,p:p};var h=squadHTML();UI.sq=null;return h;},views:VIEWS,viewComp:viewComp,doActCheck:actState,save:save,saveNow:saveNow,metaAll:metaAll,toMenu:toMenu,openSlot:openSlot};
 bootSaves();
 render();

@@ -257,6 +257,7 @@ function finishMatch(M){
   wearGear();}
  /* estadísticas propias */
  var st=S.stats,ss=S.ss;
+ if(mins>0){S.form=S.form||[];S.form.push(r1(r));if(S.form.length>5)S.form.shift();}
  if(mins>0){st.pj++;st.min+=mins;st.g+=g;st.a+=asi;st.rsum+=r;st.rn++;st.sv+=saves;
   if(nat){S.nt.caps++;S.nt.g+=g;S.nt.a+=asi;}
   else{ss.pj++;ss.g+=g;ss.a+=asi;ss.rsum+=r;ss.rn++;}
@@ -342,7 +343,7 @@ function weekly(rep){
  if(!rep){var k=pick(S.skills);if(addProg(k,1))logm(k.n+' sube a nivel '+k.lvl+'.');}
  cmWeekly();
  moral((50-S.moral)*0.05);
- S.acts=2;S.post=0;
+ S.acts=2;S.post=0;S.wk=(S.wk||0)+1;
  if(!S.event&&Math.random()<0.25)newEvent();
 }
 function playN(n){
@@ -401,7 +402,7 @@ function newGame(name,pos,tp,ts,nat,co,real,look){
  S={v:VER,name:name,pos:pos,tp:tp,ts:ts,nat:nat,cat:defCat(pos),age:16,season:1,slot:0,money:60000,medals:5,energy:100,injured:0,bono:0,mult:1,moral:55,
   skills:newSkills(pos),pl:[],offers:[],items:{},invest:{},spons:[],sofs:[],agent:'a1',cm:null,gear:{},inv:[],
   stats:{pj:0,min:0,g:0,a:0,cs:0,sv:0,rsum:0,rn:0},ss:{pj:0,g:0,a:0,rsum:0,rn:0,cs:0},nt:{calls:0,caps:0,g:0,a:0,first:0},
-  hist:[],log:[],trophies:[],aw:[],champs:[],bdo:[],last:null,tab:'train',retired:false,summary:null,rel:{coach:50,team:50,press:50,fans:50,board:50},
+  hist:[],log:[],trophies:[],aw:[],champs:[],bdo:[],last:null,tab:'home',retired:false,summary:null,rel:{coach:50,team:50,press:50,fans:50,board:50},
   fol:300,fund:0,auto:false,match:null,event:null,press:null,acts:2,post:0,posts:0,wres:[],contract:{wage:0,years:3}};
  S.real=real;S.realSeason=real?REALDATA.temporada:null;S.look=look?JSON.parse(JSON.stringify(look)):randomLook(pos);
  var w=buildWorld(real);S.clubs=w.clubs;S.lgs=w.lgs;

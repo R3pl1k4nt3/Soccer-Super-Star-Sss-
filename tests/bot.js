@@ -28,7 +28,7 @@ function carrera(G,pos,tp,ts,nat,co,years,opts){
   }catch(e){errs.push(e.stack||String(e));break;}
  }
  Object.keys(G.views).forEach(function(t){try{S.tab=t;G.views[t]();}catch(e){errs.push(t+': '+(e.stack||e));}});
- ['W','L:ENG1','L:IRL2','C:ESP','P:ESP','P:GER','P:IRL','E:E1','E:E3','T:WC','T:EC'].forEach(function(c){['tabla','g','a','r','mes','temp'].forEach(function(tb){try{G.UI.comp=c;G.UI.ctab=tb;G.views.comp();}catch(e){errs.push(c+'/'+tb+': '+(e.stack||e));}});});
+ ['W','L:ENG1','L:IRL2','C:ESP','P:ESP','P:GER','P:IRL','E:E1','E:E3','T:WC','T:EC'].forEach(function(c){['tabla','g','a','r','mes','temp'].forEach(function(tb){try{G.UI.comp=c;G.UI.ctab=tb;G.viewComp();}catch(e){errs.push(c+'/'+tb+': '+(e.stack||e));}});});
  G.UI.comp=null;G.UI.ctab='tabla';
  try{G.squad(0,null);G.squad(0,S.clubs[0].ros[0]);G.squad(S.pl[S.me].c,S.me);}catch(e){errs.push('plantilla: '+(e.stack||e));}
  return {rows:rows,errs:errs,size:JSON.stringify(S).length,trofeos:S.trophies.map(function(t){return 'T'+t.s+' '+t.n;}),seleccion:S.nt,balon:S.bdo.map(function(b){return 'T'+b.s+': '+b.top.slice(0,3).map(function(x){return x.n+' ('+x.c+')';}).join(', ')+(b.me?' · tú '+b.me+'º':'');})};

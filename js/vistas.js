@@ -18,14 +18,15 @@ function pressCard(){
 }
 function decisionCard(){
  var M=S.match,d=nextDec(M),sc=scoreAt(M,d.min),main=S.pl[d.main];
- var h='<div class="card" style="border-color:var(--gold)"><div class="rowb"><h3 style="margin:0">Minuto '+d.min+"'"+(d.dec?' · <span class="bad">JUGADA DECISIVA</span>':'')+'</h3><b class="num">'+esc(M.hn)+' '+sc[0]+' - '+sc[1]+' '+esc(M.an)+'</b></div>';
+ var h='<div class="card wide hl"><div class="rowb"><h3 style="margin:0">Minuto '+d.min+"'"+(d.dec?' · <span class="bad">JUGADA DECISIVA</span>':'')+'</h3><b class="num">'+esc(M.hn)+' '+sc[0]+' - '+sc[1]+' '+esc(M.an)+'</b></div>';
  h+='<p style="margin:8px 0 4px">'+d.sit+'</p><div class="small" style="margin-bottom:10px">Te enfrentas a <b class="star">'+esc(main.n)+'</b> <span class="mut">('+POS[main.p]+', '+main.a+' años, valoración '+main.o+')</span>'+(d.dec?'. Si sale bien o mal, pesa el doble en tu nota y en el resultado.':'')+'</div>';
+ h+='<div class="duel"><div>';
  d.opts.forEach(function(o,i){var pr=duelP(o),rk=['bajo','medio','alto'][o.rk],op=S.pl[o.op];
   var mine=o.sk.map(function(id){return (SKNAME[id]||id)+' '+Math.round(skv(id));}).join(' · ');
   var his=oppVals(o).map(function(x){return x[0]+' '+x[1];}).join(' · ');
   h+='<button class="opt" data-a="choose" data-i="'+i+'"><div class="rowb"><span>'+o.n+'</span><span class="num" style="color:'+(pr>0.6?'var(--good)':pr>0.4?'var(--gold)':'var(--bad)')+'">'+Math.round(pr*100)+'%</span></div>'+
    '<div class="small mut" style="font-family:var(--fb);font-weight:400">Riesgo '+rk+(o.shot?' · disparo':'')+' · Tú: '+mine+'<br>Contra '+esc(op.n)+' ('+op.p+'): '+his+'</div></button>';});
- h+=oppCard(d);
+ h+='</div><div>'+oppCard(d)+'</div></div>';
  M.decs.filter(function(x){return x.done>=0;}).forEach(function(x){h+='<div class="ev"><b class="num">'+x.min+"'</b><span>"+x.opts[x.done].n+': <b class="'+(x.ok?'good':'bad')+'">'+esc(x.res)+'</b></span></div>';});
  return h+'</div>';
 }
@@ -276,7 +277,8 @@ function viewLife(){
  Object.keys(REL_INFO).forEach(function(k){var v=Math.round(S.rel[k]);h+='<div class="item" style="grid-template-columns:1fr"><div><div class="rowb"><b>'+REL_INFO[k][0]+'</b><span class="num '+(v>=65?'good':v<35?'bad':'')+'">'+v+'</span></div><div class="bar big '+(v<35?'low':'en')+'"><i style="width:'+v+'%"></i></div><p>'+REL_INFO[k][1]+'</p></div></div>';});
  h+='<div class="item" style="grid-template-columns:1fr"><div><div class="rowb"><b>Moral</b><span class="num">'+S.moral+'</span></div><div class="bar big '+(S.moral<35?'low':'en')+'"><i style="width:'+S.moral+'%"></i></div><p>Sube con buenos partidos y ruedas de prensa con confianza. Mejora tu nota, tus duelos y la fuerza de tu equipo.</p></div></div></div>';
  h+='<div class="card"><div class="rowb"><h3 style="margin:0">Acciones</h3><span class="small mut">Te quedan <b class="num">'+S.acts+'</b> esta semana</span></div>';
- ACTS.forEach(function(a){h+='<div class="item"><div><b>'+a.n+'</b><p>'+REL_INFO[a.w][0]+' · '+a.d+'</p></div><button class="go alt '+(S.acts<=0||S.money<a.cost?'dis':'')+'" data-a="act" data-id="'+a.id+'">Hacer</button></div>';});
+ ACTS.forEach(function(a){var st=actState(a),f=actFactor(a),lim=a.season?'1 vez por temporada':a.cd>1?'cada '+a.cd+' semanas':'cada semana';
+  h+='<div class="item"><div><b>'+a.n+'</b><p>'+REL_INFO[a.w][0]+' · '+a.d+'</p><p class="small">'+lim+(f<1?' · <span class="warn">ahora rinde al '+Math.round(f*100)+' %</span>':'')+(st.ok?'':' · <span class="bad">'+st.why+'</span>')+'</p></div><button class="go alt '+(st.ok?'':'dis')+'" data-a="act" data-id="'+a.id+'">'+st.lbl+'</button></div>';});
  h+='</div>';
  var cm=cmObj();
  h+='<div class="card"><h3>Redes sociales</h3><div class="kv"><div><b class="num">'+fnum(S.fol)+'</b><span>Seguidores</span></div><div><b class="num good">'+fmt(socialIncome())+'</b><span>Ingresos por semana</span></div><div><b class="num">'+fmt(postValue())+'</b><span>Colaboración</span></div></div>'+
@@ -331,7 +333,7 @@ function viewShop(){
 /* ---------- Carrera ---------- */
 function viewCareer(){
  var st=S.stats,me=S.pl[S.me];
- var h='<div class="card"><div class="rowb"><h3 style="margin:0">Tu aspecto</h3><button class="chip" data-a="lookedit" aria-expanded="'+(!!UI.lookEdit)+'">'+(UI.lookEdit?'Cerrar editor':'Cambiar aspecto')+'</button></div>'+(UI.lookEdit?lookEditor(S.look,'game',clubColors(myClub())):'<div class="lookfig" style="flex-direction:row;justify-content:center">'+portraitSVG(S.look,clubColors(myClub()),180,'Retrato de '+S.name)+bodySVG(S.look,clubColors(myClub()),84)+'</div>')+'</div>';
+ var h='';
  h+='<div class="card"><h3>'+esc(S.name)+'</h3><div class="small mut">'+POS[S.pos]+' · '+S.age+' años · '+natName(me.nat)+' · '+esc(myClub().n)+'</div><div class="small" style="margin-top:4px;color:var(--gold)">'+traitLine()+'</div>'+
   '<div class="kv"><div><b class="num">'+st.pj+'</b><span>Partidos</span></div><div><b class="num">'+(S.pos==='POR'?st.sv:st.g)+'</b><span>'+(S.pos==='POR'?'Paradas':'Goles')+'</span></div><div><b class="num">'+(S.pos==='POR'?st.cs:st.a)+'</b><span>'+(S.pos==='POR'?'Porterías a cero':'Asistencias')+'</span></div>'+
   '<div><b class="num">'+(st.rn?ds(st.rsum/st.rn):'-')+'</b><span>Nota media</span></div><div><b class="num">'+S.trophies.filter(function(t){return t.k!=='ind';}).length+'</b><span>Títulos</span></div><div><b class="num">'+S.trophies.filter(function(t){return t.k==='ind';}).length+'</b><span>Premios</span></div><div><b class="num good">'+fmv(mv(me))+'</b><span>Valor de mercado</span></div></div></div>';
