@@ -1,5 +1,5 @@
 /* Estrella del Balón · núcleo: utilidades, posiciones, habilidades, rasgos, guardado. */
-var KEY='estrella_balon_v5', VER=5, MAXL=14;
+var KEY='estrella_balon_v5', VER=5, MAXL=15, BASECAP=11;
 
 /* ---------- utilidades ---------- */
 var $=function(s){return document.querySelector(s);};
@@ -86,20 +86,29 @@ var TRAITS=[
  {id:'paran',n:'Parapenaltis',d:'Dominas el uno contra uno.',gk:1,sk:['uno','ref','cfz'],fx:{cancel:.12},lim:{aer:8,com:9}},
  {id:'gral',n:'General de la defensa',d:'Ordenas a tu defensa y mejora tu equipo.',gk:1,sk:['com','pos','aer'],fx:{cancel:.08,team:1.2},lim:{agi:8,ref:9}}
 ];function traitById(id){return byId(TRAITS,id);}
-function trW(id){return S.tp===id?1:S.ts===id?0.5:0;}
+/* niveles de rasgo: se suben jugando. m multiplica bonificaciones y efectos; cap es el nivel máximo de sus habilidades */
+var TIERS=[{n:'Bronce',m:.6,cap:12,xp:0,c:'#cd7f32'},{n:'Plata',m:.8,cap:13,xp:120,c:'#c0c7d1'},{n:'Oro',m:1,cap:14,xp:450,c:'#f5c542'},{n:'Platino',m:1.25,cap:15,xp:1100,c:'#9fe3ff'}];
+function tierOf(r){return S&&S.tl&&S.tl[r]?S.tl[r].t:2;}
+/* rango máximo de cada rasgo: principal Platino, secundario Oro, tercero Plata, cuarto Bronce */
+var TIERMAX={p:3,s:2,x0:1,x1:0},XW=0.35;
+function extraRole(id){var i=(S.tx||[]).indexOf(id);return i<0?null:'x'+i;}
+function trW(id){if(S.tp===id)return TIERS[tierOf('p')].m;if(S.ts===id)return 0.5*TIERS[tierOf('s')].m;var x=extraRole(id);return x?XW*TIERS[tierOf(x)].m:0;}
 function tx(key){var s=0;TRAITS.forEach(function(t){var w=trW(t.id);if(w&&t.fx[key])s+=t.fx[key]*w;});return s;}
-function tb(id){var b=0;TRAITS.forEach(function(t){var w=trW(t.id);if(w&&t.sk.indexOf(id)>=0)b+=8*w;});return b;}
+function tb(id){var b=0;TRAITS.forEach(function(t){var w=trW(t.id);if(w&&t.sk.indexOf(id)>=0)b+=8*w;});return Math.round(b*10)/10;}
+/* nivel máximo de una habilidad que mejora un rasgo, según el nivel del rasgo (el secundario, uno menos) */
+function boostCap(id){var c=0,a=traitById(S.tp),b=traitById(S.ts);if(a&&a.sk.indexOf(id)>=0)c=TIERS[tierOf('p')].cap;if(b&&b.sk.indexOf(id)>=0)c=Math.max(c,TIERS[tierOf('s')].cap-1);(S.tx||[]).forEach(function(xid,i){var x=traitById(xid);if(x&&x.sk.indexOf(id)>=0)c=Math.max(c,TIERS[tierOf('x'+i)].cap-2);});return c;}
 /* límite de nivel que imponen los rasgos a una habilidad: {cap, by} */
 function traitCapOf(tp,ts,id){var cap=MAXL,by=null;[[tp,0],[ts,2]].forEach(function(z){var t=traitById(z[0]);if(!t||!t.lim||t.lim[id]==null)return;var c=t.lim[id]+z[1];if(c<cap){cap=c;by=t;}});return {cap:cap,by:by};}
-function traitCap(id){return traitCapOf(S.tp,S.ts,id);}
-function capFor(k){return Math.min(tb(k.id)>0?MAXL:MAXL-3,traitCap(k.id).cap);}
+/* límites: principal tal cual, secundario +2 niveles, rasgos añadidos +3 */
+function traitCap(id){var r=traitCapOf(S.tp,S.ts,id);(S.tx||[]).forEach(function(xid){var x=traitById(xid);if(x&&x.lim&&x.lim[id]!=null&&x.lim[id]+3<r.cap)r={cap:x.lim[id]+3,by:x};});return r;}
+function capFor(k){return Math.min(Math.max(BASECAP,boostCap(k.id)),traitCap(k.id).cap);}
 function traitDec(o){var b=0;TRAITS.forEach(function(t){var w=trW(t.id);if(w&&t.sk.some(function(id){return o.sk.indexOf(id)>=0;}))b+=0.06*w;});return Math.min(b,0.12);}
 function traitLine(){var a=traitById(S.tp),b=traitById(S.ts);return 'Rasgos: '+(a?a.n:'-')+' (principal) · '+(b?b.n:'-')+' (secundario)';}
 function defCat(pos){var w=CATW[pos],b=0;for(var i=1;i<5;i++)if(w[i]>=w[b])b=i;return ['men','fis','def','med','ata'][b];}
 
 /* ---------- valor de habilidades del jugador ---------- */
 function need(l){return 8+3*l;}
-function skVal(k){return Math.max(1,k.base+(k.lvl-1)*5-k.pen+tb(k.id)+gearB(k.id));}
+function skVal(k){return clamp(k.base+(k.lvl-1)*5-k.pen+tb(k.id)+gearB(k.id),1,99);}
 function skRaw(k){return Math.max(1,k.base+(k.lvl-1)*5-k.pen+tb(k.id));}
 function skv(id){var k=mySk(id);return k?skVal(k):30;}
 function mySk(id){for(var i=0;i<S.skills.length;i++)if(S.skills[i].id===id)return S.skills[i];return null;}

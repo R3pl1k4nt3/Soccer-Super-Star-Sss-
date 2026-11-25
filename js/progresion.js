@@ -6,6 +6,7 @@ function initProgress(){
  if(S.pot==null){var tp=traitById(S.tp);S.pot=Math.round(clamp(70+norm()*7+(Math.random()<0.12?8:0),60,96));}
  if(S.val==null)S.val=mvRaw();
  S.vhist=S.vhist||[];S.moments=S.moments||[];S.valMom=S.valMom||0;S.form=S.form||[];
+ if(!S.tl)S.tl={p:{t:0,x:0},s:{t:0,x:0}};
 }
 function potBand(){var p=S.pot,lo=Math.max(40,Math.floor((p-4)/2)*2),hi=lo+8;var t=p>=88?'Clase mundial':p>=82?'Muy alto':p>=75?'Alto':p>=68?'Medio':'Modesto';return t+' ('+lo+'-'+hi+')';}
 /* crecimiento según la edad: rápido hasta los 23, estable hasta los 28, luego baja */
@@ -52,6 +53,7 @@ function moment(kind,txt,fx){
 /* se revisa al final de cada partido del jugador; devuelve los momentos para mostrarlos en el resumen */
 function checkMoments(M,rep){
  var out=[],me=S.pl[S.me],desc=M.desc,nat=!!desc.nat,fin=/Final/.test(desc.rn||''),ko=desc.ko||desc.leg;
+ traitXP(M,rep).forEach(function(x){out.push(x);});
  if(rep.mins>0){
   if(!nat&&S.stats.pj===1)out.push(moment('star','Debut como profesional con '+S.clubs[me.c].n+'.',{ic:'debut'}));
   if(nat&&S.nt.caps===1)out.push(moment('star','Debut con la selección de '+nation(me.nat).n+'.',{big:1,ic:'debut'}));
@@ -91,4 +93,58 @@ function valueChart(){
   '<path d="'+pv+'" fill="none" stroke="#3ddc84" stroke-width="3" stroke-linejoin="round"/><path d="'+po+'" fill="none" stroke="#f5c542" stroke-width="2" stroke-dasharray="5 4"/>'+
   '<text x="'+pad+'" y="'+(Hh-10)+'" fill="#9fb0c8" font-size="12">Máximo: '+fmv(mx/1.1)+'</text></svg>'+
   '<div class="small mut"><span class="good">━</span> Valor de mercado · <span class="star">┅</span> Valoración</div>';
+}
+
+/* ---------- rangos de rasgo: Bronce, Plata, Oro, Platino ---------- */
+/* rasgos del jugador con su papel: p principal, s secundario, x0 y x1 añadidos durante la carrera */
+function myTraits(){var l=[{r:'p',id:S.tp},{r:'s',id:S.ts}];(S.tx||[]).forEach(function(id,i){l.push({r:'x'+i,id:id});});return l.filter(function(x){return x.id;});}
+function roleName(r){return {p:'Principal',s:'Secundario',x0:'Tercer rasgo',x1:'Cuarto rasgo'}[r];}
+/* experiencia por partido: nota y uso del rasgo (goles, asistencias, porterías a cero, partidos grandes) */
+function traitXP(M,rep){
+ var out=[];if(!S.tl||rep.mins<=0)return out;
+ myTraits().forEach(function(z){
+  var r=z.r,t=traitById(z.id),st=S.tl[r]||(S.tl[r]={t:0,x:0});if(!t||st.t>=TIERMAX[r])return;
+  var f=r==='p'?1:r==='s'?0.7:0.5,x=(1.5+Math.max(0,rep.r-5.5)*2)*f;
+  if(t.fx.gs||t.fx.fk)x+=rep.g*4;
+  if(t.fx.as)x+=rep.a*4;
+  if((t.fx.cancel||t.gk)&&rep.gc===0)x+=4;
+  if(t.fx.big&&M.imp>=1.5)x+=4;
+  if(t.fx.team||t.fx.rate||t.fx.drain)x+=rep.win?2:0;
+  st.x=r1(st.x+x*(rep.mins/90));
+  var nx=TIERS[st.t+1];
+  if(st.x>=nx.xp){st.t++;var msg='Tu rasgo '+t.n+' sube a '+TIERS[st.t].n+'.';out.push(moment('star',msg,{ic:'titulo'}));toast(msg);}
+ });
+ if(newTraitSlot()&&!S.ntNotified){S.ntNotified=1;logm('Puedes elegir un rasgo nuevo en Jugador → Entreno.');toast('¡Puedes elegir un rasgo nuevo!');}
+ return out;
+}
+/* hueco para un rasgo nuevo: el tercero cuando el principal llega a Oro; el cuarto cuando el secundario llega a Oro */
+function newTraitSlot(){if(!S.tl)return false;var n=(S.tx||[]).length;if(n===0&&tierOf('p')>=2)return true;if(n===1&&tierOf('s')>=2)return true;return false;}
+function addTrait(id){
+ if(!newTraitSlot())return;var t=traitById(id);if(!t||id===S.tp||id===S.ts||(S.tx||[]).indexOf(id)>=0||!!t.gk!==(S.pos==='POR'))return;
+ S.tx=S.tx||[];S.tx.push(id);S.tl['x'+(S.tx.length-1)]={t:0,x:0};S.ntNotified=0;
+ logm('Nuevo rasgo: '+t.n+' (llegará como mucho a '+TIERS[TIERMAX['x'+(S.tx.length-1)]].n+').');toast('Nuevo rasgo: '+t.n);save();render();
+}
+function traitBadge(r){
+ var id=r==='p'?S.tp:r==='s'?S.ts:(S.tx||[])[+r.slice(1)],t=traitById(id);if(!t)return '';var st=S.tl&&S.tl[r]||{t:2,x:0},T=TIERS[st.t],nx=st.t<TIERMAX[r]?TIERS[st.t+1]:null;
+ return '<span class="tbadge" style="--tc:'+T.c+'">'+(typeof icoRasgo==='function'?icoRasgo(t.id,18):'')+t.n+' · <b>'+T.n+'</b>'+(nx?' <span class="mut">'+Math.floor(st.x)+'/'+nx.xp+' XP</span>':'')+'</span>';
+}
+/* barra de desarrollo de un rasgo: los cuatro rangos, el progreso al siguiente y los rangos que no puede alcanzar */
+function traitBar(z){
+ var t=traitById(z.id);if(!t)return '';var st=S.tl&&S.tl[z.r]||{t:2,x:0},mx=TIERMAX[z.r],nx=st.t<mx?TIERS[st.t+1]:null,prev=TIERS[st.t].xp,pc=nx?clamp((st.x-prev)/(nx.xp-prev),0,1):1;
+ var pips=TIERS.map(function(T,i){var cls=i<=st.t?'on':i<=mx?'':'lock';return '<span class="tpip '+cls+'" style="--tc:'+T.c+'" title="'+T.n+(i>mx?' (bloqueado para este rasgo)':'')+'">'+(i>mx?'🔒 ':'')+T.n+'</span>';}).join('');
+ var lim=Object.keys(t.lim||{}).filter(function(id){return mySk(id);}).map(function(id){return SKNAME[id]+' '+traitCap(id).cap;}).join(', ');
+ return '<div class="tdev"><div class="rowb"><b class="tname">'+(typeof icoRasgo==='function'?icoRasgo(t.id,24):'')+t.n+'</b><span class="small mut">'+roleName(z.r)+' · máximo '+TIERS[mx].n+'</span></div>'+
+  '<div class="tpips">'+pips+'</div><div class="bar big" aria-hidden="true"><i style="width:'+Math.round(pc*100)+'%;background:'+TIERS[nx?st.t+1:st.t].c+'"></i></div>'+
+  '<div class="small mut">'+(nx?Math.floor(st.x)+' / '+nx.xp+' XP para '+nx.n+'. Sube jugando bien y usando el rasgo.':'Rango máximo alcanzado.')+' Mejora '+t.sk.filter(function(id){return mySk(id);}).map(function(id){return SKNAME[id];}).join(', ')+' (techo nivel '+boostCap(t.sk.filter(function(id){return mySk(id);})[0]||'')+')'+(lim?'. Limita: '+lim:'')+'.</div></div>';
+}
+function traitsCard(){
+ var h='<div class="card wide"><h3>Rasgos y desarrollo</h3><div class="tdevs">'+myTraits().map(traitBar).join('')+'</div>';
+ var n=(S.tx||[]).length;
+ if(newTraitSlot()){
+  var r='x'+n,opts=TRAITS.filter(function(t){return !!t.gk===(S.pos==='POR')&&t.id!==S.tp&&t.id!==S.ts&&(S.tx||[]).indexOf(t.id)<0;});
+  h+='<h3 style="margin-top:14px">Elige un rasgo nuevo</h3><p class="small mut" style="margin-top:0">Llegará como mucho a <b>'+TIERS[TIERMAX[r]].n+'</b>. Da algo menos de bonificación que tus rasgos principales y también trae sus limitaciones (3 niveles más suaves).</p><div class="tcards">'+
+   opts.map(function(t){var lim=Object.keys(t.lim||{}).filter(function(id){return mySk(id);}).map(function(id){var c=t.lim[id]+3,cur=traitCap(id).cap;return SKNAME[id]+' máx. '+Math.min(c,cur)+(mySk(id).lvl>c?' (ya tienes nivel '+mySk(id).lvl+')':'');});
+    return '<button class="tcard" data-a="addtrait" data-id="'+t.id+'"><b class="tname">'+(typeof icoRasgo==='function'?icoRasgo(t.id,26):'')+t.n+'</b><span class="mut">'+t.d+'</span><span class="tup">▲ Mejora: '+t.sk.filter(function(id){return mySk(id);}).map(function(id){return SKNAME[id];}).join(', ')+'</span>'+(lim.length?'<span class="tdown">▼ Limita: '+lim.join(', ')+'</span>':'')+'</button>';}).join('')+'</div>';
+ }else if(n<2)h+='<p class="small mut" style="margin-top:10px">'+(n===0?'Cuando tu rasgo principal llegue a Oro podrás elegir un tercer rasgo (hasta Plata).':'Cuando tu rasgo secundario llegue a Oro podrás elegir un cuarto rasgo (hasta Bronce).')+'</p>';
+ return h+'</div>';
 }

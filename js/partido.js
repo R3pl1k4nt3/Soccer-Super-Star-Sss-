@@ -316,7 +316,10 @@ function choose(oi){
  var M=S.match;if(!M)return;
  var d=markDec(M);if(!d)return;
  resolveDec(M,d,oi);
- if(M.decs.every(function(x){return x.done>=0;})){S.match=null;var rep=finishMatch(M);endSlot(rep);if(rep)pressAfter(rep,true);}
+ /* resultado de la jugada en una ventana emergente */
+ var o=d.opts[oi],fin=M.decs.every(function(x){return x.done>=0;});
+ if(typeof UI!=='undefined')UI.pop={k:'dec',min:d.min,n:o.n,ok:d.ok,res:d.res,dec:d.dec,sc:scoreAt(M,90),scNow:scoreAt(M,d.min),hn:M.hn,an:M.an,opp:S.pl[o.op].n,fin:fin};
+ if(fin){S.match=null;var rep=finishMatch(M);endSlot(rep);if(rep){pressAfter(rep,true);if(typeof UI!=='undefined')UI.pendRep=rep;}}
  else markDec(M);
  save();render();
 }
@@ -324,7 +327,7 @@ function endSlot(rep){
  var sl=S.cal[S.slot],m0=slotMonth(S.slot);
  slotFinalize(sl);
  weekly(rep);
- if(rep){S.last=rep;if(batch){batch.n++;batch.pts+=rep.pts;batch.medals+=rep.medals;}}
+ if(rep){S.last=rep;S.reports=S.reports||[];S.reports.unshift(rep);if(S.reports.length>10)S.reports.length=10;if(batch){batch.n++;batch.pts+=rep.pts;batch.medals+=rep.medals;}}
  S.slot++;
  if(S.slot===janStart())genOffers('Se abre el mercado de invierno. Revisa las ofertas en Club.');
  if(S.slot>=S.cal.length||slotMonth(S.slot)!==m0)monthEnd(m0);
@@ -351,11 +354,14 @@ function weekly(rep){
  if(!S.event&&Math.random()<0.25)newEvent();
 }
 function playN(n){
- if(S.summary||S.retired||S.match||S.press)return;
+ if(S.summary||S.retired||S.match)return;
+ /* la rueda de prensa no bloquea: si sigues jugando sin responder, se da por no atendida */
+ if(S.press){S.press=null;rel('press',-1);logm('No atiendes a la prensa tras el último partido.');}
  batch={n:0,pts:0,money:0,medals:0};
  var c=0,guard=0;
  while(c<n&&!S.summary&&!S.retired&&guard++<200){var r=playSlot(n===1);if(!r)break;if(r.paused)break;if(!r.none){c++;if(n===1)pressAfter(r,true);else pressAfter(r,false);}if(S.press)break;}
  var b=batch;batch=null;
+ if(n===1&&b&&b.n===1&&S.last&&!S.match&&typeof UI!=='undefined')UI.pop={k:'match',rep:S.last};
  save();render();
  if(b&&b.n>1)toast(b.n+' partidos: +'+b.pts+' puntos, '+fmt(b.money)+', '+b.medals+' medallas');
 }
@@ -411,24 +417,22 @@ function newGame(name,pos,tp,ts,nat,co,real,look){
  S.real=real;S.realSeason=real?REALDATA.temporada:null;S.look=look?JSON.parse(JSON.stringify(look)):randomLook(pos);
  var w=buildWorld(real);S.clubs=w.clubs;S.lgs=w.lgs;
  S.clubs.forEach(genRoster);
- var low=S.lgs.filter(function(l){return l.co===co;}).sort(function(a,b){return b.t-a.t;})[0];
- var start=S.clubs[pick(low.clubs)];
- var mep={i:S.pl.length,n:name,p:pos,a:16,d:0,o:30,s:0,t:tp,nat:nat,c:start.id,st:{},ms:[0,0,0,0],me:1};
- S.pl.push(mep);start.ros.push(mep.i);S.me=mep.i;S.cantera=start.id;
+ /* empiezas sin club: c = -1 hasta que firmes en la pretemporada (pretemporada.js) */
+ var mep={i:S.pl.length,n:name,p:pos,a:16,d:0,o:30,s:0,t:tp,nat:nat,c:-1,st:{},ms:[0,0,0,0],me:1};
+ S.pl.push(mep);S.me=mep.i;S.cantera=null;S.startCo=co;
+ S.tl={p:{t:0,x:0},s:{t:0,x:0}};S.tx=[];
  syncMe();
  S.euq=euQualify(false);
  startSeason();
- S.contract.wage=Math.round(wageFor(start.str)*0.8/100)*100;
- initProgress();
- logm('Sales de la cantera de '+start.n+' ('+low.n+') a los 16 años. Salario semanal: '+fmt(S.contract.wage)+'.');
- genOffers();
+ initPre(co);
+ logm('Empiezas tu carrera sin club, a los 16 años. Pretemporada: busca equipo.');
  save();
 }
 
 /* ---------- entrenamiento ---------- */
 function train(id){
  var k=mySk(id);
- if(k.lvl>=capFor(k)){var tcp=traitCap(k.id);toast(k.lvl>=MAXL?'Habilidad al máximo.':tcp.by&&tcp.cap===capFor(k)?'Tu rasgo '+tcp.by.n+' limita '+k.n+' al nivel '+tcp.cap+'.':'Solo las habilidades de tus rasgos pasan del nivel '+capFor(k)+'.',1);return;}
+ if(k.lvl>=capFor(k)){var tcp=traitCap(k.id);toast(k.lvl>=MAXL?'Habilidad al máximo.':tcp.by&&tcp.cap===capFor(k)?'Tu rasgo '+tcp.by.n+' limita '+k.n+' al nivel '+tcp.cap+'.':boostCap(k.id)?'Sube el rango de tu rasgo para pasar del nivel '+capFor(k)+'.':'Solo las habilidades de tus rasgos pasan del nivel '+capFor(k)+'.',1);return;}
  var n=S.mult,done=0,up=0;
  for(var i=0;i<n;i++){var c=pointCost(k,k.lvl);if(S.money<c)break;S.money-=c;up+=addProg(k,1);done++;S.weekTrain=(S.weekTrain||0)+1;if(k.lvl>=capFor(k))break;}
  if(!done){toast('No tienes dinero para entrenar '+k.n+'.',1);return;}

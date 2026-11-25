@@ -70,7 +70,12 @@ Al abrir el juego aparece el **menú de partidas**: tres huecos para tener varia
 - **Valor de mercado mensual** con aviso de subidas y bajadas y gráfico de evolución en Trayectoria.
 - **Momentos estrella y momentos negros:** debut, primer gol, hat-trick, gol decisivo, títulos, partido perfecto, penalti decisivo en una tanda, jugada decisiva fallada, expulsión… Suben o bajan tu valor, seguidores, moral y relación con la prensa, y quedan en «Momentos de mi carrera».
 - **Partido más visual:** minicampo con tu posición, el rival del duelo y la dirección de la jugada, y barra de dominio.
+- **Resultados en ventana emergente:** al elegir una jugada importante, el resultado aparece al momento en una ventana (bien o mal, marcador y lo que cambia). Al acabar el partido se abre su resumen, y los últimos 10 partidos se pueden volver a ver desde la pestaña Partido. Puedes salir al menú o a Inicio en cualquier momento («Seguir más tarde»).
+- **Jugadas por partido:** 1 si juegas menos de 60 minutos, 2 si juegas 60 o más, y una más en partidos importantes (máximo 3).
 - **Móvil en horizontal:** menú lateral de iconos y contenido a dos columnas; la jugada y la ficha del rival, lado a lado.
+- **Pretemporada sin club:** empiezas libre; varios clubes de la última división de tu país (y uno de la superior) te siguen. Durante 3 semanas haces una prueba por semana (partidillo, física o técnica, con su probabilidad a la vista) y firmas donde te convenzan. Siempre hay un contrato juvenil sin prueba. Donde firmes es tu cantera.
+- **Rasgos que evolucionan:** Bronce, Plata, Oro y Platino. Suben jugando bien y usando el rasgo; cada rango aumenta su bonificación y el techo de sus habilidades (12, 13, 14 y 15). El principal llega a Platino y el secundario a Oro. Cuando el principal llega a Oro eliges un tercer rasgo (hasta Plata) y cuando el secundario llega a Oro, un cuarto (hasta Bronce); traen también sus limitaciones. Cada rasgo tiene su barra de desarrollo en Jugador → Entreno.
+- **Creación guiada:** primero el rasgo principal, luego el secundario, y un gráfico con el nivel máximo que podrá alcanzar cada habilidad de tu posición. Dorsal libre del 1 al 99.
 - **Relaciones, moral, eventos, economía, envejecimiento y retirada.**
 
 ## Estructura del repositorio

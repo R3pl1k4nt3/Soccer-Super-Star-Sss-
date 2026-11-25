@@ -31,6 +31,7 @@ function pendingItems(){
  var p=[];
  if(S.match)p.push({k:'hl',t:'Tienes una jugada a medias en el partido.',go:'match',btn:'Ir al partido'});
  if(S.press)p.push({k:'hl',t:'Te espera una rueda de prensa.',go:'match',btn:'Responder'});
+ if(newTraitSlot())p.push({k:'hl',t:'Puedes elegir un rasgo nuevo.',go:'player',sub:'train',btn:'Elegir rasgo'});
  if(S.event)p.push({t:EVENTS[S.event.i].t+'.',go:'life',sub:'rel',btn:'Decidir'});
  if(windowOpen()&&S.offers.length)p.push({t:S.offers.length+(S.offers.length>1?' clubes quieren ficharte':' club quiere ficharte')+' y el mercado está abierto.',go:'career',sub:'club',btn:'Ver ofertas'});
  if(S.sofs.length)p.push({t:S.sofs.length+(S.sofs.length>1?' marcas quieren':' marca quiere')+' patrocinarte.',go:'life',sub:'money',btn:'Ver propuestas'});

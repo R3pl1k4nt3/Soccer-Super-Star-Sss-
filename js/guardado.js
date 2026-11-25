@@ -13,7 +13,7 @@ function idbOpen(cb){
 }
 function metaAll(){try{return JSON.parse(localStorage.getItem(META_KEY))||{};}catch(e){return {};}}
 function metaSet(id,m){var a=metaAll();if(m)a[id]=m;else delete a[id];try{localStorage.setItem(META_KEY,JSON.stringify(a));}catch(e){}}
-function metaNow(){var c=S.clubs[S.pl[S.me].c];return {name:S.name,pos:S.pos,club:c.n,season:S.season,age:S.age,ov:Math.round(overall()),real:!!S.real,retired:!!S.retired,date:Date.now(),look:S.look,kit:clubColors(c)};}
+function metaNow(){var c=S.clubs[S.pl[S.me].c]||{n:'Sin club (pretemporada)',str:30};return {name:S.name,pos:S.pos,club:c.n,season:S.season,age:S.age,ov:Math.round(overall()),real:!!S.real,retired:!!S.retired,date:Date.now(),look:S.look,kit:c.id!=null?clubColors(c):{a:'#5b6b86',b:'#ffffff',st:0}};}
 function slotKey(id){return KEY+'_'+id;}
 
 /* guarda la partida actual en su hueco (con un pequeño retardo para no escribir 2 MB en cada clic) */

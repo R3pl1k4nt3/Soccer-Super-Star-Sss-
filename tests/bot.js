@@ -5,7 +5,7 @@ function carrera(G,pos,tp,ts,nat,co,years,opts){
  opts=opts||{};
  var errs=[],rows=[];
  G.newGame('Bot',pos,tp,ts,nat,co,!!opts.real);
- var S=G.S;S.auto=!opts.manual;
+ var S=G.S;if(S.pre&&G.preAutoSign)G.preAutoSign();S.auto=!opts.manual;
  for(var y=0;y<years&&!S.retired;y++){
   try{
    for(var i=0;i<15;i++){var k=S.skills[Math.floor(Math.random()*S.skills.length)];S.mult=25;G.train(k.id);G.promo(k.id);}
@@ -16,6 +16,7 @@ function carrera(G,pos,tp,ts,nat,co,years,opts){
     G.playN(1);
     var q=0;while(S.match&&q++<6)G.choose(Math.floor(Math.random()*3));
     if(S.sofs.length)G.signSponsor(0);
+    if(typeof newTraitSlot==='function'&&newTraitSlot()){var op=TRAITS.filter(function(x){return !!x.gk===(S.pos==='POR')&&x.id!==S.tp&&x.id!==S.ts&&(S.tx||[]).indexOf(x.id)<0;});if(op.length)addTrait(op[0].id);}
     S.spons.forEach(function(s){G.sponsorPost(s.id);});
     if(g%7===0){var cat=G.gearCatalog().filter(function(x){return x.c<S.money*0.2;});if(cat.length)G.buyGear(cat[cat.length-1].id);}
     if(g%11===0)Object.keys(G.views).forEach(function(t){S.tab=t;G.render();});

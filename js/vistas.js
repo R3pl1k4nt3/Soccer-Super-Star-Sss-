@@ -76,8 +76,8 @@ function viewMatch(){
   '<div class="small mut" style="margin-top:8px">'+(S.injured>0?'<span class="bad">Lesionado: '+S.injured+' semana(s) de baja.</span>':'Titular en tu club: <b class="num">'+p+'%</b> (tu valoración '+ds(overall())+' frente a tu rival por el puesto).')+'</div>'+
   '<div class="mults" style="margin-top:8px">Decisiones: '+chip(!S.auto,'auto',null,'Elegir yo',0)+chip(S.auto,'auto',null,'Automáticas',1)+'</div>';
  if(S.event)h+='<div class="small" style="margin-top:8px;color:var(--gold)">Tienes un asunto pendiente en la pestaña Vida.</div>';
- if(S.match)h+='<div class="small mut" style="margin-top:10px">Resuelve la decisión para terminar el partido.</div></div>';
- else if(S.press)h+='<div class="small mut" style="margin-top:10px">Responde a la prensa para seguir.</div></div>';
+ if(S.match)h+='<div class="rowb" style="margin-top:10px;flex-wrap:wrap"><span class="small mut">Resuelve la jugada para terminar el partido. Se guarda: puedes seguir más tarde.</span><button class="go alt" data-a="go" data-id="home">Seguir más tarde</button></div></div>';
+ else if(S.press)h+='<div class="small mut" style="margin-top:10px">Tienes una rueda de prensa pendiente. Si juegas el siguiente partido sin responder, se da por no atendida.</div><div class="btns" style="margin-top:10px"><button class="go full" data-a="play" data-n="1">Jugar siguiente partido</button><button class="go alt" data-a="go" data-id="home">Volver a Inicio</button></div></div>';
  else h+='<div class="btns" style="margin-top:12px"><button class="go full" data-a="play" data-n="1">'+(S.injured>0?'Descansar':'Jugar siguiente partido')+'</button><button class="go alt" data-a="play" data-n="5">Jugar 5 partidos</button><button class="go alt" data-a="play" data-n="99">Hasta fin de temporada</button></div></div>';
  var r=S.last;
  if(r){
@@ -90,9 +90,11 @@ function viewMatch(){
   var gs=Object.keys(r.gains).map(function(k){return k+' +'+r.gains[k];}).join(', ');
   if(gs)h+='<div class="small mut" style="margin-top:8px">Puntos repartidos: '+gs+'.</div>';
   if(r.costs)h+='<div class="small mut">Gastos de la semana (representante y redes): '+fmt(r.costs)+'.</div>';
+  if(!S.match)h+='<div class="btns" style="margin-top:12px"><button class="go alt" data-a="go" data-id="home">Volver a Inicio</button><button class="go alt" data-a="go" data-id="career" data-k="comp">Ver clasificación</button></div>';
   h+='</div>';
  }
  if(S.pressLast){h+='<div class="card"><h3>Última rueda de prensa</h3>';S.pressLast.ans.forEach(function(a){h+='<div class="ev" style="display:block"><div class="small mut">«'+a.q+'»</div><div>'+esc(a.a)+' <span class="small mut">('+a.fx+')</span></div></div>';});h+='</div>';}
+ h+=reportsCard();
  if(S.wres&&S.wres.length){h+='<div class="card"><h3>Otros resultados de la semana</h3>';S.wres.slice(0,14).forEach(function(x){h+='<div class="ev"><span class="small mut" style="width:120px">'+esc(compName(x.ck).replace(/ \(.*\)/,''))+'</span><span>'+esc(teamN(x.h,x.nat))+' <b class="num">'+x.gh+'-'+x.ga+'</b> '+esc(teamN(x.a,x.nat))+(x.pw?' (pen.)':'')+'</span></div>';});h+='</div>';}
  return h;
 }
@@ -354,8 +356,8 @@ function viewCareer(){
 /* ---------- Entreno ---------- */
 function viewTrain(){
  var ov=overall(),a=traitById(S.tp),b=traitById(S.ts);
- var h='<div class="card wide"><div class="rowb"><b>Valoración total</b><b class="star num">★ '+ds(ov)+'</b></div><div class="bar big"><i style="width:'+clamp(ov,0,100)+'%"></i></div>'+
-  '<div class="small mut" style="margin-top:8px"><span class="star">◆</span> '+(a?a.n:'-')+' (+8) · <span class="star">◆</span> '+(b?b.n:'-')+' (+4). Las demás habilidades llegan hasta el nivel '+(MAXL-3)+'. El material suma aparte.</div>'+
+ var h=traitsCard()+'<div class="card wide"><div class="rowb"><b>Valoración total</b><b class="star num">★ '+ds(ov)+'</b></div><div class="bar big"><i style="width:'+clamp(ov,0,100)+'%"></i></div>'+
+  '<div class="small mut" style="margin-top:8px">'+traitBadge('p')+' · '+traitBadge('s')+'<br>Las habilidades de tus rasgos llegan hasta el nivel que marque su rango (12 en Bronce, 13 en Plata, 14 en Oro y 15 en Platino; el secundario, uno menos). Las demás, hasta el '+BASECAP+'. El material suma aparte.</div>'+
   '<div class="small" style="margin-top:8px">Potencial: <b>'+potBand()+'</b> · '+growthTxt()+' · forma: '+formTxt()+'</div>'+((S.weekTrain||0)>0?'<div class="small warn">Has entrenado '+S.weekTrain+' puntos esta semana: cada punto extra cuesta un 4 % más hasta la semana que viene. Jugar hace crecer más que entrenar.</div>':'')+
   '<div class="mults">Puntos por pulsación: '+[1,5,25].map(function(m){return chip(S.mult===m,'mult',null,'×'+m,m);}).join('')+'</div></div>';
  h+='<div class="card wide"><div class="cats" role="group" aria-label="Categoría">'+CATS.filter(function(c){return catAvg(c[0])>0;}).map(function(c){return chip(S.cat===c[0],'cat',c[0],catName(c[0])+' <span class="num">'+Math.round(catAvg(c[0]))+'</span>');}).join('')+'</div>';
@@ -419,10 +421,11 @@ var REAL_NOTE='Versión real: no es una versión comercial. Es solo para pruebas
 /* ---------- creación de carrera en 5 pasos ---------- */
 var SETUP_STEPS=['Versión','Datos','Rasgos','Aspecto','Resumen'];
 var FXTXT={rate:'mejor nota en cada partido',gs:'más goles',as:'más asistencias',fk:'opción de gol de falta en cada partido',cancel:'evitas goles del rival',team:'tu equipo rinde más contigo',drain:'te cansas mucho menos',big:'rindes mucho más en partidos importantes'};
-function skApprox(pos,id,lvl){var all=pos==='POR'?SKG:SKO,s=all.filter(function(x){return x[0]===id;})[0];if(!s)return null;return Math.round(28+2*skW(pos,id,s[2])+(lvl-1)*5);}
+function skApprox(pos,id,lvl){var all=pos==='POR'?SKG:SKO,s=all.filter(function(x){return x[0]===id;})[0];if(!s)return null;return Math.min(99,Math.round(28+2*skW(pos,id,s[2])+(lvl-1)*5));}
 function traitInfo(t,role,pos){
  var bonus=role==='tp'?8:4,off=role==='tp'?0:2,all=(pos==='POR'?SKG:SKO).map(function(x){return x[0];});
- var up=t.sk.filter(function(id){return all.indexOf(id)>=0;}).map(function(id){return SKNAME[id]+' +'+bonus;});
+ var b0=Math.round(bonus*TIERS[0].m),b3=Math.round(bonus*TIERS[3].m);
+ var up=t.sk.filter(function(id){return all.indexOf(id)>=0;}).map(function(id){return SKNAME[id]+' +'+b0+'→+'+b3;});
  var fx=Object.keys(t.fx).filter(function(k){return FXTXT[k];}).map(function(k){return FXTXT[k];});
  var lim=Object.keys(t.lim||{}).filter(function(id){return all.indexOf(id)>=0;}).map(function(id){var l=t.lim[id]+off;return SKNAME[id]+': máx. nivel '+l+' (≈'+skApprox(pos,id,l)+')';});
  return {up:up,fx:fx,lim:lim,con:t.con};
@@ -443,8 +446,9 @@ function traitConflicts(){
 function setupHTML(){
  var st=setupState;if(!st.step)st.step=1;if(!st.maxStep)st.maxStep=1;
  var gk=st.pos==='POR',ts=TRAITS.filter(function(t){return !!t.gk===gk;});
- if(!ts.some(function(t){return t.id===st.tp;}))st.tp=ts[0].id;
- if(!ts.some(function(t){return t.id===st.ts;})||st.ts===st.tp)st.ts=ts.filter(function(t){return t.id!==st.tp;})[0].id;
+ /* rasgos: se eligen de uno en uno; si dejan de valer (cambio de posición) se vacían */
+ if(st.tp&&!ts.some(function(t){return t.id===st.tp;}))st.tp=null;
+ if(st.ts&&(!ts.some(function(t){return t.id===st.ts;})||st.ts===st.tp))st.ts=null;
  if(!st.look)st.look=randomLook(st.pos);
  var hasReal=typeof REALDATA!=='undefined';if(!hasReal)st.ver='fic';var real=st.ver==='real';
  var h='<div class="setup"><div class="setup-in">'+
@@ -466,14 +470,22 @@ function setupHTML(){
    (setupErr?'<p id="nmerr" class="bad small" role="alert">'+setupErr+'</p>':'<span id="nmerr"></span>')+'</div>'+
    '<div><label for="ps">Posición</label><select id="ps">'+po+'</select></div>'+
    '<div><label for="na">Nacionalidad (tu selección)</label><select id="na">'+na+'</select></div>'+
-   '<div><label for="co">País donde empiezas</label><select id="co" aria-describedby="cohelp">'+co+'</select><p id="cohelp" class="small mut" style="margin:6px 0 0">Te toca un club al azar de la última división: será tu cantera.</p></div></div>';
+   '<div><label for="co">País donde empiezas</label><select id="co" aria-describedby="cohelp">'+co+'</select><p id="cohelp" class="small mut" style="margin:6px 0 0">Empiezas sin club: en la pretemporada te harán ofertas y podrás hacer pruebas en clubes de la última división. Donde firmes será tu cantera.</p></div></div>';
  }
  else if(st.step===3){
-  var cf=traitConflicts();
-  h+='<h2>Rasgos especiales</h2><p class="mut small" style="margin-top:0">Cada rasgo te hace especial en algo y te limita en otra cosa. El principal da +8 a sus habilidades y el secundario +4. Las habilidades que no mejora ningún rasgo llegan como mucho al nivel 11 (el máximo es 14). Los límites del rasgo secundario son 2 niveles más suaves.</p>'+
-   '<h3>Rasgo principal</h3><div class="tcards">'+ts.map(function(t){return traitCard(t,'tp');}).join('')+'</div>'+
-   '<h3 style="margin-top:16px">Rasgo secundario</h3><div class="tcards">'+ts.map(function(t){return traitCard(t,'ts');}).join('')+'</div>'+
-   (cf.length?'<p class="small notice" role="status"><b class="star">Ojo.</b> '+cf.join(' ')+'</p>':'');
+  var cf=traitConflicts(),A=traitById(st.tp),B=traitById(st.ts);
+  h+='<h2>Rasgos especiales</h2><p class="mut small" style="margin-top:0">Cada rasgo te hace especial en algo y te limita en otra cosa. Empiezan en <b style="color:#cd7f32">Bronce</b> y suben a <b style="color:#c0c7d1">Plata</b>, <b class="star">Oro</b> y <b style="color:#9fe3ff">Platino</b> a medida que juegas bien y los usas: cada rango aumenta su bonificación y el nivel máximo de sus habilidades.</p>';
+  if(!A){
+   h+='<h3>Paso 1 de 2 · Elige tu rasgo principal</h3><div class="tcards">'+ts.map(function(t){return traitCard(t,'tp');}).join('')+'</div>';
+  }else{
+   h+='<div class="chosen"><span class="small mut">Rasgo principal</span><b class="tname">'+icoRasgo(A.id,26)+A.n+'</b><button class="chip" data-a="trait" data-k="tp" data-id="">Cambiar</button></div>';
+   if(!B)h+='<h3 style="margin-top:14px">Paso 2 de 2 · Elige tu rasgo secundario</h3><p class="small mut" style="margin-top:0">Da la mitad de bonificación y sus límites son 2 niveles más suaves.</p><div class="tcards">'+ts.filter(function(t){return t.id!==A.id;}).map(function(t){return traitCard(t,'ts');}).join('')+'</div>';
+   else{
+    h+='<div class="chosen"><span class="small mut">Rasgo secundario</span><b class="tname">'+icoRasgo(B.id,26)+B.n+'</b><button class="chip" data-a="trait" data-k="ts" data-id="">Cambiar</button></div>'+
+     (cf.length?'<p class="small notice" role="status"><b class="star">Ojo.</b> '+cf.join(' ')+'</p>':'')+
+     '<h3 style="margin-top:16px">Hasta dónde podrás llegar</h3>'+limitChart(st.pos,st.tp,st.ts);
+   }
+  }
  }
  else if(st.step===4){
   h+='<div class="rowb"><h2 style="margin:0">Aspecto</h2><button class="chip" data-a="lookrnd">Aleatorio</button></div>'+lookEditor(st.look,'setup',{a:'#1565c0',b:'#ffffff',st:0});
@@ -545,3 +557,51 @@ function momentumBar(M,d){
  var v=clamp(50+(my-op)*1.2+diff*8,8,92);
  return '<div class="mom" aria-label="Dominio del partido: '+Math.round(v)+' % tu equipo"><div class="rowb small"><span>Tu equipo</span><span class="mut">Dominio</span><span>Rival</span></div><div class="mombar"><i style="width:'+v+'%"></i></div></div>';
 }
+/* gráfico de límites: nivel máximo de cada habilidad de la posición con los rasgos elegidos (de Bronce a Platino) */
+function limitChart(pos,tp,ts){
+ var all=pos==='POR'?SKG:SKO,A=traitById(tp),B=traitById(ts),h='<div class="lchart" role="table" aria-label="Nivel máximo de cada habilidad">';
+ h+='<div class="lleg small mut"><span><i class="lg-b"></i>Con tus rasgos (Bronce → Platino)</span><span><i class="lg-n"></i>Normal (hasta 11)</span><span><i class="lg-l"></i>Limitada por un rasgo</span></div>';
+ CATS.forEach(function(c){var ls=all.filter(function(s){return s[2]===c[0];});if(!ls.length)return;
+  h+='<div class="lcat">'+(pos==='POR'&&c[0]==='def'?'Portería':pos==='POR'&&c[0]==='med'?'Distribución':c[1])+'</div>';
+  ls.forEach(function(s){var id=s[0],bp=A&&A.sk.indexOf(id)>=0,bs=B&&B.sk.indexOf(id)>=0;
+   var lo=bp?TIERS[0].cap:bs?TIERS[0].cap-1:BASECAP,hi=bp?TIERS[3].cap:bs?TIERS[3].cap-1:BASECAP,lim=traitCapOf(tp,ts,id),cap=Math.min(hi,lim.cap),cap0=Math.min(lo,lim.cap),kind=lim.cap<BASECAP?'l':bp||bs?'b':'n';
+   var segs='';for(var i=1;i<=MAXL;i++){var cl=i<=cap0?(kind==='l'?'s-l':kind==='b'?'s-b':'s-n'):i<=cap?'s-up':'';segs+='<i class="'+cl+'"></i>';}
+   h+='<div class="lrow" role="row"><span role="cell" class="lname">'+(bp||bs?'<b>'+SKNAME[id]+'</b>':SKNAME[id])+'</span><span role="cell" class="lbar" aria-label="máximo nivel '+cap+'">'+segs+'</span><span role="cell" class="lval num">'+(cap0!==cap?cap0+'→'+cap:cap)+' <span class="mut">≈'+skApprox(pos,id,cap)+'</span></span>'+
+    (lim.by&&lim.cap<hi?'<span role="cell" class="lwhy small bad">límite de '+lim.by.n+'</span>':'<span role="cell"></span>')+'</div>';});
+ });
+ return h+'</div><p class="small mut">El número es el nivel máximo (de 15) y, tras ≈, el valor aproximado que alcanzaría la habilidad. Las barras claras son lo que ganas al subir tus rasgos hasta Platino.</p>';
+}
+/* ---------- ventanas emergentes: resultado de la jugada y resumen del partido ---------- */
+function popHTML(){
+ var P=UI.pop;if(!P)return '';
+ if(P.k==='dec'){
+  var good=P.ok,big=/gol|Gol/.test(P.res);
+  return '<div class="modal" role="dialog" aria-modal="true" aria-label="Resultado de la jugada"><div class="card pop '+(good?'pgood':'pbad')+'">'+
+   '<div class="pophead">'+(P.dec?'<span class="badge">JUGADA DECISIVA</span>':'<span class="small mut">Jugada · minuto '+P.min+"'</span>")+'</div>'+
+   '<div class="popicon" aria-hidden="true">'+(good?(big?POPI.gol:POPI.ok):POPI.ko)+'</div>'+
+   '<h2>'+esc(P.res)+'</h2><p class="mut">Elegiste: <b>'+esc(P.n)+'</b> contra '+esc(P.opp)+'.</p>'+
+   '<div class="popscore"><span>'+esc(P.hn)+'</span><b class="num">'+P.scNow[0]+' - '+P.scNow[1]+'</b><span>'+esc(P.an)+'</span></div>'+
+   '<button class="go block" data-a="popclose" style="margin-top:14px">'+(P.fin?'Ver resumen del partido':'Continuar')+'</button></div></div>';
+ }
+ return '<div class="modal" role="dialog" aria-modal="true" aria-label="Resumen del partido"><div class="card pop">'+reportHTML(P.rep)+'<button class="go block" data-a="popclose" style="margin-top:12px">Cerrar</button></div></div>';
+}
+function reportHTML(r){
+ var h='<div class="small mut" style="text-align:center">'+esc(r.comp||'')+'</div><div class="vs"><b>'+esc(r.home)+'</b><span class="score num">'+r.gh+' - '+r.ga+'</span><b>'+esc(r.away)+'</b></div>'+(r.pw?'<div class="small mut" style="text-align:center">Gana en los penaltis '+esc(r.pw==='h'?r.home:r.away)+'</div>':'');
+ h+='<div class="small mut" style="text-align:center">'+(r.role==='titular'?'Titular, 90 minutos':r.role==='suplente'?'Entras de suplente, '+r.mins+' minutos':r.role==='lesionado'?'Lesionado, no juegas':'No juegas, estás en el banquillo')+'</div>';
+ if(r.moments&&r.moments.length)h+=r.moments.map(function(x){return '<div class="moment '+(x.k==='star'?'mstar':'mblack')+'"'+momBg(x.k)+'>'+icoMom(x)+'<b>'+(x.k==='star'?'★ Momento estrella':'✖ Momento negro')+'</b> '+esc(x.t)+'</div>';}).join('');
+ h+='<div class="kv"><div><b class="num">'+(r.mins>0?ds(r.r):'-')+'</b><span>Nota</span></div>'+(S.pos==='POR'?'<div><b class="num">'+r.saves+'</b><span>Paradas</span></div>':'<div><b class="num">'+r.g+' / '+r.a+'</b><span>Goles / asist.</span></div>')+
+  '<div><b class="num">'+r.pts+'</b><span>Puntos habilidad</span></div><div><b class="num good">'+fmt(r.income||0)+'</b><span>Ingresos</span></div><div><b class="num">'+r.medals+'</b><span>Medallas</span></div></div>';
+ if(r.decs&&r.decs.length)h+='<h3 style="margin-top:12px">Tus jugadas</h3>'+r.decs.map(function(d){return '<div class="ev"><b class="num">'+d.min+"'</b><span>"+(d.dec?'<span class="star">◆</span> ':'')+esc(d.n)+': <b class="'+(d.ok?'good':'bad')+'">'+esc(d.res)+'</b></span></div>';}).join('');
+ if(r.evs&&r.evs.length)h+='<h3 style="margin-top:12px">Goles</h3>'+r.evs.map(function(e){return '<div class="ev"><b class="num">'+e.min+"'</b><span class='"+(e.me?'me':'')+"'>"+e.txt+'</span></div>';}).join('');
+ return h;
+}
+function reportsCard(){
+ var R=S.reports||[];if(!R.length)return '';
+ return '<div class="card"><h3>Últimos partidos</h3>'+R.map(function(r,i){var res=r.win?'V':r.lose?'D':'E';return '<div class="item"><div><b>'+esc(r.home)+' '+r.gh+'-'+r.ga+' '+esc(r.away)+'</b><p>'+esc(r.comp||'')+' · '+(r.mins>0?'nota '+ds(r.r):'no juegas')+'</p></div><button class="go alt" data-a="report" data-i="'+i+'"><span class="res-'+res+'">'+res+'</span> Ver resumen</button></div>';}).join('')+'</div>';
+}
+
+var POPI={
+ gol:'<svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7l4 3-1.5 4.5h-5L8 10z" fill="currentColor"/><path d="M12 3v4M16 10l4.5-1.5M14.5 14.5l2.5 4M9.5 14.5L7 18.5M8 10L3.5 8.5"/></svg>',
+ ok:'<svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l3 3 5-6"/></svg>',
+ ko:'<svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg>'
+};

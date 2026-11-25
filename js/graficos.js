@@ -122,13 +122,13 @@ function icoRasgo(id,size){return ICO_RASGO[id]?gIcon('rasgo-'+ICO_RASGO[id],siz
 function icoAcc(id){return ICO_ACC[id]?gIcon('accion-'+ICO_ACC[id]):'';}
 function icoRel(id){return ICO_REL[id]?gIcon('relacion-'+ICO_REL[id]):'';}
 function icoMom(m){return m&&m.ic?gIcon('momento-'+m.ic):'';}
-/* im�genes de los momentos y de la cabecera del men� */
+/* imágenes de los momentos y de la cabecera del menú */
 function momBg(kind){var i=gImg(kind==='star'?'fondos/momento-estrella':'fondos/momento-negro');return i?' style="background-image:linear-gradient(90deg,rgba(10,16,29,.92) 45%,rgba(10,16,29,.5)),url(\''+i+'\');background-size:cover;background-position:center"':'';}
 function heroBg(){var i=gImg('fondos/cabecera-menu');return i?' style="background-image:linear-gradient(90deg,rgba(10,16,29,.92) 35%,rgba(10,16,29,.3)),url(\''+i+'\');background-size:cover;background-position:center;padding:30px 22px;border-radius:16px"':'';}
-/* minicampo subido (sustituye al c�sped dibujado de la jugada) */
+/* minicampo subido (sustituye al césped dibujado de la jugada) */
 function pitchBase(){var s=gInner('fondos/minicampo');return s?'<g>'+s+'</g>':null;}
 
-/* el paquete de gr�ficos (�1 MB) solo se descarga si se eligen los Mejorados */
+/* el paquete de gráficos (≈1 MB) solo se descarga si se eligen los Mejorados */
 var gfxLoading=false;
 function loadGfx(){
  if(gfxAvail()||gfxLoading||typeof document==='undefined'||!document.createElement)return;

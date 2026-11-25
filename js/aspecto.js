@@ -54,6 +54,7 @@ function avatarSVG(L,kit,size){return bodySVG(L,kit,size);}
 function lookEditor(L,mode,kit){
  var h='<div class="look"><div class="lookfig">'+portraitSVG(L,kit,170)+bodySVG(L,kit,92)+'</div><div class="lookopts">';
  LOOK_OPTS.forEach(function(o){
+  if(o.k==='num'){h+='<div class="lookrow"><label class="lookk" for="dorsal" style="margin:0">Dorsal</label><div class="cats" style="margin:0;align-items:center"><input id="dorsal" type="number" min="1" max="99" inputmode="numeric" value="'+(L.num||10)+'" style="width:90px;min-height:40px"> '+[1,7,9,10,11,14,23].map(function(n){var on=+L.num===n;return '<button class="chip '+(on?'on':'')+'" data-a="look" data-k="num" data-id="'+n+'" aria-pressed="'+on+'">'+n+'</button>';}).join('')+'<span class="small mut">Del 1 al 99</span></div></div>';return;}
   var col=o.k==='skin'||o.k==='eyec'||o.k==='hairc';
   h+='<div class="lookrow"><span class="lookk">'+o.n+'</span><div class="cats" style="margin:0">'+o.v.map(function(v){var on=String(L[o.k])===String(v[0]);
    return '<button class="chip '+(on?'on':'')+'" data-a="look" data-k="'+o.k+'" data-id="'+esc(String(v[0]))+'" aria-pressed="'+on+'"'+(col?' title="'+v[1]+'"':'')+'>'+(col?'<span class="sw" style="background:'+v[0]+'"></span>':'')+(col?'<span class="sr">'+v[1]+'</span>':v[1])+'</button>';}).join('')+'</div></div>';});
@@ -69,7 +70,7 @@ function lookEditor(L,mode,kit){
  }
  return h+'</div></div>';
 }
-function setLook(L,k,v){var o=byId(LOOK_OPTS.map(function(x){return {id:x.k,v:x.v};}),k);if(k==='alt'){L.alt=+v;return;}if(!o)return;var m=o.v.filter(function(x){return String(x[0])===String(v);})[0];if(m)L[k]=m[0];}
+function setLook(L,k,v){if(k==='num'){L.num=clamp(parseInt(v,10)||10,1,99);return;}var o=byId(LOOK_OPTS.map(function(x){return {id:x.k,v:x.v};}),k);if(k==='alt'){L.alt=+v;return;}if(!o)return;var m=o.v.filter(function(x){return String(x[0])===String(v);})[0];if(m)L[k]=m[0];}
 function toggleTat(L,t){var i=L.tat.indexOf(t);if(i>=0)L.tat.splice(i,1);else L.tat.push(t);}
 function newTattoo(t){
  if(S.look.tat.indexOf(t)>=0)return;
