@@ -81,7 +81,7 @@ function viewMatch(){
  else h+='<div class="btns" style="margin-top:12px"><button class="go full" data-a="play" data-n="1">'+(S.injured>0?'Descansar':'Jugar siguiente partido')+'</button><button class="go alt" data-a="play" data-n="5">Jugar 5 partidos</button><button class="go alt" data-a="play" data-n="99">Hasta fin de temporada</button></div></div>';
  var r=S.last;
  if(r){
-  h+='<div class="card"><h3>Último partido · '+esc(r.comp)+'</h3>'+(r.moments&&r.moments.length?r.moments.map(function(x){return '<div class="moment '+(x.k==='star'?'mstar':'mblack')+'"><b>'+(x.k==='star'?'★ Momento estrella':'✖ Momento negro')+'</b> '+esc(x.t)+'</div>';}).join(''):'')+'<div class="vs"><b>'+esc(r.home)+'</b><span class="score num">'+r.gh+' - '+r.ga+'</span><b>'+esc(r.away)+'</b></div>'+(r.pw?'<div class="small mut" style="text-align:center">Gana en los penaltis '+esc(r.pw==='h'?r.home:r.away)+'</div>':'');
+  h+='<div class="card"><h3>Último partido · '+esc(r.comp)+'</h3>'+(r.moments&&r.moments.length?r.moments.map(function(x){return '<div class="moment '+(x.k==='star'?'mstar':'mblack')+'"'+momBg(x.k)+'>'+icoMom(x)+'<b>'+(x.k==='star'?'★ Momento estrella':'✖ Momento negro')+'</b> '+esc(x.t)+'</div>';}).join(''):'')+'<div class="vs"><b>'+esc(r.home)+'</b><span class="score num">'+r.gh+' - '+r.ga+'</span><b>'+esc(r.away)+'</b></div>'+(r.pw?'<div class="small mut" style="text-align:center">Gana en los penaltis '+esc(r.pw==='h'?r.home:r.away)+'</div>':'');
   h+='<div class="small mut" style="text-align:center">'+(r.role==='titular'?'Titular, 90 minutos':r.role==='suplente'?'Entras de suplente, '+r.mins+' minutos':r.role==='lesionado'?'Lesionado, no juegas':'No juegas, estás en el banquillo')+'</div>';
   r.evs.forEach(function(e){h+='<div class="ev"><b class="num">'+e.min+"'</b><span class='"+(e.me?'me':'')+"'>"+e.txt+'</span></div>';});
   if(r.decs&&r.decs.length){h+='<h3 style="margin-top:10px">Tus duelos</h3>';r.decs.forEach(function(d){h+='<div class="ev"><b class="num">'+d.min+"'</b><span>"+(d.dec?'<span class="star">◆</span> ':'')+d.n+': <b class="'+(d.ok?'good':'bad')+'">'+esc(d.res)+'</b></span></div>';});}
@@ -274,11 +274,11 @@ function viewLife(){
  var h='';
  if(S.event){var ev=EVENTS[S.event.i];h+='<div class="card" style="border-color:var(--gold)"><h3>'+ev.t+'</h3><p style="margin:0 0 10px">'+ev.d+'</p><div class="btns">'+ev.o.map(function(o,i){return '<button class="go'+(i?' alt':'')+'" data-a="ev" data-i="'+i+'">'+o.n+'</button>';}).join('')+'</div></div>';}
  h+='<div class="card"><h3>Relaciones y moral</h3>';
- Object.keys(REL_INFO).forEach(function(k){var v=Math.round(S.rel[k]);h+='<div class="item" style="grid-template-columns:1fr"><div><div class="rowb"><b>'+REL_INFO[k][0]+'</b><span class="num '+(v>=65?'good':v<35?'bad':'')+'">'+v+'</span></div><div class="bar big '+(v<35?'low':'en')+'"><i style="width:'+v+'%"></i></div><p>'+REL_INFO[k][1]+'</p></div></div>';});
+ Object.keys(REL_INFO).forEach(function(k){var v=Math.round(S.rel[k]);h+='<div class="item" style="grid-template-columns:1fr"><div><div class="rowb"><b class="tname">'+icoRel(k)+REL_INFO[k][0]+'</b><span class="num '+(v>=65?'good':v<35?'bad':'')+'">'+v+'</span></div><div class="bar big '+(v<35?'low':'en')+'"><i style="width:'+v+'%"></i></div><p>'+REL_INFO[k][1]+'</p></div></div>';});
  h+='<div class="item" style="grid-template-columns:1fr"><div><div class="rowb"><b>Moral</b><span class="num">'+S.moral+'</span></div><div class="bar big '+(S.moral<35?'low':'en')+'"><i style="width:'+S.moral+'%"></i></div><p>Sube con buenos partidos y ruedas de prensa con confianza. Mejora tu nota, tus duelos y la fuerza de tu equipo.</p></div></div></div>';
  h+='<div class="card"><div class="rowb"><h3 style="margin:0">Acciones</h3><span class="small mut">Te quedan <b class="num">'+S.acts+'</b> esta semana</span></div>';
  ACTS.forEach(function(a){var st=actState(a),f=actFactor(a),lim=a.season?'1 vez por temporada':a.cd>1?'cada '+a.cd+' semanas':'cada semana';
-  h+='<div class="item"><div><b>'+a.n+'</b><p>'+REL_INFO[a.w][0]+' · '+a.d+'</p><p class="small">'+lim+(f<1?' · <span class="warn">ahora rinde al '+Math.round(f*100)+' %</span>':'')+(st.ok?'':' · <span class="bad">'+st.why+'</span>')+'</p></div><button class="go alt '+(st.ok?'':'dis')+'" data-a="act" data-id="'+a.id+'">'+st.lbl+'</button></div>';});
+  h+='<div class="item"><div><b class="tname">'+icoAcc(a.id)+a.n+'</b><p>'+REL_INFO[a.w][0]+' · '+a.d+'</p><p class="small">'+lim+(f<1?' · <span class="warn">ahora rinde al '+Math.round(f*100)+' %</span>':'')+(st.ok?'':' · <span class="bad">'+st.why+'</span>')+'</p></div><button class="go alt '+(st.ok?'':'dis')+'" data-a="act" data-id="'+a.id+'">'+st.lbl+'</button></div>';});
  h+='</div>';
  var cm=cmObj();
  h+='<div class="card"><h3>Redes sociales</h3><div class="kv"><div><b class="num">'+fnum(S.fol)+'</b><span>Seguidores</span></div><div><b class="num good">'+fmt(socialIncome())+'</b><span>Ingresos por semana</span></div><div><b class="num">'+fmt(postValue())+'</b><span>Colaboración</span></div></div>'+
@@ -430,7 +430,7 @@ function traitInfo(t,role,pos){
 function traitCard(t,role){
  var on=setupState[role]===t.id,other=role==='tp'?setupState.ts:setupState.tp,dis=other===t.id,I=traitInfo(t,role,setupState.pos);
  return '<button class="tcard'+(on?' on':'')+'" data-a="trait" data-k="'+role+'" data-id="'+t.id+'" aria-pressed="'+on+'"'+(dis?' disabled title="Ya es tu otro rasgo"':'')+'>'+
-  '<b>'+t.n+'</b><span class="mut">'+t.d+'</span>'+
+  '<b class="tname">'+icoRasgo(t.id,28)+t.n+'</b><span class="mut">'+t.d+'</span>'+
   '<span class="tup"><i aria-hidden="true">▲</i> Mejora: '+I.up.join(', ')+(I.fx.length?'; '+I.fx.join(', '):'')+'.</span>'+
   (I.lim.length||I.con?'<span class="tdown"><i aria-hidden="true">▼</i> Limita: '+I.lim.join(', ')+(I.lim.length&&I.con?'. ':'')+(I.con||'')+'</span>':'')+'</button>';
 }
@@ -493,7 +493,7 @@ function setupHTML(){
 function menuHTML(){
  if(!UI.booted)return '<div class="setup"><div class="setup-in"><p class="mut">Cargando partidas…</p></div></div>';
  var m=metaAll(),h='<div class="setup"><div class="setup-in">'+
-  '<div class="hero"><svg width="44" height="44" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.9L22 9.3l-5.5 4.8L18.2 21 12 17.3 5.8 21l1.7-6.9L2 9.3l7.1-.4z" fill="currentColor"/></svg><div><h1>Estrella del Balón</h1><p class="mut" style="margin:4px 0 0">Tu carrera de futbolista, de la cantera al Balón de Oro.</p></div></div>'+
+  '<div class="hero"'+heroBg()+'>'+(logoPlus(44)||'<svg width="44" height="44" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.9L22 9.3l-5.5 4.8L18.2 21 12 17.3 5.8 21l1.7-6.9L2 9.3l7.1-.4z" fill="currentColor"/></svg>')+'<div><h1>Estrella del Balón</h1><p class="mut" style="margin:4px 0 0">Tu carrera de futbolista, de la cantera al Balón de Oro.</p></div></div>'+
   '<section class="card"><h3>Partidas</h3><div class="slots">';
  for(var i=1;i<=NSLOTS;i++){var s=m[i];
   if(!s){h+='<div class="slot empty"><div class="slotbody"><b>Hueco '+i+'</b><span class="mut small">Vacío</span></div><button class="go" data-a="newslot" data-id="'+i+'">Nueva carrera</button></div>';continue;}
@@ -516,7 +516,7 @@ function progressCard(){
 }
 function momentsCard(){
  var M=S.moments||[];
- return '<div class="card"><h3>Momentos de mi carrera</h3>'+(M.length?M.slice(0,15).map(function(x){return '<div class="ev"><b class="num" style="min-width:40px">T'+x.s+'</b><span class="'+(x.k==='star'?'star':'bad')+'">'+(x.k==='star'?'★ ':'✖ ')+'</span><span>'+esc(x.t)+'</span></div>';}).join(''):'<p class="small mut">Tus debuts, goles decisivos, hat-tricks, títulos, penaltis y errores importantes aparecerán aquí.</p>')+'</div>';
+ return '<div class="card"><h3>Momentos de mi carrera</h3>'+(M.length?M.slice(0,15).map(function(x){return '<div class="ev"><b class="num" style="min-width:40px">T'+x.s+'</b>'+(icoMom(x)||'<span class="'+(x.k==='star'?'star':'bad')+'">'+(x.k==='star'?'★ ':'✖ ')+'</span>')+'<span>'+esc(x.t)+'</span></div>';}).join(''):'<p class="small mut">Tus debuts, goles decisivos, hat-tricks, títulos, penaltis y errores importantes aparecerán aquí.</p>')+'</div>';
 }
 /* ---------- partido visual: minicampo de la jugada y dominio ---------- */
 var PITCH_X={POR:8,DEF:28,MED:52,DEL:76};
@@ -528,9 +528,9 @@ function pitchSVG(M,d){
  var tx=att?W-6:6,ty=H/2;
  var h='<svg class="pitch" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Jugada: tú contra '+esc(main.n)+(att?', atacando':', defendiendo')+'">'+
   '<defs><pattern id="grass" width="40" height="'+H+'" patternUnits="userSpaceOnUse"><rect width="20" height="'+H+'" fill="#1f7a46"/><rect x="20" width="20" height="'+H+'" fill="#23884e"/></pattern><marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#fff"/></marker></defs>'+
-  '<rect width="'+W+'" height="'+H+'" rx="10" fill="url(#grass)"/>'+
+  (pitchBase()||'<rect width="'+W+'" height="'+H+'" rx="10" fill="url(#grass)"/>'+
   '<g fill="none" stroke="rgba(255,255,255,.7)" stroke-width="1.5"><rect x="6" y="6" width="'+(W-12)+'" height="'+(H-12)+'"/><line x1="'+W/2+'" y1="6" x2="'+W/2+'" y2="'+(H-6)+'"/><circle cx="'+W/2+'" cy="'+H/2+'" r="24"/>'+
-  '<rect x="6" y="'+(H/2-40)+'" width="44" height="80"/><rect x="'+(W-50)+'" y="'+(H/2-40)+'" width="44" height="80"/><rect x="6" y="'+(H/2-16)+'" width="14" height="32"/><rect x="'+(W-20)+'" y="'+(H/2-16)+'" width="14" height="32"/></g>'+
+  '<rect x="6" y="'+(H/2-40)+'" width="44" height="80"/><rect x="'+(W-50)+'" y="'+(H/2-40)+'" width="44" height="80"/><rect x="6" y="'+(H/2-16)+'" width="14" height="32"/><rect x="'+(W-20)+'" y="'+(H/2-16)+'" width="14" height="32"/></g>')+
   '<line x1="'+mx+'" y1="'+my+'" x2="'+(att?tx:mx-40)+'" y2="'+(att?ty:my)+'" stroke="#fff" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#arr)" opacity=".85"/>'+
   '<g><circle cx="'+ox+'" cy="'+oy+'" r="11" fill="#e53935" stroke="#fff" stroke-width="2"/><text x="'+ox+'" y="'+(oy+4)+'" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">'+esc(main.p)+'</text></g>'+
   '<g class="mepin"><circle cx="'+mx+'" cy="'+my+'" r="13" fill="'+kit.a+'" stroke="#f5c542" stroke-width="3"/><text x="'+mx+'" y="'+(my+4)+'" text-anchor="middle" font-size="11" font-weight="700" fill="'+kit.b+'">'+(S.look&&S.look.num||10)+'</text></g>'+

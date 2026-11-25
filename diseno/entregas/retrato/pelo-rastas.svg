@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220" width="200" height="220">
+  <defs>
+    <linearGradient id="pelo-rastas-luz" x1="15%" y1="10%" x2="80%" y2="85%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.16"/>
+      <stop offset="55%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="pelo-rastas-sombra" x1="25%" y1="20%" x2="90%" y2="95%">
+      <stop offset="45%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.22"/>
+    </linearGradient>
+    <clipPath id="pelo-rastas-clip">
+      <path d="M 62 74 C 62 48, 76 36, 100 36 C 124 36, 138 48, 138 74 L 134 74 C 133 62, 126 55, 100 55 C 74 55, 67 62, 66 74 Z"/>
+      <rect x="61" y="54" width="9" height="36" rx="4.5"/>
+      <rect x="70" y="45" width="9" height="24" rx="4.5"/>
+      <rect x="81" y="40" width="9.5" height="22" rx="4.7"/>
+      <rect x="95" y="38" width="10" height="22" rx="5"/>
+      <rect x="109.5" y="40" width="9.5" height="22" rx="4.7"/>
+      <rect x="121" y="45" width="9" height="24" rx="4.5"/>
+      <rect x="130" y="54" width="9" height="36" rx="4.5"/>
+    </clipPath>
+  </defs>
+  <g id="pelo-rastas">
+    <g id="pelo-rastas-base">
+      <path d="M 62 74 C 62 48, 76 36, 100 36 C 124 36, 138 48, 138 74 L 134 74 C 133 62, 126 55, 100 55 C 74 55, 67 62, 66 74 Z" fill="#4a2e1c"/>
+      <rect x="61" y="54" width="9" height="36" rx="4.5" fill="#4a2e1c"/>
+      <rect x="70" y="45" width="9" height="24" rx="4.5" fill="#4a2e1c"/>
+      <rect x="81" y="40" width="9.5" height="22" rx="4.7" fill="#4a2e1c"/>
+      <rect x="95" y="38" width="10" height="22" rx="5" fill="#4a2e1c"/>
+      <rect x="109.5" y="40" width="9.5" height="22" rx="4.7" fill="#4a2e1c"/>
+      <rect x="121" y="45" width="9" height="24" rx="4.5" fill="#4a2e1c"/>
+      <rect x="130" y="54" width="9" height="36" rx="4.5" fill="#4a2e1c"/>
+    </g>
+    <g id="pelo-rastas-volumen" clip-path="url(#pelo-rastas-clip)">
+      <rect x="0" y="0" width="200" height="220" fill="url(#pelo-rastas-luz)"/>
+      <rect x="0" y="0" width="200" height="220" fill="url(#pelo-rastas-sombra)"/>
+    </g>
+  </g>
+</svg>

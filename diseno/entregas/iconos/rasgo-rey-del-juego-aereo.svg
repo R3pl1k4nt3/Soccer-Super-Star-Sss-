@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#e8edf7" fill="none">
+  <g id="rasgo-rey-del-juego-aereo-acento">
+    <path d="M 5 11 L 7 6 L 12 9 L 17 6 L 19 11 Z" fill="#f5c542"/>
+  </g>
+  <g id="rasgo-rey-del-juego-aereo-linea" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 5 11 L 7 6 L 12 9 L 17 6 L 19 11 Z"/>
+    <path d="M 12 20 L 12 14 M 9 17 L 12 14 L 15 17"/>
+  </g>
+</svg>

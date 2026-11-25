@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#e8edf7" fill="none">
+  <g id="otro-community-manager-acento">
+    <rect x="7" y="4" width="10" height="14" rx="1" fill="#2bd47d" opacity="0.25"/>
+  </g>
+  <g id="otro-community-manager-linea" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="6" y="3" width="12" height="18" rx="2"/>
+    <path d="M 11 18 L 13 18 M 10 8 L 14 8 M 10 12 L 13 12"/>
+  </g>
+</svg>

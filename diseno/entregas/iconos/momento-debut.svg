@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#e8edf7" fill="none">
+  <g id="momento-debut-acento">
+    <polygon points="12,3 13.8,7.8 18.8,8.2 15,11.5 16.2,16.5 12,13.8 7.8,16.5 9,11.5 5.2,8.2 10.2,7.8" fill="#f5c542" opacity="0.45"/>
+  </g>
+  <g id="momento-debut-linea" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polygon points="12,3 13.8,7.8 18.8,8.2 15,11.5 16.2,16.5 12,13.8 7.8,16.5 9,11.5 5.2,8.2 10.2,7.8"/>
+    <path d="M 6 20 L 18 20"/>
+  </g>
+</svg>

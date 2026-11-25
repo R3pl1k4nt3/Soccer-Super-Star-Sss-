@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#e8edf7" fill="none">
+  <g id="nav-jugador-acento">
+    <circle cx="12" cy="8" r="3.5" fill="#2bd47d" opacity="0.85"/>
+  </g>
+  <g id="nav-jugador-linea" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="8" r="4"/>
+    <path d="M 4 21 C 4 16.5, 7.5 14, 12 14 C 16.5 14, 20 16.5, 20 21"/>
+  </g>
+</svg>

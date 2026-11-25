@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 256" width="512" height="256">
+  <defs>
+    <linearGradient id="bota-nordika-agarre-pro-luz" x1="15%" y1="10%" x2="80%" y2="85%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.26"/>
+      <stop offset="55%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="bota-nordika-agarre-pro-sombra" x1="25%" y1="20%" x2="90%" y2="95%">
+      <stop offset="45%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.22"/>
+    </linearGradient>
+    <clipPath id="bota-nordika-agarre-pro-clip">
+      <path d="M 70 104 C 98 114, 138 114, 174 96 C 216 84, 260 106, 318 132 C 372 152, 422 160, 452 174 C 462 180, 460 196, 438 198 L 76 198 C 54 196, 46 174, 52 142 C 56 122, 62 108, 70 104 Z"/>
+    </clipPath>
+  </defs>
+  <g id="bota-nordika-agarre-pro">
+    <g id="bota-nordika-agarre-pro-tacos">
+      <rect x="80" y="205" width="12" height="20" rx="3" fill="#10241b"/><rect x="81.5" y="220" width="9" height="5" rx="2" fill="#69f0ae"/><rect x="126" y="205" width="12" height="20" rx="3" fill="#10241b"/><rect x="127.5" y="220" width="9" height="5" rx="2" fill="#69f0ae"/><rect x="270" y="205" width="12" height="20" rx="3" fill="#10241b"/><rect x="271.5" y="220" width="9" height="5" rx="2" fill="#69f0ae"/><rect x="324" y="205" width="12" height="20" rx="3" fill="#10241b"/><rect x="325.5" y="220" width="9" height="5" rx="2" fill="#69f0ae"/><rect x="378" y="205" width="12" height="20" rx="3" fill="#10241b"/><rect x="379.5" y="220" width="9" height="5" rx="2" fill="#69f0ae"/><rect x="422" y="205" width="12" height="20" rx="3" fill="#10241b"/><rect x="423.5" y="220" width="9" height="5" rx="2" fill="#69f0ae"/>
+    </g>
+    <g id="bota-nordika-agarre-pro-cuerpo">
+      <path d="M 70 104 C 98 114, 138 114, 174 96 C 216 84, 260 106, 318 132 C 372 152, 422 160, 452 174 C 462 180, 460 196, 438 198 L 76 198 C 54 196, 46 174, 52 142 C 56 122, 62 108, 70 104 Z" fill="#00c853"/>
+      <g clip-path="url(#bota-nordika-agarre-pro-clip)">
+        <path d="M 70 104 C 98 114, 138 114, 174 96 L 168 108 C 136 124, 96 124, 67 114 Z" fill="#13212c" opacity="0.88"/>
+        
+        <path d="M 56 144 C 82 146, 102 164, 106 196 L 76 196 C 56 194, 50 174, 56 144 Z" fill="#13212c" opacity="0.22"/><path d="M 140 192 L 370 192 L 358 186 L 154 186 Z" fill="#69f0ae" opacity="0.78"/>
+        <g transform="translate(175, 155) scale(1.15)"><path d="M -20 12 L -6 -14 L 2 0 L 10 -10 L 22 12 L 15 12 L 10 2 L 2 12 L -6 -2 L -13 12 Z" fill="#13212c"/></g>
+        <rect x="0" y="0" width="512" height="256" fill="url(#bota-nordika-agarre-pro-luz)"/>
+        <rect x="0" y="0" width="512" height="256" fill="url(#bota-nordika-agarre-pro-sombra)"/>
+      </g>
+      <g stroke="#13212c" stroke-width="3.2" stroke-linecap="round" opacity="0.88"><line x1="188" y1="98" x2="206" y2="108"/><line x1="206" y1="103" x2="224" y2="114"/><line x1="224" y1="109" x2="242" y2="120"/><line x1="242" y1="115" x2="260" y2="126"/></g>
+    </g>
+    <g id="bota-nordika-agarre-pro-suela">
+      <path d="M 64 192 L 450 192 C 456 196, 450 206, 436 207 L 78 207 C 64 206, 58 198, 64 192 Z" fill="#10241b"/>
+      <path d="M 64 192 L 450 192 C 456 196, 450 206, 436 207 L 78 207 C 64 206, 58 198, 64 192 Z" fill="url(#bota-nordika-agarre-pro-luz)"/>
+    </g>
+  </g>
+</svg>

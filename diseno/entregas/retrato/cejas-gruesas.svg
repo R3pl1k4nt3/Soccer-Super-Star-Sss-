@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220" width="200" height="220">
+  <g id="cejas-gruesas">
+    <g id="cejas-gruesas-base">
+      <path d="M 69.5 80.8 Q 81.0 75.5 93.2 78.2 Q 93.8 81.2 92.0 82.4 Q 81.0 80.2 70.5 82.8 Z" fill="#4a2e1c"/>
+      <path d="M 130.5 80.8 Q 119.0 75.5 106.8 78.2 Q 106.2 81.2 108.0 82.4 Q 119.0 80.2 129.5 82.8 Z" fill="#4a2e1c"/>
+    </g>
+    <g id="cejas-gruesas-sombras">
+      <path d="M 69.5 80.8 Q 81.0 75.5 93.2 78.2 Q 93.8 81.2 92.0 82.4 Q 81.0 80.2 70.5 82.8 Z" fill="#000000" opacity="0.10"/>
+      <path d="M 130.5 80.8 Q 119.0 75.5 106.8 78.2 Q 106.2 81.2 108.0 82.4 Q 119.0 80.2 129.5 82.8 Z" fill="#000000" opacity="0.14"/>
+    </g>
+  </g>
+</svg>

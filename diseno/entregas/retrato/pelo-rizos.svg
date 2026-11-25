@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220" width="200" height="220">
+  <defs>
+    <linearGradient id="pelo-rizos-luz" x1="15%" y1="10%" x2="80%" y2="85%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.18"/>
+      <stop offset="55%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="pelo-rizos-sombra" x1="25%" y1="20%" x2="90%" y2="95%">
+      <stop offset="45%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.22"/>
+    </linearGradient>
+    <clipPath id="pelo-rizos-clip">
+      <path d="M 62 82 C 60 66, 63 54, 70 48 L 130 48 C 137 54, 140 66, 138 82 L 134 82 C 134 70, 130 62, 124 59 L 76 59 C 70 62, 66 70, 66 82 Z"/>
+      <circle cx="72" cy="49" r="11"/>
+      <circle cx="86" cy="40" r="13"/>
+      <circle cx="102" cy="37" r="14"/>
+      <circle cx="118" cy="41" r="12.5"/>
+      <circle cx="130" cy="51" r="10.5"/>
+      <circle cx="80" cy="53" r="9.5"/>
+      <circle cx="96" cy="51" r="10"/>
+      <circle cx="113" cy="52" r="9.5"/>
+    </clipPath>
+  </defs>
+  <g id="pelo-rizos">
+    <g id="pelo-rizos-base">
+      <path d="M 62 82 C 60 66, 63 54, 70 48 L 130 48 C 137 54, 140 66, 138 82 L 134 82 C 134 70, 130 62, 124 59 L 76 59 C 70 62, 66 70, 66 82 Z" fill="#4a2e1c"/>
+      <circle cx="72" cy="49" r="11" fill="#4a2e1c"/>
+      <circle cx="86" cy="40" r="13" fill="#4a2e1c"/>
+      <circle cx="102" cy="37" r="14" fill="#4a2e1c"/>
+      <circle cx="118" cy="41" r="12.5" fill="#4a2e1c"/>
+      <circle cx="130" cy="51" r="10.5" fill="#4a2e1c"/>
+      <circle cx="80" cy="53" r="9.5" fill="#4a2e1c"/>
+      <circle cx="96" cy="51" r="10" fill="#4a2e1c"/>
+      <circle cx="113" cy="52" r="9.5" fill="#4a2e1c"/>
+    </g>
+    <g id="pelo-rizos-volumen" clip-path="url(#pelo-rizos-clip)">
+      <rect x="0" y="0" width="200" height="220" fill="url(#pelo-rizos-luz)"/>
+      <rect x="0" y="0" width="200" height="220" fill="url(#pelo-rizos-sombra)"/>
+    </g>
+  </g>
+</svg>

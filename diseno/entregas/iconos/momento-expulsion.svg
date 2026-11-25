@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#e8edf7" fill="none">
+  <g id="momento-expulsion-acento">
+    <rect x="6" y="3" width="12" height="18" rx="2" fill="#ff6b6b"/>
+  </g>
+  <g id="momento-expulsion-linea" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="6" y="3" width="12" height="18" rx="2"/>
+  </g>
+</svg>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 520" width="200" height="520">
+  <g id="tatuaje-brazo-der">
+    <g id="tatuaje-brazo-der-tinta" opacity="0.80">
+      <path d="M 152 202 L 144 204 L 146 218 L 154 216 Z" fill="#18203a" opacity="0.72"/>
+      <path d="M 155 224 L 145 226 L 150 238 Z" fill="none" stroke="#18203a" stroke-width="1.6" stroke-linejoin="round"/>
+      <path d="M 156 244 L 146 246 M 156 252 L 147 254" fill="none" stroke="#18203a" stroke-width="2.0" stroke-linecap="round"/>
+      <path d="M 157 262 L 148 264 L 150 282 L 158 280 Z" fill="#18203a" opacity="0.65"/>
+      <circle cx="153" cy="288" r="2.2" fill="#18203a"/>
+    </g>
+  </g>
+</svg>

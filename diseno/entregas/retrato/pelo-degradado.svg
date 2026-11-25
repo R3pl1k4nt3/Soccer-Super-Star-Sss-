@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220" width="200" height="220">
+  <defs>
+    <linearGradient id="pelo-degradado-luz" x1="15%" y1="10%" x2="80%" y2="85%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.18"/>
+      <stop offset="55%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="pelo-degradado-sombra" x1="25%" y1="20%" x2="90%" y2="95%">
+      <stop offset="45%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.22"/>
+    </linearGradient>
+    <linearGradient id="pelo-degradado-fade" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#4a2e1c" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#4a2e1c" stop-opacity="0.06"/>
+    </linearGradient>
+  </defs>
+  <g id="pelo-degradado">
+    <g id="pelo-degradado-fade-lados">
+      <path d="M 63 82 L 66 82 L 68 62 L 62 62 Z" fill="url(#pelo-degradado-fade)"/>
+      <path d="M 137 82 L 134 82 L 132 62 L 138 62 Z" fill="url(#pelo-degradado-fade)"/>
+    </g>
+    <g id="pelo-degradado-base">
+      <path d="M 63 65 C 62 46, 76 34, 100 34 C 124 34, 138 46, 137 65 C 131 58, 122 55, 100 56 C 78 55, 69 58, 63 65 Z" fill="#4a2e1c"/>
+    </g>
+    <g id="pelo-degradado-volumen">
+      <path d="M 63 65 C 62 46, 76 34, 100 34 C 124 34, 138 46, 137 65 C 131 58, 122 55, 100 56 C 78 55, 69 58, 63 65 Z" fill="url(#pelo-degradado-luz)"/>
+      <path d="M 63 65 C 62 46, 76 34, 100 34 C 124 34, 138 46, 137 65 C 131 58, 122 55, 100 56 C 78 55, 69 58, 63 65 Z" fill="url(#pelo-degradado-sombra)"/>
+    </g>
+  </g>
+</svg>

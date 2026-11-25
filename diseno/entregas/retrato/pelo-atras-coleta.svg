@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220" width="200" height="220">
+  <defs>
+    <linearGradient id="pelo-atras-coleta-luz" x1="15%" y1="10%" x2="80%" y2="85%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.08"/>
+      <stop offset="55%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="pelo-atras-coleta-sombra" x1="25%" y1="20%" x2="90%" y2="95%">
+      <stop offset="45%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.3"/>
+    </linearGradient>
+    <clipPath id="pelo-atras-coleta-clip">
+      <path d="M 86 92 C 74 108, 66 130, 72 154 C 78 164, 92 162, 100 156 C 108 162, 122 164, 128 154 C 134 130, 126 108, 114 92 Z"/>
+    </clipPath>
+  </defs>
+  <g id="pelo-atras-coleta">
+    <g id="pelo-atras-coleta-base">
+      <path d="M 86 92 C 74 108, 66 130, 72 154 C 78 164, 92 162, 100 156 C 108 162, 122 164, 128 154 C 134 130, 126 108, 114 92 Z" fill="#4a2e1c"/>
+    </g>
+    <g id="pelo-atras-coleta-volumen" clip-path="url(#pelo-atras-coleta-clip)">
+      <rect x="0" y="0" width="200" height="220" fill="url(#pelo-atras-coleta-luz)"/>
+      <rect x="0" y="0" width="200" height="220" fill="url(#pelo-atras-coleta-sombra)"/>
+      <rect x="0" y="0" width="200" height="220" fill="#000000" opacity="0.18"/>
+    </g>
+  </g>
+</svg>

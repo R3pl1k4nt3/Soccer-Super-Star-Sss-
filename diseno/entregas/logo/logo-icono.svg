@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <radialGradient id="li-bg" cx="35%" cy="25%" r="75%">
+      <stop offset="0%" stop-color="#16304a"/>
+      <stop offset="100%" stop-color="#0a101d"/>
+    </radialGradient>
+    <linearGradient id="li-luz" x1="12%" y1="8%" x2="85%" y2="88%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.28"/>
+      <stop offset="52%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <g id="fondo">
+    <rect x="0" y="0" width="1024" height="1024" fill="url(#li-bg)"/>
+  </g>
+    <g id="li-marca" transform="translate(512,522) scale(1.08)">
+      <!-- Estrella dorada -->
+      <polygon points="0.0,-340.0 89.3,-123.0 323.4,-105.1 144.6,47.0 199.8,275.1 0.0,152.0 -199.8,275.1 -144.6,47.0 -323.4,-105.1 -89.3,-123.0" fill="#f5c542"/>
+      <polygon points="0.0,-340.0 89.3,-123.0 323.4,-105.1 144.6,47.0 199.8,275.1 0.0,152.0 -199.8,275.1 -144.6,47.0 -323.4,-105.1 -89.3,-123.0" fill="url(#li-luz)"/>
+      <!-- Balon integrado en el nucleo -->
+      <circle cx="0" cy="0" r="146" fill="#0a101d"/>
+      <circle cx="0" cy="0" r="134" fill="#e8edf7"/>
+      <circle cx="0" cy="0" r="134" fill="url(#li-luz)"/>
+      <g stroke="#0a101d" stroke-width="14" stroke-linecap="round">
+        <line x1="0.0" y1="-70.0" x2="0.0" y2="-148.0"/><line x1="66.6" y1="-21.6" x2="140.8" y2="-45.7"/><line x1="41.1" y1="56.6" x2="87.0" y2="119.7"/><line x1="-41.1" y1="56.6" x2="-87.0" y2="119.7"/><line x1="-66.6" y1="-21.6" x2="-140.8" y2="-45.7"/>
+      </g>
+      <polygon points="0.0,-72.0 68.5,-22.2 42.3,58.2 -42.3,58.2 -68.5,-22.2" fill="#0a101d"/>
+      <circle cx="0" cy="0" r="134" fill="none" stroke="#f5c542" stroke-width="16"/>
+    </g>
+</svg>

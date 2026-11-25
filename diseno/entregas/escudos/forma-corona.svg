@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 104" width="100" height="104">
+  <defs>
+    <linearGradient id="forma-corona-luz" x1="12%" y1="8%" x2="82%" y2="85%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.2"/>
+      <stop offset="52%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="forma-corona-sombra" x1="25%" y1="20%" x2="92%" y2="95%">
+      <stop offset="45%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.22"/>
+    </linearGradient>
+  </defs>
+  <g id="principal">
+    <path id="forma-corona-silueta" d="M 15 24 L 85 24 L 85 56 C 85 78, 68 92, 50 98 C 32 92, 15 78, 15 56 Z" fill="#ff00ff"/>
+  </g>
+  <g id="detalles">
+    <path d="M 15 24 L 85 24 L 85 56 C 85 78, 68 92, 50 98 C 32 92, 15 78, 15 56 Z" fill="none" stroke="#f5c542" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M 26 22 L 22 8 L 37 15 L 50 4 L 63 15 L 78 8 L 74 22 Z" fill="#f5c542"/>
+    <circle cx="22" cy="7" r="2.2" fill="#f5c542"/>
+    <circle cx="50" cy="3.5" r="2.6" fill="#f5c542"/>
+    <circle cx="78" cy="7" r="2.2" fill="#f5c542"/>
+  </g>
+  <g id="sombra">
+    <path d="M 15 24 L 85 24 L 85 56 C 85 78, 68 92, 50 98 C 32 92, 15 78, 15 56 Z" fill="url(#forma-corona-luz)"/>
+    <path d="M 15 24 L 85 24 L 85 56 C 85 78, 68 92, 50 98 C 32 92, 15 78, 15 56 Z" fill="url(#forma-corona-sombra)"/>
+  </g>
+</svg>

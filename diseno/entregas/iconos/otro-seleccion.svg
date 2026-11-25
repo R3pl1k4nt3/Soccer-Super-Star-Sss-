@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#e8edf7" fill="none">
+  <g id="otro-seleccion-acento">
+    <path d="M 6 4 L 19 4 L 16 9 L 19 14 L 6 14 Z" fill="#f5c542" opacity="0.45"/>
+  </g>
+  <g id="otro-seleccion-linea" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 6 3 L 6 21 M 6 4 L 19 4 L 16 9 L 19 14 L 6 14"/>
+  </g>
+</svg>

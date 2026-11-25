@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#e8edf7" fill="none">
+  <g id="rasgo-pase-milimetrico-acento">
+    <circle cx="19" cy="6" r="2.5" fill="#2bd47d"/>
+  </g>
+  <g id="rasgo-pase-milimetrico-linea" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="5" cy="18" r="2.5"/>
+    <path d="M 7 16 L 16 8"/>
+    <path d="M 13 7 L 17 7 L 17 11"/>
+  </g>
+</svg>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#e8edf7" fill="none">
+  <g id="otro-medalla-acento">
+    <circle cx="12" cy="15" r="5" fill="#f5c542" opacity="0.6"/>
+  </g>
+  <g id="otro-medalla-linea" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 8 3 L 11 10 M 16 3 L 13 10"/>
+    <circle cx="12" cy="15" r="5.5"/>
+  </g>
+</svg>

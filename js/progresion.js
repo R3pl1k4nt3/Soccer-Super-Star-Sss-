@@ -41,30 +41,30 @@ function valuation(){
 /* ---------- momentos estrella y momentos negros ---------- */
 function moment(kind,txt,fx){
  fx=fx||{};S.moments=S.moments||[];
- S.moments.unshift({s:S.season,m:slotMonth(S.slot),k:kind,t:txt});if(S.moments.length>80)S.moments.length=80;
+ S.moments.unshift({s:S.season,m:slotMonth(S.slot),k:kind,t:txt,ic:fx.ic||null});if(S.moments.length>80)S.moments.length=80;
  var star=kind==='star',big=fx.big?1.6:1;
  S.valMom=(S.valMom||0)+(star?0.06:-0.06)*big;
  S.fol=Math.round(S.fol*(1+(star?0.05:-0.01)*big));
  moral((star?10:-12)*big);rel('press',(star?4:-5)*big);if(!star)rel('fans',-3*big);else rel('fans',3*big);
  logm((star?'★ Momento estrella: ':'✖ Momento negro: ')+txt);
- return {k:kind,t:txt};
+ return {k:kind,t:txt,ic:fx.ic||null};
 }
 /* se revisa al final de cada partido del jugador; devuelve los momentos para mostrarlos en el resumen */
 function checkMoments(M,rep){
  var out=[],me=S.pl[S.me],desc=M.desc,nat=!!desc.nat,fin=/Final/.test(desc.rn||''),ko=desc.ko||desc.leg;
  if(rep.mins>0){
-  if(!nat&&S.stats.pj===1)out.push(moment('star','Debut como profesional con '+S.clubs[me.c].n+'.'));
-  if(nat&&S.nt.caps===1)out.push(moment('star','Debut con la selección de '+nation(me.nat).n+'.',{big:1}));
-  if(rep.g>0&&S.stats.g===rep.g)out.push(moment('star','Primer gol como profesional.'));
-  if(rep.g>=3)out.push(moment('star','Hat-trick contra '+(M.home?rep.away:rep.home)+'.',{big:1}));
+  if(!nat&&S.stats.pj===1)out.push(moment('star','Debut como profesional con '+S.clubs[me.c].n+'.',{ic:'debut'}));
+  if(nat&&S.nt.caps===1)out.push(moment('star','Debut con la selección de '+nation(me.nat).n+'.',{big:1,ic:'debut'}));
+  if(rep.g>0&&S.stats.g===rep.g)out.push(moment('star','Primer gol como profesional.',{ic:'primer-gol'}));
+  if(rep.g>=3)out.push(moment('star','Hat-trick contra '+(M.home?rep.away:rep.home)+'.',{big:1,ic:'hat-trick'}));
   var gs=Math.floor(S.stats.g/50)*50;if(gs>0&&S.stats.g-rep.g<gs)out.push(moment('star','Llegas a '+gs+' goles como profesional.'));
   /* gol decisivo: tuyo, en el minuto 80 o más, que da la victoria o el empate en un partido importante */
   var late=rep.evs.filter(function(e){return e.me==='g'&&e.min>=80;});
-  if(late.length&&(rep.win||(!rep.lose&&rep.gf===rep.gc))&&M.imp>=1.3)out.push(moment('star','Gol decisivo en el minuto '+late[late.length-1].min+(fin?' de la final':'')+'.',{big:fin}));
+  if(late.length&&(rep.win||(!rep.lose&&rep.gf===rep.gc))&&M.imp>=1.3)out.push(moment('star','Gol decisivo en el minuto '+late[late.length-1].min+(fin?' de la final':'')+'.',{big:fin,ic:'gol-decisivo'}));
   /* duelo decisivo fallado que acaba en derrota en un partido grande */
   var bad=M.decs.filter(function(d){return d.dec&&d.done>=0&&!d.ok;});
   if(bad.length&&rep.lose&&M.imp>=1.4)out.push(moment('black','Fallas en la jugada decisiva'+(fin?' de la final':'')+' y tu equipo pierde.',{big:fin}));
-  if(rep.red)out.push(moment('black','Expulsado en el minuto '+rep.red+'.'));
+  if(rep.red)out.push(moment('black','Expulsado en el minuto '+rep.red+'.',{ic:'expulsion'}));
   if(rep.r>=9.8&&(rep.g+rep.a>=2||S.pos==='POR')&&S.perfS!==S.season){S.perfS=S.season;out.push(moment('star','Partido perfecto: nota '+ds(rep.r)+'.'));}
   if(rep.r<=4)out.push(moment('black','Uno de los peores partidos de tu carrera (nota '+ds(rep.r)+').'));
  }
@@ -72,12 +72,12 @@ function checkMoments(M,rep){
  if(rep.pw&&rep.mins>=60&&S.pos!=='POR'&&Math.random()<0.4){
   var p=clamp(0.55+(skv('fin')+skv('con'))/400+(S.moral-50)*0.003,0.35,0.92),ok=Math.random()<p;
   rep.pen=ok?'Marcas el penalti decisivo de la tanda.':'Fallas el penalti decisivo de la tanda.';
-  out.push(moment(ok?'star':'black',rep.pen+(fin?' En una final.':''),{big:fin}));
+  out.push(moment(ok?'star':'black',rep.pen+(fin?' En una final.':''),{big:fin,ic:ok?'penalti-marcado':'penalti-fallado'}));
  }
  return out;
 }
 /* título ganado: momento estrella */
-function titleMoment(n){moment('star','Campeón: '+n+'.',{big:1});}
+function titleMoment(n){moment('star','Campeón: '+n+'.',{big:1,ic:'titulo'});}
 
 /* ---------- gráfico de evolución (SVG) ---------- */
 function valueChart(){

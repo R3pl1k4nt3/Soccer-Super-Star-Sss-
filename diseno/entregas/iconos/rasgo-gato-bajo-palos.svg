@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#e8edf7" fill="none">
+  <g id="rasgo-gato-bajo-palos-acento">
+    <path d="M 6 11 C 6 7, 18 7, 18 11 L 17 18 L 7 18 Z" fill="#2bd47d" opacity="0.35"/>
+  </g>
+  <g id="rasgo-gato-bajo-palos-linea" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 6 11 L 5 5 L 9 8 L 15 8 L 19 5 L 18 11 C 18 16, 15 19, 12 19 C 9 19, 6 16, 6 11 Z"/>
+    <path d="M 9.5 13 L 10 13 M 14 13 L 14.5 13"/>
+  </g>
+</svg>

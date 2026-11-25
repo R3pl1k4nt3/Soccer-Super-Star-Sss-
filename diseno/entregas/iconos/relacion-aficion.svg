@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#e8edf7" fill="none">
+  <g id="relacion-aficion-acento">
+    <path d="M 4 7 L 20 7 L 20 12 L 4 12 Z" fill="#2bd47d" opacity="0.4"/>
+  </g>
+  <g id="relacion-aficion-linea" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 4 7 L 20 7 L 20 12 L 4 12 Z"/>
+    <path d="M 6 12 L 6 19 M 18 12 L 18 19 M 9 7 L 9 12 M 15 7 L 15 12"/>
+  </g>
+</svg>

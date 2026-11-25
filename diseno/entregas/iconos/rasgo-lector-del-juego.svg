@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#e8edf7" fill="none">
+  <g id="rasgo-lector-del-juego-acento">
+    <circle cx="12" cy="12" r="3" fill="#2bd47d"/>
+  </g>
+  <g id="rasgo-lector-del-juego-linea" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 2 12 C 5 6.5, 19 6.5, 22 12 C 19 17.5, 5 17.5, 2 12 Z"/>
+    <circle cx="12" cy="12" r="3"/>
+  </g>
+</svg>

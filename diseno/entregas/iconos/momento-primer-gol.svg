@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#e8edf7" fill="none">
+  <g id="momento-primer-gol-acento">
+    <circle cx="15" cy="13" r="3" fill="#2bd47d"/>
+  </g>
+  <g id="momento-primer-gol-linea" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 4 20 L 4 6 L 20 6 L 20 20"/>
+    <path d="M 4 11 L 9 11 M 4 16 L 9 16"/>
+    <circle cx="15" cy="13" r="3"/>
+  </g>
+</svg>

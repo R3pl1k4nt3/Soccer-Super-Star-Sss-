@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 320" width="1200" height="320">
+  <defs>
+    <linearGradient id="lh-luz" x1="12%" y1="8%" x2="85%" y2="88%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.28"/>
+      <stop offset="52%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+    <g id="lh-marca" transform="translate(160,162) scale(0.38)">
+      <!-- Estrella dorada -->
+      <polygon points="0.0,-340.0 89.3,-123.0 323.4,-105.1 144.6,47.0 199.8,275.1 0.0,152.0 -199.8,275.1 -144.6,47.0 -323.4,-105.1 -89.3,-123.0" fill="#f5c542"/>
+      <polygon points="0.0,-340.0 89.3,-123.0 323.4,-105.1 144.6,47.0 199.8,275.1 0.0,152.0 -199.8,275.1 -144.6,47.0 -323.4,-105.1 -89.3,-123.0" fill="url(#lh-luz)"/>
+      <!-- Balon integrado en el nucleo -->
+      <circle cx="0" cy="0" r="146" fill="#0a101d"/>
+      <circle cx="0" cy="0" r="134" fill="#e8edf7"/>
+      <circle cx="0" cy="0" r="134" fill="url(#lh-luz)"/>
+      <g stroke="#0a101d" stroke-width="14" stroke-linecap="round">
+        <line x1="0.0" y1="-70.0" x2="0.0" y2="-148.0"/><line x1="66.6" y1="-21.6" x2="140.8" y2="-45.7"/><line x1="41.1" y1="56.6" x2="87.0" y2="119.7"/><line x1="-41.1" y1="56.6" x2="-87.0" y2="119.7"/><line x1="-66.6" y1="-21.6" x2="-140.8" y2="-45.7"/>
+      </g>
+      <polygon points="0.0,-72.0 68.5,-22.2 42.3,58.2 -42.3,58.2 -68.5,-22.2" fill="#0a101d"/>
+      <circle cx="0" cy="0" r="134" fill="none" stroke="#f5c542" stroke-width="16"/>
+    </g>
+  <g id="tipografia">
+    <text x="320" y="156" fill="#e8edf7" font-family="'Barlow Condensed','Arial Narrow','Impact',sans-serif" font-weight="800" font-size="96" letter-spacing="3">ESTRELLA</text>
+    <text x="322" y="240" fill="#f5c542" font-family="'Barlow Condensed','Arial Narrow','Impact',sans-serif" font-weight="800" font-size="82" letter-spacing="5">DEL BALÓN</text>
+    <rect x="324" y="256" width="140" height="8" rx="4" fill="#2bd47d"/>
+  </g>
+</svg>

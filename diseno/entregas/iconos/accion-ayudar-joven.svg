@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#e8edf7" fill="none">
+  <g id="accion-ayudar-joven-acento">
+    <circle cx="17" cy="10" r="2.5" fill="#2bd47d"/>
+  </g>
+  <g id="accion-ayudar-joven-linea" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="8" cy="7" r="3"/>
+    <path d="M 3 19 C 3 15, 5.5 13, 8.5 13 C 11 13, 13 14.5, 13.5 17"/>
+    <circle cx="17" cy="10" r="2.5"/>
+    <path d="M 13.5 19 C 13.5 16.5, 15 15, 17.5 15 C 19.5 15, 21 16.5, 21 19"/>
+  </g>
+</svg>

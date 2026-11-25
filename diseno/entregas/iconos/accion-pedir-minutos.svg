@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#e8edf7" fill="none">
+  <g id="accion-pedir-minutos-acento">
+    <path d="M 12 12 L 12 7 A 5 5 0 0 1 17 12 Z" fill="#2bd47d"/>
+  </g>
+  <g id="accion-pedir-minutos-linea" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="13" r="7"/>
+    <path d="M 12 9 L 12 13 L 15 13 M 9 3 L 15 3 M 12 3 L 12 6"/>
+  </g>
+</svg>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#e8edf7" fill="none">
+  <g id="accion-cena-equipo-acento">
+    <circle cx="12" cy="12" r="5" fill="#2bd47d" opacity="0.35"/>
+  </g>
+  <g id="accion-cena-equipo-linea" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="5"/>
+    <path d="M 4 5 L 4 19 M 2.5 5 L 2.5 10 C 2.5 11.5, 5.5 11.5, 5.5 10 L 5.5 5"/>
+    <path d="M 20 5 L 20 19 M 20 5 C 18 5, 17.5 8, 17.5 12 L 20 12"/>
+  </g>
+</svg>

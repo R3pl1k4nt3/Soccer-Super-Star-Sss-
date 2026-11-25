@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#e8edf7" fill="none">
+  <g id="rasgo-killer-del-area-acento">
+    <circle cx="12" cy="12" r="3" fill="#ff6b6b"/>
+  </g>
+  <g id="rasgo-killer-del-area-linea" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="7"/>
+    <path d="M 12 2 L 12 6 M 12 18 L 12 22 M 2 12 L 6 12 M 18 12 L 22 12"/>
+  </g>
+</svg>

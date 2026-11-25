@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#e8edf7" fill="none">
+  <g id="rasgo-parapenaltis-acento">
+    <circle cx="12" cy="11" r="2.5" fill="#2bd47d"/>
+  </g>
+  <g id="rasgo-parapenaltis-linea" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 6 18 L 6 11 C 6 9, 8 9, 8 11 L 8 6 C 8 4.5, 10 4.5, 10 6 L 10 5 C 10 3.5, 12 3.5, 12 5 L 12 6 C 12 4.5, 14 4.5, 14 6 L 14 9 C 14 7.5, 16 7.5, 16 9 L 16 14 C 16 17, 14 19, 11 19 L 8 19 C 7 19, 6 18.5, 6 18 Z"/>
+  </g>
+</svg>

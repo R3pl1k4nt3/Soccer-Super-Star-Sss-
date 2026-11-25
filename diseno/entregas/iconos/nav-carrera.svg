@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#e8edf7" fill="none">
+  <g id="nav-carrera-acento">
+    <path d="M 8 5 L 16 5 L 15 11 C 14.5 13.5, 9.5 13.5, 9 11 Z" fill="#f5c542" opacity="0.9"/>
+  </g>
+  <g id="nav-carrera-linea" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 7 4 L 17 4 L 16 11 C 15.5 14, 8.5 14, 8 11 Z"/>
+    <path d="M 7 6 L 4 6 C 4 9, 5.5 11, 8 11 M 17 6 L 20 6 C 20 9, 18.5 11, 16 11"/>
+    <path d="M 12 14 L 12 18 M 8 20 L 16 20"/>
+  </g>
+</svg>

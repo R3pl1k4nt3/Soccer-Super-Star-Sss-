@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220" width="200" height="220">
+  <defs>
+    <linearGradient id="pelo-corto-luz" x1="15%" y1="10%" x2="80%" y2="85%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.18"/>
+      <stop offset="55%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="pelo-corto-sombra" x1="25%" y1="20%" x2="90%" y2="95%">
+      <stop offset="45%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.22"/>
+    </linearGradient>
+    <clipPath id="pelo-corto-clip">
+      <path d="M 62 84 C 59 62, 66 42, 84 36 C 95 32, 114 33, 126 41 C 138 49, 141 64, 138 84 L 134 84 C 134 70, 131 62, 124 58 C 115 54, 103 57, 89 59 C 78 60, 71 63, 68 72 L 66 84 Z"/>
+    </clipPath>
+  </defs>
+  <g id="pelo-corto">
+    <g id="pelo-corto-base">
+      <path d="M 62 84 C 59 62, 66 42, 84 36 C 95 32, 114 33, 126 41 C 138 49, 141 64, 138 84 L 134 84 C 134 70, 131 62, 124 58 C 115 54, 103 57, 89 59 C 78 60, 71 63, 68 72 L 66 84 Z" fill="#4a2e1c"/>
+    </g>
+    <g id="pelo-corto-volumen" clip-path="url(#pelo-corto-clip)">
+      <rect x="0" y="0" width="200" height="220" fill="url(#pelo-corto-luz)"/>
+      <rect x="0" y="0" width="200" height="220" fill="url(#pelo-corto-sombra)"/>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#e8edf7" fill="none">
+  <g id="otro-valor-subida-acento">
+    <polygon points="15,6 21,6 21,12" fill="#2bd47d"/>
+  </g>
+  <g id="otro-valor-subida-linea" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 3 17 L 9 11 L 13 15 L 20 7"/>
+    <path d="M 15 7 L 20 7 L 20 12"/>
+  </g>
+</svg>

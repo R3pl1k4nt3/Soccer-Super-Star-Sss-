@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#e8edf7" fill="none">
+  <g id="accion-autografos-acento">
+    <polygon points="15,5 19,9 10,18 6,18 6,14" fill="#2bd47d" opacity="0.4"/>
+  </g>
+  <g id="accion-autografos-linea" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 15 5 L 19 9 L 10 18 L 6 18 L 6 14 Z"/>
+    <path d="M 4 21 L 20 21"/>
+  </g>
+</svg>

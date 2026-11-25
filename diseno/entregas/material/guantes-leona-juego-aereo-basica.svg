@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="guantes-leona-juego-aereo-basica-luz" x1="15%" y1="10%" x2="80%" y2="85%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.14"/>
+      <stop offset="55%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="guantes-leona-juego-aereo-basica-sombra" x1="25%" y1="20%" x2="90%" y2="95%">
+      <stop offset="45%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.16"/>
+    </linearGradient>
+    <clipPath id="guantes-leona-juego-aereo-basica-clip-palma">
+      <path d="M 86 360 L 76 252 C 72 214, 72 148, 84 138 C 96 132, 104 144, 104 174 L 108 112 C 110 92, 128 92, 130 112 L 132 166 L 136 96 C 138 76, 156 76, 158 96 L 160 166 L 164 112 C 166 94, 184 94, 186 114 L 184 212 L 204 188 C 216 176, 230 188, 222 206 L 196 274 L 186 360 Z"/>
+    </clipPath>
+    <clipPath id="guantes-leona-juego-aereo-basica-clip-dorso">
+      <path d="M 426 360 L 436 252 C 440 214, 440 148, 428 138 C 416 132, 408 144, 408 174 L 404 112 C 402 92, 384 92, 382 112 L 380 166 L 376 96 C 374 76, 356 76, 354 96 L 352 166 L 348 112 C 346 94, 328 94, 326 114 L 328 212 L 308 188 C 296 176, 282 188, 290 206 L 316 274 L 326 360 Z"/>
+    </clipPath>
+  </defs>
+  <g id="guantes-leona-juego-aereo-basica">
+    <!-- Guante izquierdo: Palma -->
+    <g id="guantes-leona-juego-aereo-basica-palma">
+      <rect x="84" y="356" width="106" height="58" rx="12" fill="#e53935"/>
+      <path d="M 86 360 L 76 252 C 72 214, 72 148, 84 138 C 96 132, 104 144, 104 174 L 108 112 C 110 92, 128 92, 130 112 L 132 166 L 136 96 C 138 76, 156 76, 158 96 L 160 166 L 164 112 C 166 94, 184 94, 186 114 L 184 212 L 204 188 C 216 176, 230 188, 222 206 L 196 274 L 186 360 Z" fill="#f4f7fb"/>
+      <g clip-path="url(#guantes-leona-juego-aereo-basica-clip-palma)">
+        
+        <rect x="0" y="0" width="256" height="512" fill="url(#guantes-leona-juego-aereo-basica-luz)"/>
+        <rect x="0" y="0" width="256" height="512" fill="url(#guantes-leona-juego-aereo-basica-sombra)"/>
+      </g>
+      <rect x="80" y="366" width="114" height="28" rx="8" fill="#1e222b"/>
+      <rect x="88" y="375" width="46" height="10" rx="4" fill="#1e222b"/>
+    </g>
+    <!-- Guante derecho: Dorso -->
+    <g id="guantes-leona-juego-aereo-basica-dorso">
+      <rect x="322" y="356" width="106" height="58" rx="12" fill="#1e222b"/>
+      <path d="M 426 360 L 436 252 C 440 214, 440 148, 428 138 C 416 132, 408 144, 408 174 L 404 112 C 402 92, 384 92, 382 112 L 380 166 L 376 96 C 374 76, 356 76, 354 96 L 352 166 L 348 112 C 346 94, 328 94, 326 114 L 328 212 L 308 188 C 296 176, 282 188, 290 206 L 316 274 L 326 360 Z" fill="#e53935"/>
+      <g clip-path="url(#guantes-leona-juego-aereo-basica-clip-dorso)">
+        <g fill="#1e222b" opacity="0.88"><rect x="328" y="192" width="18" height="28" rx="6"/><rect x="352" y="186" width="18" height="32" rx="6"/><rect x="376" y="186" width="18" height="32" rx="6"/><rect x="400" y="194" width="18" height="26" rx="6"/></g>
+        <g transform="translate(374, 286) scale(1.25)"><circle cx="0" cy="2" r="8" fill="#1e222b"/><path d="M 0 -16 L 4 -8 L -4 -8 Z M 13 -11 L 9 -3 L 4 -7 Z M 17 2 L 9 5 L 9 -2 Z M -13 -11 L -4 -7 L -9 -3 Z M -17 2 L -9 -2 L -9 5 Z M 11 13 L 4 8 L 8 4 Z M -11 13 L -8 4 L -4 8 Z" fill="#1e222b"/></g>
+        <rect x="256" y="0" width="256" height="512" fill="url(#guantes-leona-juego-aereo-basica-luz)"/>
+        <rect x="256" y="0" width="256" height="512" fill="url(#guantes-leona-juego-aereo-basica-sombra)"/>
+      </g>
+      <rect x="318" y="366" width="114" height="28" rx="8" fill="#1e222b"/>
+      <g transform="translate(374, 385) scale(0.55)"><circle cx="0" cy="2" r="8" fill="#e53935"/><path d="M 0 -16 L 4 -8 L -4 -8 Z M 13 -11 L 9 -3 L 4 -7 Z M 17 2 L 9 5 L 9 -2 Z M -13 -11 L -4 -7 L -9 -3 Z M -17 2 L -9 -2 L -9 5 Z M 11 13 L 4 8 L 8 4 Z M -11 13 L -8 4 L -4 8 Z" fill="#e53935"/></g>
+    </g>
+  </g>
+</svg>

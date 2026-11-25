@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 520" width="200" height="520">
+  <defs>
+    <linearGradient id="medias-altas-luz" x1="12%" y1="8%" x2="82%" y2="88%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.14"/>
+      <stop offset="52%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="medias-altas-sombra" x1="25%" y1="15%" x2="92%" y2="95%">
+      <stop offset="45%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.18"/>
+    </linearGradient>
+    <clipPath id="medias-altas-clip">
+      <path d="M 71.5 376 Q 82 374 92.5 376 C 93.5 425, 91 458, 89 486 L 75 486 C 73 458, 70.5 425, 71.5 376 Z"/>
+      <path d="M 107.5 376 Q 118 374 128.5 376 C 129.5 425, 127 458, 125 486 L 111 486 C 109 458, 106.5 425, 107.5 376 Z"/>
+    </clipPath>
+  </defs>
+  <g id="medias-altas">
+    <g id="medias-altas-base">
+      <path d="M 71.5 376 Q 82 374 92.5 376 C 93.5 425, 91 458, 89 486 L 75 486 C 73 458, 70.5 425, 71.5 376 Z" fill="#ffffff"/>
+      <path d="M 107.5 376 Q 118 374 128.5 376 C 129.5 425, 127 458, 125 486 L 111 486 C 109 458, 106.5 425, 107.5 376 Z" fill="#ffffff"/>
+    </g>
+    <g id="medias-altas-franja" clip-path="url(#medias-altas-clip)">
+      <rect x="65" y="382" width="70" height="8" fill="#1565c0"/>
+      <rect x="65" y="393" width="70" height="3" fill="#1565c0"/>
+    </g>
+    <g id="medias-altas-volumen" clip-path="url(#medias-altas-clip)">
+      <rect x="0" y="0" width="200" height="520" fill="url(#medias-altas-luz)"/>
+      <rect x="0" y="0" width="200" height="520" fill="url(#medias-altas-sombra)"/>
+    </g>
+  </g>
+</svg>

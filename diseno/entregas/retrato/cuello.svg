@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220" width="200" height="220">
+  <defs>
+    <linearGradient id="cuello-luz" x1="15%" y1="10%" x2="80%" y2="85%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.16"/>
+      <stop offset="55%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="cuello-sombra" x1="25%" y1="20%" x2="90%" y2="95%">
+      <stop offset="45%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.18"/>
+    </linearGradient>
+  </defs>
+  <g id="cuello">
+    <g id="orejas-base">
+      <path d="M 65 84 C 57 82, 54 90, 55 99 C 56 107, 60 112, 66 110 Z" fill="#d29a6e"/>
+      <path d="M 135 84 C 143 82, 146 90, 145 99 C 144 107, 140 112, 134 110 Z" fill="#d29a6e"/>
+    </g>
+    <g id="orejas-sombras">
+      <path d="M 65 84 C 57 82, 54 90, 55 99 C 56 107, 60 112, 66 110 Z" fill="url(#cuello-luz)"/>
+      <path d="M 135 84 C 143 82, 146 90, 145 99 C 144 107, 140 112, 134 110 Z" fill="url(#cuello-sombra)"/>
+      <path d="M 62 89 C 58 90, 58 98, 61 104 C 63 105, 64 101, 63 97 C 62 94, 63 91, 62 89 Z" fill="#000000" opacity="0.14"/>
+      <path d="M 138 89 C 142 90, 142 98, 139 104 C 137 105, 136 101, 137 97 C 138 94, 137 91, 138 89 Z" fill="#000000" opacity="0.14"/>
+    </g>
+    <g id="cuello-base">
+      <path d="M 81 124 L 119 124 L 120 148 C 122 155, 130 158, 138 162 L 138 188 L 62 188 L 62 162 C 70 158, 78 155, 80 148 Z" fill="#d29a6e"/>
+    </g>
+    <g id="cuello-sombras">
+      <path d="M 81 124 L 119 124 L 120 148 C 122 155, 130 158, 138 162 L 138 188 L 62 188 L 62 162 C 70 158, 78 155, 80 148 Z" fill="url(#cuello-luz)"/>
+      <path d="M 81 124 L 119 124 L 120 148 C 122 155, 130 158, 138 162 L 138 188 L 62 188 L 62 162 C 70 158, 78 155, 80 148 Z" fill="url(#cuello-sombra)"/>
+      <path d="M 80 128 C 88 148, 112 148, 120 128 L 120 146 C 110 153, 90 153, 80 144 Z" fill="#000000" opacity="0.18"/>
+      <path d="M 87 148 Q 92 162 96 170" fill="none" stroke="#000000" stroke-width="1.4" stroke-linecap="round" opacity="0.09"/>
+      <path d="M 113 148 Q 108 162 104 170" fill="none" stroke="#000000" stroke-width="1.4" stroke-linecap="round" opacity="0.09"/>
+    </g>
+  </g>
+</svg>

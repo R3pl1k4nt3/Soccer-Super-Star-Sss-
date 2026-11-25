@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#e8edf7" fill="none">
+  <g id="relacion-vestuario-acento">
+    <circle cx="12" cy="8" r="2.8" fill="#2bd47d"/>
+  </g>
+  <g id="relacion-vestuario-linea" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="8" r="3"/>
+    <path d="M 7 20 C 7 16.5, 9 14.5, 12 14.5 C 15 14.5, 17 16.5, 17 20"/>
+    <circle cx="5.5" cy="10" r="2"/>
+    <path d="M 2 19 C 2 16.8, 3.5 15.5, 5.5 15.5"/>
+    <circle cx="18.5" cy="10" r="2"/>
+    <path d="M 22 19 C 22 16.8, 20.5 15.5, 18.5 15.5"/>
+  </g>
+</svg>

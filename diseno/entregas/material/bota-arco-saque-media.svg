@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 256" width="512" height="256">
+  <defs>
+    <linearGradient id="bota-arco-saque-media-luz" x1="15%" y1="10%" x2="80%" y2="85%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.2"/>
+      <stop offset="55%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="bota-arco-saque-media-sombra" x1="25%" y1="20%" x2="90%" y2="95%">
+      <stop offset="45%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.2"/>
+    </linearGradient>
+    <clipPath id="bota-arco-saque-media-clip">
+      <path d="M 74 108 C 98 118, 136 118, 172 98 C 212 82, 256 104, 316 134 C 372 156, 422 164, 454 176 C 464 182, 462 196, 442 198 L 78 198 C 56 196, 48 176, 54 144 C 58 124, 64 112, 74 108 Z"/>
+    </clipPath>
+  </defs>
+  <g id="bota-arco-saque-media">
+    <g id="bota-arco-saque-media-tacos">
+      <rect x="80" y="205" width="12" height="17" rx="3" fill="#1a1f2b"/><rect x="126" y="205" width="12" height="17" rx="3" fill="#1a1f2b"/><rect x="270" y="205" width="12" height="17" rx="3" fill="#1a1f2b"/><rect x="324" y="205" width="12" height="17" rx="3" fill="#1a1f2b"/><rect x="378" y="205" width="12" height="17" rx="3" fill="#1a1f2b"/><rect x="422" y="205" width="12" height="17" rx="3" fill="#1a1f2b"/>
+    </g>
+    <g id="bota-arco-saque-media-cuerpo">
+      <path d="M 74 108 C 98 118, 136 118, 172 98 C 212 82, 256 104, 316 134 C 372 156, 422 164, 454 176 C 464 182, 462 196, 442 198 L 78 198 C 56 196, 48 176, 54 144 C 58 124, 64 112, 74 108 Z" fill="#ff5a1f"/>
+      <g clip-path="url(#bota-arco-saque-media-clip)">
+        <path d="M 74 108 C 98 118, 136 118, 172 98 L 166 109 C 134 127, 96 127, 71 117 Z" fill="#161d2b" opacity="0.88"/>
+        <path d="M 358 156 C 402 164, 438 172, 454 180 C 458 188, 452 196, 438 197 L 352 197 C 348 182, 350 168, 358 156 Z" fill="#161d2b" opacity="0.22"/>
+        <path d="M 56 144 C 82 146, 102 164, 106 196 L 76 196 C 56 194, 50 174, 56 144 Z" fill="#161d2b" opacity="0.22"/>
+        <g transform="translate(175, 155) scale(1.15)"><path d="M -22 10 C -8 -16, 12 -18, 26 -4 C 12 -10, -4 -6, -16 14 Z" fill="#161d2b"/><path d="M -10 14 C 0 0, 12 -2, 22 4 C 12 2, 2 5, -6 15 Z" fill="#161d2b" opacity="0.65"/></g>
+        <rect x="0" y="0" width="512" height="256" fill="url(#bota-arco-saque-media-luz)"/>
+        <rect x="0" y="0" width="512" height="256" fill="url(#bota-arco-saque-media-sombra)"/>
+      </g>
+      <g stroke="#161d2b" stroke-width="3.2" stroke-linecap="round" opacity="0.88"><line x1="188" y1="98" x2="206" y2="108"/><line x1="206" y1="103" x2="224" y2="114"/><line x1="224" y1="109" x2="242" y2="120"/><line x1="242" y1="115" x2="260" y2="126"/></g>
+    </g>
+    <g id="bota-arco-saque-media-suela">
+      <path d="M 64 192 L 450 192 C 456 196, 450 206, 436 207 L 78 207 C 64 206, 58 198, 64 192 Z" fill="#1a1f2b"/>
+      <path d="M 64 192 L 450 192 C 456 196, 450 206, 436 207 L 78 207 C 64 206, 58 198, 64 192 Z" fill="url(#bota-arco-saque-media-luz)"/>
+    </g>
+  </g>
+</svg>

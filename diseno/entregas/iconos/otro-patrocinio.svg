@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#e8edf7" fill="none">
+  <g id="otro-patrocinio-acento">
+    <polygon points="12,3 20,9 12,21 4,9" fill="#f5c542" opacity="0.4"/>
+  </g>
+  <g id="otro-patrocinio-linea" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polygon points="12,3 20,9 12,21 4,9"/>
+    <path d="M 4 9 L 20 9"/>
+  </g>
+</svg>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220" width="200" height="220">
+  <defs>
+    <linearGradient id="pelo-melena-luz" x1="15%" y1="10%" x2="80%" y2="85%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.18"/>
+      <stop offset="55%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="pelo-melena-sombra" x1="25%" y1="20%" x2="90%" y2="95%">
+      <stop offset="45%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.22"/>
+    </linearGradient>
+    <clipPath id="pelo-melena-clip">
+      <path d="M 56 84 C 55 56, 70 36, 100 36 C 130 36, 145 56, 144 84 C 144 96, 142 106, 138 112 C 137 94, 135 76, 128 63 C 120 55, 109 53, 100 50 C 91 53, 80 55, 72 63 C 65 76, 63 94, 62 112 C 58 106, 56 96, 56 84 Z"/>
+    </clipPath>
+  </defs>
+  <g id="pelo-melena">
+    <g id="pelo-melena-base">
+      <path d="M 56 84 C 55 56, 70 36, 100 36 C 130 36, 145 56, 144 84 C 144 96, 142 106, 138 112 C 137 94, 135 76, 128 63 C 120 55, 109 53, 100 50 C 91 53, 80 55, 72 63 C 65 76, 63 94, 62 112 C 58 106, 56 96, 56 84 Z" fill="#4a2e1c"/>
+    </g>
+    <g id="pelo-melena-volumen" clip-path="url(#pelo-melena-clip)">
+      <rect x="0" y="0" width="200" height="220" fill="url(#pelo-melena-luz)"/>
+      <rect x="0" y="0" width="200" height="220" fill="url(#pelo-melena-sombra)"/>
+    </g>
+  </g>
+</svg>

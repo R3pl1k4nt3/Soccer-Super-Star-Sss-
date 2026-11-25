@@ -123,6 +123,7 @@ document.addEventListener('change',function(e){var t=e.target;if(!t)return;
  if(t.id==='ps')setupState.pos=t.value;else if(t.id==='tp')setupState.tp=t.value;else if(t.id==='ts')setupState.ts=t.value;else if(t.id==='na')setupState.nat=t.value;else if(t.id==='co')setupState.co=t.value;else return;render();});
 window.__dbg={get S(){return S;},set S(v){S=v;},newGame:newGame,playN:playN,playSlot:playSlot,choose:choose,pressAnswer:pressAnswer,doEvent:doEvent,doAct:doAct,train:train,promo:promo,render:render,UI:UI,
  overall:overall,leaders:leaders,genOffers:genOffers,accept:accept,signSponsor:signSponsor,buyGear:buyGear,gearCatalog:gearCatalog,hireAgent:hireAgent,hireCM:hireCM,sponsorPost:sponsorPost,squad:function(c,p){UI.sq={club:c,p:p};var h=squadHTML();UI.sq=null;return h;},views:VIEWS,viewComp:viewComp,doActCheck:actState,save:save,saveNow:saveNow,metaAll:metaAll,toMenu:toMenu,openSlot:openSlot};
+if(gfxMode()==='mejorados')loadGfx();
 applyGfxBackground();
 bootSaves();
 render();

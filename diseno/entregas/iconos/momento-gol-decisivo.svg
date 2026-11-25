@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#e8edf7" fill="none">
+  <g id="momento-gol-decisivo-acento">
+    <polygon points="12,4 13.5,8.5 18,9 14.5,12 15.5,16.5 12,14 8.5,16.5 9.5,12 6,9 10.5,8.5" fill="#f5c542"/>
+  </g>
+  <g id="momento-gol-decisivo-linea" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 3 19 L 3 5 L 21 5 L 21 19"/>
+  </g>
+</svg>

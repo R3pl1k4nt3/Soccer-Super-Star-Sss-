@@ -57,7 +57,10 @@ Mínimo para empezar: las 9 piezas de un aspecto concreto (por ejemplo `cara-ova
 **Formato:** PNG transparente (512×256 las botas, 512×512 los guantes) o SVG. Aparecen como imagen en la tienda (Jugador → Material).
 La lista completa de los 116 nombres está en `diseno/inventario.json` (campo `material`, columna `archivo`). Ejemplos: `bota-arco-velocidad-elite.png`, `bota-leona-agarre-basica.png`, `guantes-felino-reflejos-pro.png`, `ropa-tribanda-ropa-de-compresion-elite.png`.
 
-### `escudos/` · encargo `prompts/05-escudos-ficticios.md` (opción B)
+### `escudos/` · encargo `prompts/05-escudos-ficticios.md`
+**Opción A (la que está subida):** piezas `forma-*.svg`, `division-*.svg` y `emblema-*.svg`. El juego compone el escudo de cada club eligiendo forma, división y emblema a partir de su nombre y lo colorea con sus colores (`#ff00ff` → principal, `#00ffff` → secundario).
+
+**Opción B (opcional, tiene prioridad):** un escudo completo por club.
 **Formato:** SVG cuadrado o PNG transparente. Solo para la **versión ficticia** (la real usa los escudos descargados).
 Nombre: `club-` + nombre del club en minúsculas, sin acentos y con guiones. La lista de los 204 clubes de primera división e invitados, con sus colores e iniciales, está en `diseno/inventario.json` (campo `escudos`). Ejemplos: `club-chamartin-cf.svg`, `club-merseyside-reds.svg`.
 
@@ -75,6 +78,12 @@ Ahora el juego usa los de navegación: `nav-inicio.svg`, `nav-partido.svg`, `nav
 
 ### `equipacion/` · encargo `prompts/04-equipaciones.md`
 Preparada para más adelante: `lisa.svg`, `rayas-verticales.svg`, `rayas-horizontales.svg`, `mitades.svg`, `banda-diagonal.svg`, `franja-pecho.svg`, `cuello-contraste.svg`, `mangas-contraste.svg`.
+
+## Lo que falta
+
+Las 8 prendas de ropa (compresión y potencia): encargo `prompts/08-lo-que-falta.md`. Mientras no estén, en la tienda aparecen sin imagen.
+
+Los .zip y los visores .html que traen las herramientas se pueden dejar en las carpetas: el juego no los usa y no se suben a GitHub.
 
 ## Orden recomendado
 

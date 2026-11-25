@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220" width="200" height="220">
+  <g id="cejas-arqueadas">
+    <g id="cejas-arqueadas-base">
+      <path d="M 70.0 81.8 Q 78.5 74.0 92.5 79.5 Q 92.8 81.2 91.2 81.8 Q 79.5 77.6 71.2 83.2 Z" fill="#4a2e1c"/>
+      <path d="M 130.0 81.8 Q 121.5 74.0 107.5 79.5 Q 107.2 81.2 108.8 81.8 Q 120.5 77.6 128.8 83.2 Z" fill="#4a2e1c"/>
+    </g>
+    <g id="cejas-arqueadas-sombras">
+      <path d="M 70.0 81.8 Q 78.5 74.0 92.5 79.5 Q 92.8 81.2 91.2 81.8 Q 79.5 77.6 71.2 83.2 Z" fill="#000000" opacity="0.10"/>
+      <path d="M 130.0 81.8 Q 121.5 74.0 107.5 79.5 Q 107.2 81.2 108.8 81.8 Q 120.5 77.6 128.8 83.2 Z" fill="#000000" opacity="0.14"/>
+    </g>
+  </g>
+</svg>

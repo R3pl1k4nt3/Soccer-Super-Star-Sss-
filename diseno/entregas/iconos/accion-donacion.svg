@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#e8edf7" fill="none">
+  <g id="accion-donacion-acento">
+    <path d="M 12 12 C 9.5 9.8, 8 8, 8 6.3 C 8 5, 9 4, 10.2 4 C 11 4, 11.6 4.5, 12 5.2 C 12.4 4.5, 13 4, 13.8 4 C 15 4, 16 5, 16 6.3 C 16 8, 14.5 9.8, 12 12 Z" fill="#f5c542"/>
+  </g>
+  <g id="accion-donacion-linea" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 3 16 L 8 16 L 12 18 L 19 16 C 20 15.6, 21 16.5, 20.5 17.5 L 15 20 L 7 20 L 3 18"/>
+  </g>
+</svg>

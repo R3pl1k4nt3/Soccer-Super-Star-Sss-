@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 256" width="512" height="256">
+  <defs>
+    <linearGradient id="bota-nordika-control-basica-luz" x1="15%" y1="10%" x2="80%" y2="85%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.14"/>
+      <stop offset="55%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="bota-nordika-control-basica-sombra" x1="25%" y1="20%" x2="90%" y2="95%">
+      <stop offset="45%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.16"/>
+    </linearGradient>
+    <clipPath id="bota-nordika-control-basica-clip">
+      <path d="M 72 86 C 98 92, 138 92, 174 84 C 214 82, 258 106, 318 134 C 374 156, 424 164, 452 177 C 462 183, 460 196, 440 198 L 78 198 C 56 196, 48 174, 54 140 C 58 114, 64 94, 72 86 Z"/>
+    </clipPath>
+  </defs>
+  <g id="bota-nordika-control-basica">
+    <g id="bota-nordika-control-basica-tacos">
+      <rect x="80" y="205" width="12" height="17" rx="3" fill="#10241b"/><rect x="126" y="205" width="12" height="17" rx="3" fill="#10241b"/><rect x="270" y="205" width="12" height="17" rx="3" fill="#10241b"/><rect x="324" y="205" width="12" height="17" rx="3" fill="#10241b"/><rect x="378" y="205" width="12" height="17" rx="3" fill="#10241b"/><rect x="422" y="205" width="12" height="17" rx="3" fill="#10241b"/>
+    </g>
+    <g id="bota-nordika-control-basica-cuerpo">
+      <path d="M 72 86 C 98 92, 138 92, 174 84 C 214 82, 258 106, 318 134 C 374 156, 424 164, 452 177 C 462 183, 460 196, 440 198 L 78 198 C 56 196, 48 174, 54 140 C 58 114, 64 94, 72 86 Z" fill="#00c853"/>
+      <g clip-path="url(#bota-nordika-control-basica-clip)">
+        <path d="M 72 86 C 98 92, 138 92, 174 84 L 170 104 C 136 110, 96 110, 68 104 Z" fill="#13212c" opacity="0.88"/>
+        <g opacity="0.28" stroke="#13212c" stroke-width="3" stroke-linecap="round"><line x1="298" y1="138" x2="314" y2="168"/><line x1="316" y1="145" x2="332" y2="173"/><line x1="334" y1="152" x2="348" y2="177"/><line x1="352" y1="158" x2="364" y2="181"/></g>
+        
+        <g transform="translate(175, 155) scale(1.15)"><path d="M -20 12 L -6 -14 L 2 0 L 10 -10 L 22 12 L 15 12 L 10 2 L 2 12 L -6 -2 L -13 12 Z" fill="#13212c"/></g>
+        <rect x="0" y="0" width="512" height="256" fill="url(#bota-nordika-control-basica-luz)"/>
+        <rect x="0" y="0" width="512" height="256" fill="url(#bota-nordika-control-basica-sombra)"/>
+      </g>
+      <g stroke="#13212c" stroke-width="3.2" stroke-linecap="round" opacity="0.88"><line x1="188" y1="98" x2="206" y2="108"/><line x1="206" y1="103" x2="224" y2="114"/><line x1="224" y1="109" x2="242" y2="120"/><line x1="242" y1="115" x2="260" y2="126"/></g>
+    </g>
+    <g id="bota-nordika-control-basica-suela">
+      <path d="M 64 192 L 450 192 C 456 196, 450 206, 436 207 L 78 207 C 64 206, 58 198, 64 192 Z" fill="#10241b"/>
+      <path d="M 64 192 L 450 192 C 456 196, 450 206, 436 207 L 78 207 C 64 206, 58 198, 64 192 Z" fill="url(#bota-nordika-control-basica-luz)"/>
+    </g>
+  </g>
+</svg>

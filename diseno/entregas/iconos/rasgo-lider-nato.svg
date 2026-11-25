@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#e8edf7" fill="none">
+  <g id="rasgo-lider-nato-acento">
+    <rect x="4" y="8" width="16" height="8" rx="2" fill="#f5c542" opacity="0.4"/>
+  </g>
+  <g id="rasgo-lider-nato-linea" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="4" y="8" width="16" height="8" rx="2"/>
+    <path d="M 9 12 L 15 12 M 12 9.5 L 12 14.5"/>
+  </g>
+</svg>

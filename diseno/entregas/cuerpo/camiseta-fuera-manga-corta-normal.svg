@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 520" width="200" height="520">
+  <defs>
+    <linearGradient id="camiseta-fuera-manga-corta-normal-luz" x1="12%" y1="8%" x2="82%" y2="88%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.2"/>
+      <stop offset="52%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="camiseta-fuera-manga-corta-normal-sombra" x1="25%" y1="15%" x2="92%" y2="95%">
+      <stop offset="45%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.22"/>
+    </linearGradient>
+    <clipPath id="camiseta-fuera-manga-corta-normal-clip">
+      <path d="M 61 175 C 51 180, 40.72 206, 41.68 226 L 57.68 230 C 68.12 214, 70.2 200, 70.68 195 Z"/>
+      <path d="M 139 175 C 149 180, 159.28 206, 158.32 226 L 142.32 230 C 131.88 214, 129.8 200, 129.32 195 Z"/>
+      <path d="M 86 172 C 92 183, 108 183, 114 172 C 133 173, 143 175, 147 180 L 128 258 L 129 299 Q 100 304 71 299 L 72 258 L 53 180 C 57 175, 67 173, 86 172 Z"/>
+    </clipPath>
+  </defs>
+  <g id="camiseta-fuera-manga-corta-normal">
+    <g id="camiseta-fuera-manga-corta-normal-base">
+      <path d="M 61 175 C 51 180, 40.72 206, 41.68 226 L 57.68 230 C 68.12 214, 70.2 200, 70.68 195 Z" fill="#1565c0"/>
+      <path d="M 139 175 C 149 180, 159.28 206, 158.32 226 L 142.32 230 C 131.88 214, 129.8 200, 129.32 195 Z" fill="#1565c0"/>
+      <path d="M 86 172 C 92 183, 108 183, 114 172 C 133 173, 143 175, 147 180 L 128 258 L 129 299 Q 100 304 71 299 L 72 258 L 53 180 C 57 175, 67 173, 86 172 Z" fill="#1565c0"/>
+    </g>
+    <g id="camiseta-fuera-manga-corta-normal-detalles">
+      <path d="M 85 172 C 92 183, 108 183, 115 172 L 118 173 C 110 187, 90 187, 82 173 Z" fill="#ffffff"/>
+      <path d="M 82 174 C 65 175, 55 177, 51 182" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" opacity="0.92"/>
+      <path d="M 118 174 C 135 175, 145 177, 149 182" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" opacity="0.92"/>
+      <path d="M 41.68 223 L 57.68 227" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M 158.32 223 L 142.32 227" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round"/>
+    </g>
+    <g id="camiseta-fuera-manga-corta-normal-volumen" clip-path="url(#camiseta-fuera-manga-corta-normal-clip)">
+      <rect x="0" y="0" width="200" height="520" fill="url(#camiseta-fuera-manga-corta-normal-luz)"/>
+      <rect x="0" y="0" width="200" height="520" fill="url(#camiseta-fuera-manga-corta-normal-sombra)"/>
+      <path d="M 76 200 Q 78 240 75 280" fill="none" stroke="#000000" stroke-width="1.4" opacity="0.10"/>
+      <path d="M 124 200 Q 122 240 125 280" fill="none" stroke="#000000" stroke-width="1.4" opacity="0.10"/>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 520" width="200" height="520">
+  <defs>
+    <linearGradient id="medias-bajadas-luz" x1="12%" y1="8%" x2="82%" y2="88%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.14"/>
+      <stop offset="52%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="medias-bajadas-sombra" x1="25%" y1="15%" x2="92%" y2="95%">
+      <stop offset="45%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.18"/>
+    </linearGradient>
+    <clipPath id="medias-bajadas-clip">
+      <path d="M 71.5 442 Q 82 440 92.5 442 C 93.5 467, 91 458, 89 486 L 75 486 C 73 458, 70.5 467, 71.5 442 Z"/>
+      <path d="M 107.5 442 Q 118 440 128.5 442 C 129.5 467, 127 458, 125 486 L 111 486 C 109 458, 106.5 467, 107.5 442 Z"/>
+    </clipPath>
+  </defs>
+  <g id="medias-bajadas">
+    <g id="medias-bajadas-espinilleras">
+      <rect x="74" y="414" width="16" height="36" rx="6" fill="#1f2c47"/>
+      <rect x="76" y="417" width="12" height="30" rx="4" fill="#5aa9ff" opacity="0.28"/>
+      <rect x="110" y="414" width="16" height="36" rx="6" fill="#1f2c47"/>
+      <rect x="112" y="417" width="12" height="30" rx="4" fill="#5aa9ff" opacity="0.28"/>
+    </g>
+    <g id="medias-bajadas-base">
+      <path d="M 71.5 442 Q 82 440 92.5 442 C 93.5 467, 91 458, 89 486 L 75 486 C 73 458, 70.5 467, 71.5 442 Z" fill="#ffffff"/>
+      <path d="M 107.5 442 Q 118 440 128.5 442 C 129.5 467, 127 458, 125 486 L 111 486 C 109 458, 106.5 467, 107.5 442 Z" fill="#ffffff"/>
+    </g>
+    <g id="medias-bajadas-franja" clip-path="url(#medias-bajadas-clip)">
+      <rect x="65" y="448" width="70" height="8" fill="#1565c0"/>
+      <rect x="65" y="459" width="70" height="3" fill="#1565c0"/>
+    </g>
+    <g id="medias-bajadas-volumen" clip-path="url(#medias-bajadas-clip)">
+      <rect x="0" y="0" width="200" height="520" fill="url(#medias-bajadas-luz)"/>
+      <rect x="0" y="0" width="200" height="520" fill="url(#medias-bajadas-sombra)"/>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220" width="200" height="220">
+  <defs>
+    <linearGradient id="cara-ovalada-luz" x1="15%" y1="10%" x2="80%" y2="85%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.18"/>
+      <stop offset="55%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="cara-ovalada-sombra" x1="25%" y1="20%" x2="90%" y2="95%">
+      <stop offset="45%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.16"/>
+    </linearGradient>
+  </defs>
+  <g id="cara-ovalada">
+    <g id="cara-ovalada-base">
+      <path d="M 100 42 C 124 42, 137 58, 137 82 C 137 104, 132 121, 121 132 C 114 139, 107 142, 100 142 C 93 142, 86 139, 79 132 C 68 121, 63 104, 63 82 C 63 58, 76 42, 100 42 Z" fill="#d29a6e"/>
+    </g>
+    <g id="cara-ovalada-volumen">
+      <path d="M 100 42 C 124 42, 137 58, 137 82 C 137 104, 132 121, 121 132 C 114 139, 107 142, 100 142 C 93 142, 86 139, 79 132 C 68 121, 63 104, 63 82 C 63 58, 76 42, 100 42 Z" fill="url(#cara-ovalada-luz)"/>
+      <path d="M 100 42 C 124 42, 137 58, 137 82 C 137 104, 132 121, 121 132 C 114 139, 107 142, 100 142 C 93 142, 86 139, 79 132 C 68 121, 63 104, 63 82 C 63 58, 76 42, 100 42 Z" fill="url(#cara-ovalada-sombra)"/>
+    </g>
+  </g>
+</svg>

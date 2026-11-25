@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#e8edf7" fill="none">
+  <g id="otro-moral-acento">
+    <circle cx="12" cy="12" r="8" fill="#2bd47d" opacity="0.25"/>
+  </g>
+  <g id="otro-moral-linea" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="9"/>
+    <path d="M 8.5 14.5 C 9.5 16.5, 14.5 16.5, 15.5 14.5"/>
+    <path d="M 9 9.5 L 9 9.6 M 15 9.5 L 15 9.6"/>
+  </g>
+</svg>

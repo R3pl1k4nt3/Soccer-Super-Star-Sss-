@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200" width="320" height="200">
+  <defs>
+    <linearGradient id="mc-luz" x1="10%" y1="5%" x2="85%" y2="95%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.12"/>
+      <stop offset="55%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <clipPath id="mc-clip">
+      <rect x="0" y="0" width="320" height="200" rx="10"/>
+    </clipPath>
+  </defs>
+  <g id="minicampo" clip-path="url(#mc-clip)">
+    <g id="cesped">
+      <rect x="0" y="0" width="320" height="200" fill="#186b44"/>
+      <rect x="0" y="0" width="32" height="200" fill="#1e7d50"/>
+      <rect x="64" y="0" width="32" height="200" fill="#1e7d50"/>
+      <rect x="128" y="0" width="32" height="200" fill="#1e7d50"/>
+      <rect x="192" y="0" width="32" height="200" fill="#1e7d50"/>
+      <rect x="256" y="0" width="32" height="200" fill="#1e7d50"/>
+    </g>
+    <g id="lineas" fill="none" stroke="#e8edf7" stroke-width="1.8" opacity="0.88">
+      <!-- Borde exterior -->
+      <rect x="14" y="12" width="292" height="176"/>
+      <!-- Linea central y circulo -->
+      <line x1="160" y1="12" x2="160" y2="188"/>
+      <circle cx="160" cy="100" r="26"/>
+      <circle cx="160" cy="100" r="2.2" fill="#e8edf7"/>
+      <!-- Area izquierda -->
+      <rect x="14" y="46" width="46" height="108"/>
+      <rect x="14" y="72" width="16" height="56"/>
+      <circle cx="46" cy="100" r="1.8" fill="#e8edf7"/>
+      <path d="M 60 80 A 24 24 0 0 1 60 120"/>
+      <!-- Area derecha -->
+      <rect x="260" y="46" width="46" height="108"/>
+      <rect x="290" y="72" width="16" height="56"/>
+      <circle cx="274" cy="100" r="1.8" fill="#e8edf7"/>
+      <path d="M 260 80 A 24 24 0 0 0 260 120"/>
+      <!-- Corners -->
+      <path d="M 14 20 A 8 8 0 0 0 22 12"/>
+      <path d="M 298 12 A 8 8 0 0 0 306 20"/>
+      <path d="M 14 180 A 8 8 0 0 1 22 188"/>
+      <path d="M 298 188 A 8 8 0 0 1 306 180"/>
+    </g>
+    <rect x="0" y="0" width="320" height="200" fill="url(#mc-luz)"/>
+  </g>
+</svg>

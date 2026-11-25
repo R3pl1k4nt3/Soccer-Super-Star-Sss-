@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#e8edf7" fill="none">
+  <g id="accion-entrevista-acento">
+    <rect x="9" y="4" width="6" height="9" rx="3" fill="#2bd47d" opacity="0.45"/>
+  </g>
+  <g id="accion-entrevista-linea" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="9" y="4" width="6" height="9" rx="3"/>
+    <path d="M 6 11 C 6 14.5, 8.7 17, 12 17 C 15.3 17, 18 14.5, 18 11 M 12 17 L 12 21 M 9 21 L 15 21"/>
+  </g>
+</svg>

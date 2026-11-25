@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 256" width="512" height="256">
+  <defs>
+    <linearGradient id="bota-arco-control-elite-luz" x1="15%" y1="10%" x2="80%" y2="85%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.34"/>
+      <stop offset="55%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="bota-arco-control-elite-sombra" x1="25%" y1="20%" x2="90%" y2="95%">
+      <stop offset="45%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.25"/>
+    </linearGradient>
+    <clipPath id="bota-arco-control-elite-clip">
+      <path d="M 72 86 C 98 92, 138 92, 174 84 C 214 82, 258 106, 318 134 C 374 156, 424 164, 452 177 C 462 183, 460 196, 440 198 L 78 198 C 56 196, 48 174, 54 140 C 58 114, 64 94, 72 86 Z"/>
+    </clipPath>
+  </defs>
+  <g id="bota-arco-control-elite">
+    <g id="bota-arco-control-elite-tacos">
+      <rect x="80" y="205" width="12" height="17" rx="3" fill="#1a1f2b"/><rect x="81.5" y="217" width="9" height="5" rx="2" fill="#f5c542"/><rect x="126" y="205" width="12" height="17" rx="3" fill="#1a1f2b"/><rect x="127.5" y="217" width="9" height="5" rx="2" fill="#f5c542"/><rect x="270" y="205" width="12" height="17" rx="3" fill="#1a1f2b"/><rect x="271.5" y="217" width="9" height="5" rx="2" fill="#f5c542"/><rect x="324" y="205" width="12" height="17" rx="3" fill="#1a1f2b"/><rect x="325.5" y="217" width="9" height="5" rx="2" fill="#f5c542"/><rect x="378" y="205" width="12" height="17" rx="3" fill="#1a1f2b"/><rect x="379.5" y="217" width="9" height="5" rx="2" fill="#f5c542"/><rect x="422" y="205" width="12" height="17" rx="3" fill="#1a1f2b"/><rect x="423.5" y="217" width="9" height="5" rx="2" fill="#f5c542"/>
+    </g>
+    <g id="bota-arco-control-elite-cuerpo">
+      <path d="M 72 86 C 98 92, 138 92, 174 84 C 214 82, 258 106, 318 134 C 374 156, 424 164, 452 177 C 462 183, 460 196, 440 198 L 78 198 C 56 196, 48 174, 54 140 C 58 114, 64 94, 72 86 Z" fill="#ff5a1f"/>
+      <g clip-path="url(#bota-arco-control-elite-clip)">
+        <path d="M 72 86 C 98 92, 138 92, 174 84 L 170 104 C 136 110, 96 110, 68 104 Z" fill="#161d2b" opacity="0.88"/>
+        <g opacity="0.28" stroke="#161d2b" stroke-width="3" stroke-linecap="round"><line x1="298" y1="138" x2="314" y2="168"/><line x1="316" y1="145" x2="332" y2="173"/><line x1="334" y1="152" x2="348" y2="177"/><line x1="352" y1="158" x2="364" y2="181"/></g>
+        <path d="M 56 144 C 82 146, 102 164, 106 196 L 76 196 C 56 194, 50 174, 56 144 Z" fill="#161d2b" opacity="0.22"/><path d="M 140 192 L 370 192 L 358 186 L 154 186 Z" fill="#ffb74d" opacity="0.78"/><path d="M 64 195 L 446 195" stroke="#f5c542" stroke-width="2.5" opacity="0.9"/><path d="M 210 118 C 280 132, 350 156, 412 174" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" opacity="0.26"/>
+        <g transform="translate(175, 155) scale(1.15)"><path d="M -22 10 C -8 -16, 12 -18, 26 -4 C 12 -10, -4 -6, -16 14 Z" fill="#f5c542"/><path d="M -10 14 C 0 0, 12 -2, 22 4 C 12 2, 2 5, -6 15 Z" fill="#f5c542" opacity="0.65"/></g>
+        <rect x="0" y="0" width="512" height="256" fill="url(#bota-arco-control-elite-luz)"/>
+        <rect x="0" y="0" width="512" height="256" fill="url(#bota-arco-control-elite-sombra)"/>
+      </g>
+      <g stroke="#161d2b" stroke-width="3.2" stroke-linecap="round" opacity="0.88"><line x1="188" y1="98" x2="206" y2="108"/><line x1="206" y1="103" x2="224" y2="114"/><line x1="224" y1="109" x2="242" y2="120"/><line x1="242" y1="115" x2="260" y2="126"/></g>
+    </g>
+    <g id="bota-arco-control-elite-suela">
+      <path d="M 64 192 L 450 192 C 456 196, 450 206, 436 207 L 78 207 C 64 206, 58 198, 64 192 Z" fill="#1a1f2b"/>
+      <path d="M 64 192 L 450 192 C 456 196, 450 206, 436 207 L 78 207 C 64 206, 58 198, 64 192 Z" fill="url(#bota-arco-control-elite-luz)"/>
+    </g>
+  </g>
+</svg>

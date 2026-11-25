@@ -305,6 +305,10 @@ tr:hover td{background:rgba(148,163,184,.07)}
 .mom{margin:4px 0 12px}
 .mombar{height:8px;border-radius:999px;background:#e53935;overflow:hidden;margin-top:4px}
 .mombar i{display:block;height:100%;background:var(--acc)}
-.item:has(.gearimg){grid-template-columns:64px 1fr auto}
-.gearimg{width:64px;height:40px;object-fit:contain;display:block}
-.gearimg svg{width:64px;height:40px}
+.item:has(.gearimg){grid-template-columns:96px 1fr auto}
+.gearimg{width:96px;height:56px;object-fit:contain;display:block}
+.gearimg svg{width:96px;height:56px}
+.gico{display:inline-flex;vertical-align:middle;margin-right:6px;color:var(--acc)}
+.gico svg{display:block}
+.tname{display:inline-flex;align-items:center;gap:2px}
+.moment{display:flex;align-items:center;gap:8px;flex-wrap:wrap}

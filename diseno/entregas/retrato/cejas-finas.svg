@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220" width="200" height="220">
+  <g id="cejas-finas">
+    <g id="cejas-finas-base">
+      <path d="M 70.5 80.5 Q 81.5 76.2 92.5 79.2 Q 92.8 80.5 91.5 81.2 Q 81.5 79.0 71.2 81.8 Z" fill="#4a2e1c"/>
+      <path d="M 129.5 80.5 Q 118.5 76.2 107.5 79.2 Q 107.2 80.5 108.5 81.2 Q 118.5 79.0 128.8 81.8 Z" fill="#4a2e1c"/>
+    </g>
+    <g id="cejas-finas-sombras">
+      <path d="M 70.5 80.5 Q 81.5 76.2 92.5 79.2 Q 92.8 80.5 91.5 81.2 Q 81.5 79.0 71.2 81.8 Z" fill="#000000" opacity="0.10"/>
+      <path d="M 129.5 80.5 Q 118.5 76.2 107.5 79.2 Q 107.2 80.5 108.5 81.2 Q 118.5 79.0 128.8 81.8 Z" fill="#000000" opacity="0.14"/>
+    </g>
+  </g>
+</svg>

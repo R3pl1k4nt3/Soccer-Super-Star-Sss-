@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220" width="200" height="220">
+  <defs>
+    <linearGradient id="camiseta-cuello-v-luz" x1="15%" y1="10%" x2="80%" y2="85%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.2"/>
+      <stop offset="55%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="camiseta-cuello-v-sombra" x1="25%" y1="20%" x2="90%" y2="95%">
+      <stop offset="45%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.22"/>
+    </linearGradient>
+  </defs>
+  <g id="camiseta-cuello-v">
+    <g id="camiseta-cuello-v-base">
+      <path d="M 76 155 L 100 180 L 124 155 C 140 160, 160 167, 170 178 C 178 187, 182 203, 184 220 L 16 220 C 18 203, 22 187, 30 178 C 40 167, 60 160, 76 155 Z" fill="#1565c0"/>
+    </g>
+    <g id="camiseta-cuello-v-detalles">
+      <path d="M 76 155 L 100 180 L 124 155 L 129 156 L 100 187 L 71 156 Z" fill="#ffffff"/>
+      <path d="M 70 158 C 54 164, 41 171, 32 181" fill="none" stroke="#ffffff" stroke-width="3.2" stroke-linecap="round" opacity="0.92"/>
+      <path d="M 130 158 C 146 164, 159 171, 168 181" fill="none" stroke="#ffffff" stroke-width="3.2" stroke-linecap="round" opacity="0.92"/>
+    </g>
+    <g id="camiseta-cuello-v-volumen">
+      <path d="M 76 155 L 100 180 L 124 155 C 140 160, 160 167, 170 178 C 178 187, 182 203, 184 220 L 16 220 C 18 203, 22 187, 30 178 C 40 167, 60 160, 76 155 Z" fill="url(#camiseta-cuello-v-luz)"/>
+      <path d="M 76 155 L 100 180 L 124 155 C 140 160, 160 167, 170 178 C 178 187, 182 203, 184 220 L 16 220 C 18 203, 22 187, 30 178 C 40 167, 60 160, 76 155 Z" fill="url(#camiseta-cuello-v-sombra)"/>
+      <path d="M 52 178 Q 56 198 54 220" fill="none" stroke="#000000" stroke-width="1.6" opacity="0.10"/>
+      <path d="M 148 178 Q 144 198 146 220" fill="none" stroke="#000000" stroke-width="1.6" opacity="0.10"/>
+    </g>
+  </g>
+</svg>

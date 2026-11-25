@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 104" width="100" height="104">
+  <defs>
+    <linearGradient id="forma-cuadrado-redondeado-luz" x1="12%" y1="8%" x2="82%" y2="85%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.2"/>
+      <stop offset="52%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="forma-cuadrado-redondeado-sombra" x1="25%" y1="20%" x2="92%" y2="95%">
+      <stop offset="45%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.22"/>
+    </linearGradient>
+  </defs>
+  <g id="principal">
+    <path id="forma-cuadrado-redondeado-silueta" d="M 24 12 L 76 12 Q 88 12 88 24 L 88 76 Q 88 92 72 94 L 28 94 Q 12 92 12 76 L 12 24 Q 12 12 24 12 Z" fill="#ff00ff"/>
+  </g>
+  <g id="detalles">
+    <path d="M 24 12 L 76 12 Q 88 12 88 24 L 88 76 Q 88 92 72 94 L 28 94 Q 12 92 12 76 L 12 24 Q 12 12 24 12 Z" fill="none" stroke="#f5c542" stroke-width="4" stroke-linejoin="round"/>
+  </g>
+  <g id="sombra">
+    <path d="M 24 12 L 76 12 Q 88 12 88 24 L 88 76 Q 88 92 72 94 L 28 94 Q 12 92 12 76 L 12 24 Q 12 12 24 12 Z" fill="url(#forma-cuadrado-redondeado-luz)"/>
+    <path d="M 24 12 L 76 12 Q 88 12 88 24 L 88 76 Q 88 92 72 94 L 28 94 Q 12 92 12 76 L 12 24 Q 12 12 24 12 Z" fill="url(#forma-cuadrado-redondeado-sombra)"/>
+  </g>
+</svg>

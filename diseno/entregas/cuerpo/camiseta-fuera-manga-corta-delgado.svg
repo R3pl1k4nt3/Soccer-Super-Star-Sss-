@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 520" width="200" height="520">
+  <defs>
+    <linearGradient id="camiseta-fuera-manga-corta-delgado-luz" x1="12%" y1="8%" x2="82%" y2="88%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.2"/>
+      <stop offset="52%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="camiseta-fuera-manga-corta-delgado-sombra" x1="25%" y1="15%" x2="92%" y2="95%">
+      <stop offset="45%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.22"/>
+    </linearGradient>
+    <clipPath id="camiseta-fuera-manga-corta-delgado-clip">
+      <path d="M 66 175 C 56 180, 44.88 206, 45.72 226 L 59.72 230 C 71.48 214, 73.3 200, 73.72 195 Z"/>
+      <path d="M 134 175 C 144 180, 155.12 206, 154.28 226 L 140.28 230 C 128.52 214, 126.7 200, 126.28 195 Z"/>
+      <path d="M 86 172 C 92 183, 108 183, 114 172 C 128 173, 138 175, 142 180 L 124 258 L 126 299 Q 100 304 74 299 L 76 258 L 58 180 C 62 175, 72 173, 86 172 Z"/>
+    </clipPath>
+  </defs>
+  <g id="camiseta-fuera-manga-corta-delgado">
+    <g id="camiseta-fuera-manga-corta-delgado-base">
+      <path d="M 66 175 C 56 180, 44.88 206, 45.72 226 L 59.72 230 C 71.48 214, 73.3 200, 73.72 195 Z" fill="#1565c0"/>
+      <path d="M 134 175 C 144 180, 155.12 206, 154.28 226 L 140.28 230 C 128.52 214, 126.7 200, 126.28 195 Z" fill="#1565c0"/>
+      <path d="M 86 172 C 92 183, 108 183, 114 172 C 128 173, 138 175, 142 180 L 124 258 L 126 299 Q 100 304 74 299 L 76 258 L 58 180 C 62 175, 72 173, 86 172 Z" fill="#1565c0"/>
+    </g>
+    <g id="camiseta-fuera-manga-corta-delgado-detalles">
+      <path d="M 85 172 C 92 183, 108 183, 115 172 L 118 173 C 110 187, 90 187, 82 173 Z" fill="#ffffff"/>
+      <path d="M 82 174 C 70 175, 60 177, 56 182" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" opacity="0.92"/>
+      <path d="M 118 174 C 130 175, 140 177, 144 182" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" opacity="0.92"/>
+      <path d="M 45.72 223 L 59.72 227" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round"/>
+      <path d="M 154.28 223 L 140.28 227" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round"/>
+    </g>
+    <g id="camiseta-fuera-manga-corta-delgado-volumen" clip-path="url(#camiseta-fuera-manga-corta-delgado-clip)">
+      <rect x="0" y="0" width="200" height="520" fill="url(#camiseta-fuera-manga-corta-delgado-luz)"/>
+      <rect x="0" y="0" width="200" height="520" fill="url(#camiseta-fuera-manga-corta-delgado-sombra)"/>
+      <path d="M 80 200 Q 82 240 79 280" fill="none" stroke="#000000" stroke-width="1.4" opacity="0.10"/>
+      <path d="M 120 200 Q 118 240 121 280" fill="none" stroke="#000000" stroke-width="1.4" opacity="0.10"/>
+    </g>
+  </g>
+</svg>

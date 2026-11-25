@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <clipPath id="eq-cuello-contraste-clip-all">
+      <path d="M 126 106 C 92 134, 58 182, 42 238 L 114 268 C 126 244, 134 232, 140 224 Z"/>
+      <path d="M 386 106 C 420 134, 454 182, 470 238 L 398 268 C 386 244, 378 232, 372 224 Z"/>
+      <path d="M 192 78 C 214 114, 298 114, 320 78 C 348 84, 372 94, 386 106 L 372 224 C 368 290, 366 370, 368 446 Q 256 462 144 446 C 146 370, 144 290, 140 224 L 126 106 C 140 94, 164 84, 192 78 Z"/>
+    </clipPath>
+    <clipPath id="eq-cuello-contraste-clip-torso">
+      <path d="M 192 78 C 214 114, 298 114, 320 78 C 348 84, 372 94, 386 106 L 372 224 C 368 290, 366 370, 368 446 Q 256 462 144 446 C 146 370, 144 290, 140 224 L 126 106 C 140 94, 164 84, 192 78 Z"/>
+    </clipPath>
+    <linearGradient id="eq-cuello-contraste-luz" x1="12%" y1="8%" x2="82%" y2="85%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.22"/>
+      <stop offset="52%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="eq-cuello-contraste-sombra" x1="25%" y1="18%" x2="92%" y2="95%">
+      <stop offset="42%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.22"/>
+    </linearGradient>
+  </defs>
+  <g id="principal">
+      <path d="M 192 78 Q 256 64 320 78 C 298 114, 214 114, 192 78 Z" fill="#ff00ff"/>
+      <path d="M 126 106 C 92 134, 58 182, 42 238 L 114 268 C 126 244, 134 232, 140 224 Z" fill="#ff00ff"/>
+      <path d="M 386 106 C 420 134, 454 182, 470 238 L 398 268 C 386 244, 378 232, 372 224 Z" fill="#ff00ff"/>
+      <path d="M 192 78 C 214 114, 298 114, 320 78 C 348 84, 372 94, 386 106 L 372 224 C 368 290, 366 370, 368 446 Q 256 462 144 446 C 146 370, 144 290, 140 224 L 126 106 C 140 94, 164 84, 192 78 Z" fill="#ff00ff"/>
+  </g>
+  <g id="secundario">
+      <path d="M 182 77 C 208 130, 304 130, 330 77 L 314 74 C 294 112, 218 112, 198 74 Z" fill="#00ffff"/>
+      <path d="M 46 225 L 118 255 L 114 268 L 42 238 Z" fill="#00ffff"/>
+      <path d="M 466 225 L 394 255 L 398 268 L 470 238 Z" fill="#00ffff"/>
+  </g>
+  <g id="sombra">
+      <!-- Sombra interior del cuello -->
+      <path d="M 192 78 Q 256 64 320 78 C 298 114, 214 114, 192 78 Z" fill="#000000" opacity="0.34"/>
+      <g clip-path="url(#eq-cuello-contraste-clip-all)">
+        <rect x="0" y="0" width="512" height="512" fill="url(#eq-cuello-contraste-luz)"/>
+        <rect x="0" y="0" width="512" height="512" fill="url(#eq-cuello-contraste-sombra)"/>
+        <!-- Costuras y pliegues suaves -->
+        <path d="M 126 106 Q 134 166 140 224" fill="none" stroke="#000000" stroke-width="2.5" opacity="0.14"/>
+        <path d="M 386 106 Q 378 166 372 224" fill="none" stroke="#000000" stroke-width="2.5" opacity="0.14"/>
+        <path d="M 176 232 Q 180 330 172 440" fill="none" stroke="#000000" stroke-width="3" stroke-linecap="round" opacity="0.08"/>
+        <path d="M 336 232 Q 332 330 340 440" fill="none" stroke="#000000" stroke-width="3" stroke-linecap="round" opacity="0.08"/>
+        <path d="M 144 438 Q 256 454 368 438 L 368 456 Q 256 470 144 456 Z" fill="#000000" opacity="0.10"/>
+      </g>
+  </g>
+</svg>
