@@ -14,12 +14,37 @@ function potBand(){var p=S.pot,lo=Math.max(40,Math.floor((p-4)/2)*2),hi=lo+8;var
 function ageGrowth(a){return a<=19?1.35:a<=21?1.25:a<=23?1.12:a<=26?1:a<=28?0.85:a<=30?0.65:a<=32?0.45:0.3;}
 /* cuanto más cerca del techo, más cuesta mejorar */
 function potGrowth(){var ov=overall(),gap=S.pot-ov;return gap>=10?1:gap>=5?0.8:gap>=2?0.55:gap>=0?0.3:0.12;}
-/* nivel de tu liga: en ligas fuertes mejoras más rápido; en las bajas marcas más, pero tu valoración se estanca antes */
-function lgLevel(){var me=S.pl[S.me];if(!me||me.c==null||me.c<0)return 50;var lg=lgOf(me.c),s=0;if(!lg)return S.clubs[me.c].str;lg.clubs.forEach(function(id){s+=S.clubs[id].str;});return s/lg.clubs.length;}
-function leagueCeil(){return Math.round(lgLevel()+14);}
-function leagueF(){var L=lgLevel(),f=clamp(0.65+(L-40)/60,0.6,1.35),c=leagueCeil(),ov=overall();if(ov>c)f*=clamp(1-(ov-c)/10,0.25,1);return f;}
-function leagueTxt(){var f=leagueF(),ov=overall(),c=leagueCeil();return 'Ritmo por tu liga: <b class="num '+(f>=1?'good':f<0.75?'bad':'')+'">'+Math.round(f*100)+'%</b>'+(ov>c?' <span class="bad">(te has quedado pequeño para esta liga: por encima de '+c+' casi no mejoras)</span>':' · techo de la liga ≈'+c);}
+/* ---------- ritmo de mejora: edad × liga × potencial ----------
+   Liga: en ligas fuertes mejoras más rápido; en las bajas marcas más, pero tu valoración se estanca antes (techo de la liga).
+   Edad: de joven la liga marca mucho tu desarrollo; de veterano, poco. A partir de los 31, en una liga fuerte
+   mantienes mejor el físico (mejores médicos y preparadores); en una baja lo pierdes antes. */
+function lgLevelOf(cid){var c=S.clubs[cid];if(!c)return 50;var lg=lgOf(cid),s=0;if(!lg)return c.str;lg.clubs.forEach(function(id){s+=S.clubs[id].str;});return s/lg.clubs.length;}
+function lgLevel(){var me=S.pl[S.me];if(!me||me.c==null||me.c<0)return 50;return lgLevelOf(me.c);}
+function ceilOf(L){return Math.round(L+14);}
+function leagueCeil(){return ceilOf(lgLevel());}
+/* cuánto pesa la liga según la edad */
+function lgAgeW(a){return a<=19?1.25:a<=21?1.15:a<=24?1:a<=27?0.75:a<=30?0.55:0.4;}
+function lgBase(L){return clamp(0.65+(L-40)/60,0.6,1.35);}
+function leagueFor(L,a,ov){var f=1+(lgBase(L)-1)*lgAgeW(a),c=ceilOf(L);if(ov>c)f*=clamp(1-(ov-c)/10,0.25,1);return Math.max(0.2,f);}
+function leagueF(){return leagueFor(lgLevel(),S.age,overall());}
+/* pérdida física de los veteranos: menos en ligas fuertes */
+function declineFor(L){return clamp(1.2-(L-40)/100,0.8,1.2);}
+function growthAt(cid){return ageGrowth(S.age)*potGrowth()*leagueFor(lgLevelOf(cid),S.age,overall());}
 function growthF(){return ageGrowth(S.age)*potGrowth()*leagueF();}
+function pcnt(x){return Math.round(x*100)+'%';}
+function rateCls(f){return f>=1?'good':f<0.75?'bad':'';}
+function leagueTxt(){var a=ageGrowth(S.age),l=leagueF(),p=potGrowth(),g=a*l*p,ov=overall(),c=leagueCeil();
+ return 'Ritmo de mejora: <b class="num '+rateCls(g)+'">'+pcnt(g)+'</b> <span class="mut">= edad '+pcnt(a)+' × liga '+pcnt(l)+' × potencial '+pcnt(p)+'</span>'+
+  (ov>c?'<br><span class="bad">Te has quedado pequeño para esta liga: por encima de '+c+' casi no mejoras.</span>':'<br><span class="mut">Techo de tu liga ≈'+c+'. A tu edad la liga pesa un '+pcnt(lgAgeW(S.age))+(S.age>=31?'; en ella pierdes físico al '+pcnt(declineFor(lgLevel()))+'.':'.')+'</span>');}
+/* ritmo que tendrías en cada división de tu país, a tu edad y con tu valoración */
+function lgRatesCard(){
+ var me=S.pl[S.me],c=S.clubs[me.c];if(!c||c.guest)return '';
+ var lgs=S.lgs.filter(function(l){return l.co===c.co;}).sort(function(a,b){return a.t-b.t;}),ov=overall(),a=ageGrowth(S.age),p=potGrowth();
+ var h='<div class="card"><h3>Dónde mejorarías más</h3><p class="small mut" style="margin-top:0">Ritmo de mejora en cada división de '+esc(country(c.co).n)+' con tu edad ('+S.age+') y tu valoración ('+ds(ov)+'). En las bajas juegas más y marcas más, pero te estancas antes.</p><div class="tw"><table><tr><th>División</th><th>Nivel</th><th>Techo</th><th>Ritmo</th></tr>';
+ lgs.forEach(function(l){var s=0;l.clubs.forEach(function(id){s+=S.clubs[id].str;});var L=s/l.clubs.length,g=a*p*leagueFor(L,S.age,ov),mine=l.id===c.co+c.t;
+  h+='<tr class="'+(mine?'mine':'')+'"><td>'+esc(l.n)+(mine?' (tú)':'')+'</td><td class="num">'+Math.round(L)+'</td><td class="num">'+ceilOf(L)+'</td><td class="num '+rateCls(g)+'">'+pcnt(g)+'</td></tr>';});
+ return h+'</table></div></div>';
+}
 function growthTxt(){var g=growthF();return g>=1.1?'Creces muy rápido':g>=0.85?'Creces a buen ritmo':g>=0.55?'Creces despacio':g>=0.3?'Cerca de tu techo':'En tu techo o por encima';}
 
 /* ---------- entrenar sin jugar rinde cada vez menos ---------- */

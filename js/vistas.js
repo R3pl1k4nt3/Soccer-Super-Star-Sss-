@@ -289,7 +289,7 @@ function viewClub(){
  h+='</div>';
  h+='<div class="card"><h3>Ofertas</h3><div class="small mut" style="margin-bottom:6px">'+(windowOpen()?'Mercado abierto.':'Mercado cerrado. Abre al inicio de temporada y en enero.')+'</div>';
  S.offers.forEach(function(o,i){var x=S.clubs[o.club],p=Math.round(starterP(x)*100),r2=rivalFor(x),l2=lgOf(x.id);
-  h+='<div class="item"><div><b>'+esc(x.n)+'</b><p>'+l2.n+' ('+country(x.co).n+') · fuerza '+x.str+' · '+fmt(o.wage)+'/semana · '+o.years+' año(s) · prima '+fmt(o.bonus)+' · titular '+p+'%'+(r2?' · rival: '+esc(r2.n)+' ('+r2.o+')':'')+'</p></div><div style="display:grid;gap:6px"><button class="go alt" data-a="squad" data-id="'+x.id+'">Plantilla</button><button class="go '+(windowOpen()?'':'dis')+'" data-a="accept" data-i="'+i+'">Fichar</button></div></div>';});
+  h+='<div class="item"><div><b>'+esc(x.n)+'</b><p>'+l2.n+' ('+country(x.co).n+') · fuerza '+x.str+' · '+fmt(o.wage)+'/semana · '+o.years+' año(s) · prima '+fmt(o.bonus)+' · titular '+p+'%'+(function(){var g=growthAt(x.id),now=growthF();return ' · ritmo de mejora <b class="'+(g>now+0.02?'good':g<now-0.02?'bad':'')+'">'+Math.round(g*100)+'%</b> (ahora '+Math.round(now*100)+'%)';})()+(r2?' · rival: '+esc(r2.n)+' ('+r2.o+')':'')+'</p></div><div style="display:grid;gap:6px"><button class="go alt" data-a="squad" data-id="'+x.id+'">Plantilla</button><button class="go '+(windowOpen()?'':'dis')+'" data-a="accept" data-i="'+i+'">Fichar</button></div></div>';});
  if(!S.offers.length)h+='<p class="mut">No hay ofertas ahora.</p>';
  h+='</div>';
  if(S.age>=35)h+='<div class="card"><h3>Retirada</h3><p class="small mut">Puedes colgar las botas cuando quieras. A los 40 es obligatorio.</p><button class="go alt block" data-a="retire">Retirarme</button></div>';
@@ -381,7 +381,7 @@ function viewCareer(){
 /* ---------- Entreno ---------- */
 function viewTrain(){
  var ov=overall(),a=traitById(S.tp),b=traitById(S.ts);
- var h=keySkillsCard()+traitsCard()+'<div class="card wide"><div class="rowb"><b>Valoración total</b><b class="star num">★ '+ds(ov)+'</b></div><div class="bar big"><i style="width:'+clamp(ov,0,100)+'%"></i></div>'+
+ var h=keySkillsCard()+traitsCard()+lgRatesCard()+'<div class="card wide"><div class="rowb"><b>Valoración total</b><b class="star num">★ '+ds(ov)+'</b></div><div class="bar big"><i style="width:'+clamp(ov,0,100)+'%"></i></div>'+
   '<div class="small mut" style="margin-top:8px">'+traitBadge('p')+' · '+traitBadge('s')+'<br>Cada habilidad tiene un techo según tu puesto y tus rasgos. Al subir de rango un rasgo, sube el techo de sus habilidades. Solo las de tu rasgo principal en Platino llegan a 99. El material suma aparte.</div>'+
   '<div class="small" style="margin-top:8px">Potencial: <b>'+potBand()+'</b> · '+growthTxt()+' · forma: '+formTxt()+'<br>'+leagueTxt()+'</div>'+((S.weekTrain||0)>0?'<div class="small warn">Has entrenado '+S.weekTrain+' puntos esta semana: cada punto extra cuesta un 4 % más hasta la semana que viene. Jugar hace crecer más que entrenar.</div>':'')+
   '<div class="mults">Puntos por pulsación: '+[1,5,25].map(function(m){return chip(S.mult===m,'mult',null,'×'+m,m);}).join('')+'</div></div>';

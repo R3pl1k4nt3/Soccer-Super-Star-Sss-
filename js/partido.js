@@ -426,7 +426,7 @@ function endSeason(){
  /* edad */
  S.age++;
  Object.keys(S.rel).forEach(function(k){S.rel[k]=Math.round((S.rel[k]+(50-S.rel[k])*0.15)*10)/10;});
- if(S.age>=31)S.skills.forEach(function(k){k.pen+=Math.round((S.age-30)*(PHYS[k.id]?0.8:0.3)*10)/10;});
+ if(S.age>=31){var dcl=declineFor(lgLevel());S.skills.forEach(function(k){k.pen+=Math.round((S.age-30)*(PHYS[k.id]?0.8:0.3)*dcl*10)/10;});}
  ageRosters();
  sm.transfers=aiTransfers().slice(0,6);
  sm.devs=aiSeasonEvolve();

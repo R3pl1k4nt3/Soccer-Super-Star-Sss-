@@ -327,12 +327,16 @@ function driftClubs(){
 var MINPOS={POR:2,DFC:3,LI:1,LD:1,MCD:1,MC:2,MP:1,EI:1,ED:1,DC:2};
 function youth(c,pos){var p=mkPlayer(c,pos||pick(SLOTS),false,true);p.a=16+Math.floor(Math.random()*3);p.d=Math.round(-16+Math.random()*8+(Math.random()<0.07?9:0));c.ros.push(p.i);return p;}
 function ageRosters(){
- var retired=0,newbies=0;
+ var retired=0,newbies=0,LV={};
+ /* nivel de cada liga: los jóvenes crecen más en ligas fuertes; los veteranos caen más despacio en ellas */
+ S.clubs.forEach(function(c){if(LV[c.id]==null)LV[c.id]=typeof lgLevelOf==='function'?lgLevelOf(c.id):c.str;});
  S.clubs.forEach(function(c){
   var keep=[];
   c.ros.forEach(function(id){var p=S.pl[id];if(!p)return;if(p.me){keep.push(id);return;}
    if(!p.h){p.h=[p.o];p.hs=S.season;}
-   p.a++;p.d+=p.a<=21?1.6:p.a<=24?1:p.a>=31?-1.4:0;p.d=clamp(p.d,-25,14);
+   p.a++;var L=LV[c.id],g=p.a<=21?1.6:p.a<=24?1:p.a>=31?-1.4:0;
+   if(g>0){g*=1+(lgBase(L)-1)*lgAgeW(p.a);if(p.o>ceilOf(L))g*=0.4;}else if(g<0)g*=declineFor(L);
+   p.d=clamp(p.d+g,-25,14);
    var good=p.d>2?2:p.d>-3?1:0,pr=(p.a-32-good)*0.2;
    if(p.a>=40||(p.a>=33+good&&Math.random()<pr)){S.pl[id]=0;retired++;return;}
    keep.push(id);});
