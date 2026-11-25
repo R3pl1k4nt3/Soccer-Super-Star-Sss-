@@ -377,3 +377,6 @@ tr:hover td{background:rgba(148,163,184,.07)}
 .krow{padding:6px 0;border-bottom:1px solid rgba(148,163,184,.08)}
 .kchip{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:1px 6px;border-radius:999px;background:rgba(79,163,255,.18);color:#9cc9ff;margin-left:4px;vertical-align:1px}
 .lbar2 .capbar{margin-top:0}
+/* rasgos de los jugadores de la IA */
+.tdot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--tc);margin-left:4px;vertical-align:1px;box-shadow:0 0 0 1px rgba(0,0,0,.4)}
+.evo svg{display:block;color:var(--mut,#94a3b8)}

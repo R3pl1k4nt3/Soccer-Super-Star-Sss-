@@ -64,7 +64,7 @@ function oppCard(d){
  ids=ids.slice(0,12);
  var tired=Math.round((1-tiredF(p,'ace',min))*100);
  var h='<div class="card" style="margin:6px 0 10px;background:rgba(0,0,0,.18)"><div class="rowb"><b>Ficha de '+esc(p.n)+' ahora</b><span class="small mut">'+POS[p.p]+' · '+p.o+' · '+fmv(mv(p))+'</span></div>'+
-  '<div class="small mut" style="margin-bottom:6px">Minuto '+min+"' · cansancio "+(tired?'−'+tired+'% en lo físico':'ninguno')+' · forma del día '+(fm>0?'+':'')+fm+'</div><div class="g2">';
+  '<div class="small mut" style="margin-bottom:6px">Minuto '+min+"' · cansancio "+(tired?'−'+tired+'% en lo físico':'ninguno')+' · forma del día '+(fm>0?'+':'')+fm+'</div>'+aiTraitsHTML(p)+'<div class="g2" style="margin-top:6px">';
  ids.forEach(function(id){var base=pskill(p,id),now=pskillNow(p,id,min,fm),used=d.opts.some(function(x){return x.op===d.main&&x.ok.indexOf(id)>=0;});
   h+='<div class="rowb small"><span'+(used?' style="color:var(--gold)"':'')+'>'+(SKNAME[id]||id)+'</span><b class="num">'+now+(now!==base?' <span class="mut" style="font-weight:400">('+base+')</span>':'')+'</b></div>';});
  return h+'</div><div class="small mut" style="margin-top:6px">En dorado, las habilidades que cuentan en esta jugada. Entre paréntesis, su valor sin cansancio ni forma.</div></div>';
@@ -383,7 +383,7 @@ function viewTrain(){
  var ov=overall(),a=traitById(S.tp),b=traitById(S.ts);
  var h=keySkillsCard()+traitsCard()+'<div class="card wide"><div class="rowb"><b>Valoración total</b><b class="star num">★ '+ds(ov)+'</b></div><div class="bar big"><i style="width:'+clamp(ov,0,100)+'%"></i></div>'+
   '<div class="small mut" style="margin-top:8px">'+traitBadge('p')+' · '+traitBadge('s')+'<br>Cada habilidad tiene un techo según tu puesto y tus rasgos. Al subir de rango un rasgo, sube el techo de sus habilidades. Solo las de tu rasgo principal en Platino llegan a 99. El material suma aparte.</div>'+
-  '<div class="small" style="margin-top:8px">Potencial: <b>'+potBand()+'</b> · '+growthTxt()+' · forma: '+formTxt()+'</div>'+((S.weekTrain||0)>0?'<div class="small warn">Has entrenado '+S.weekTrain+' puntos esta semana: cada punto extra cuesta un 4 % más hasta la semana que viene. Jugar hace crecer más que entrenar.</div>':'')+
+  '<div class="small" style="margin-top:8px">Potencial: <b>'+potBand()+'</b> · '+growthTxt()+' · forma: '+formTxt()+'<br>'+leagueTxt()+'</div>'+((S.weekTrain||0)>0?'<div class="small warn">Has entrenado '+S.weekTrain+' puntos esta semana: cada punto extra cuesta un 4 % más hasta la semana que viene. Jugar hace crecer más que entrenar.</div>':'')+
   '<div class="mults">Puntos por pulsación: '+[1,5,25].map(function(m){return chip(S.mult===m,'mult',null,'×'+m,m);}).join('')+'</div></div>';
  h+='<div class="card wide"><div class="cats" role="group" aria-label="Categoría">'+CATS.filter(function(c){return catAvg(c[0])>0;}).map(function(c){return chip(S.cat===c[0],'cat',c[0],catName(c[0])+' <span class="num">'+Math.round(catAvg(c[0]))+'</span>');}).join('')+'</div>';
  h+='<div class="hdr"><span>Entrenar</span><span>Habilidad</span><span>Promoción</span></div>';
@@ -432,7 +432,7 @@ function squadHTML(){
   var pl=S.pl[UI.sq.p],list,t;
   if(pl.me)list=S.skills.map(function(k){return {id:k.id,n:k.n,cat:k.cat,v:Math.round(skVal(k))};});else list=pskills(pl);
   t=traitById(pl.t);var s=pl.st.L||[0,0,0,0];
-  h+='<p style="margin:8px 0 2px"><b>'+pName(pl)+'</b></p><div class="small mut">'+POS[pl.p]+' · '+(pl.me?S.age:pl.a)+' años · '+natName(pl.nat)+' · valoración <b class="num star">'+pl.o+'</b> · valor de mercado <b class="num good">'+fmv(mv(pl))+'</b>'+(t?' · '+t.n:'')+'</div>'+
+  h+='<p style="margin:8px 0 2px"><b>'+pName(pl)+'</b></p><div class="small mut">'+POS[pl.p]+' · '+(pl.me?S.age:pl.a)+' años · '+natName(pl.nat)+' · valoración <b class="num star">'+pl.o+'</b> · valor de mercado <b class="num good">'+fmv(mv(pl))+'</b></div>'+(pl.me?'':aiTraitsHTML(pl)+evoHTML(pl))+
    '<div class="small mut">Liga esta temporada: '+s[0]+' partidos, '+s[1]+' goles, '+s[2]+' asistencias'+(s[0]?', nota '+ds(s[3]/s[0]):'')+'</div>'+
    skillsGrid(list,pl.p==='POR')+'<button class="go alt block" data-a="sqback" style="margin-top:12px">Volver a la plantilla</button></div></div>';
   return h;
@@ -441,9 +441,28 @@ function squadHTML(){
  var rows=c.ros.map(function(id){return S.pl[id];}),tot=0;rows.forEach(function(p){tot+=mv(p);});
  h+='<div class="small mut">Valor total de la plantilla: <b class="good">'+fmv(tot)+'</b></div>';
  rows.sort(function(x,y){return ORDER.indexOf(x.p)-ORDER.indexOf(y.p)||y.o-x.o;});
- rows.forEach(function(p){h+='<tr class="'+(p.me?'mine':'')+'"><td>'+p.p+'</td><td><button class="lnk" data-a="sqp" data-id="'+p.i+'">'+pName(p)+'</button> <span class="small mut">'+p.nat+'</span></td><td class="num">'+(p.me?S.age:p.a)+'</td><td class="num">'+p.o+'</td><td class="num small">'+fmv(mv(p))+'</td></tr>';});
+ rows.forEach(function(p){h+='<tr class="'+(p.me?'mine':'')+'"><td>'+p.p+'</td><td><button class="lnk" data-a="sqp" data-id="'+p.i+'">'+pName(p)+'</button> <span class="small mut">'+p.nat+'</span>'+(p.me?'':aiTraitDots(p))+'</td><td class="num">'+(p.me?S.age:p.a)+'</td><td class="num">'+p.o+trendHTML(p)+'</td><td class="num small">'+fmv(mv(p))+'</td></tr>';});
  return h+'</table></div></div></div>';
 }
+/* rasgos de un jugador de la IA con su rango */
+function aiTraitsHTML(p){var tr=aiTraits(p);if(!tr.length)return '<div class="small mut" style="margin-top:6px">Sin rasgos especiales.</div>';
+ return '<div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap">'+tr.map(function(z){var t=traitById(z.id),T=TIERS[z.t];if(!t)return '';
+  return '<span class="tbadge" style="--tc:'+T.c+'" title="'+esc(t.d)+'">'+(typeof icoRasgo==='function'?icoRasgo(t.id,18):'')+t.n+' · <b>'+T.n+'</b>'+(z.r==='s'?' <span class="mut">(secundario)</span>':'')+'</span>';}).join('')+'</div>';}
+/* puntitos de color en la plantilla: un punto por rasgo, del color de su rango */
+function aiTraitDots(p){return aiTraits(p).map(function(z){var t=traitById(z.id),T=TIERS[z.t];return t?' <span class="tdot" style="--tc:'+T.c+'" title="'+esc(t.n+' · '+T.n)+'" aria-label="'+esc(t.n+', '+T.n)+'"></span>':'';}).join('');}
+/* cambio de valoración desde la temporada anterior */
+function trendHTML(p){if(p.me||!p.h||p.h.length<2)return '';var d=p.h[p.h.length-1]-p.h[p.h.length-2];if(!d)return '';return ' <span class="small '+(d>0?'good':'bad')+'">'+(d>0?'▲'+d:'▼'+(-d))+'</span>';}
+/* evolución de la valoración temporada a temporada */
+function evoHTML(p){var h=(p.h||[]).slice();if(h.length)h[h.length-1]=p.o;if(h.length<2)return '<div class="small mut" style="margin-top:8px">Evolución: se verá a partir de la próxima temporada.</div>';
+ var W=300,H=70,mn=Math.min.apply(null,h)-3,mx=Math.max.apply(null,h)+3,x=function(i){return 12+i*(W-24)/(h.length-1);},y=function(v){return H-10-(v-mn)/(mx-mn)*(H-22);};
+ var pts=h.map(function(v,i){return x(i).toFixed(1)+','+y(v).toFixed(1);}).join(' '),hs=p.hs!=null?p.hs:S.season-h.length+1;
+ return '<div class="evo" style="margin-top:10px"><div class="small mut">Evolución de su valoración</div><svg viewBox="0 0 '+W+' '+H+'" width="100%" height="'+H+'" role="img" aria-label="Valoración por temporada: '+h.map(function(v,i){return 'T'+(hs+i)+' '+v;}).join(', ')+'">'+
+  '<polyline points="'+pts+'" fill="none" stroke="var(--acc)" stroke-width="2"/>'+h.map(function(v,i){return '<circle cx="'+x(i)+'" cy="'+y(v)+'" r="3" fill="var(--acc)"/><text x="'+x(i)+'" y="'+(y(v)-6)+'" font-size="10" text-anchor="middle" fill="currentColor">'+v+'</text><text x="'+x(i)+'" y="'+(H-1)+'" font-size="9" text-anchor="middle" fill="currentColor" opacity=".6">T'+(hs+i)+'</text>';}).join('')+'</svg></div>';}
+/* fin de temporada: jóvenes que despuntan y rasgos que suben en el resto del mundo */
+function devsHTML(d){var h='';
+ if(d.ris&&d.ris.length)h+='<h3 style="margin-top:10px">Jóvenes que despuntan</h3>'+d.ris.map(function(x){var p=S.pl[x.i];if(!p)return '';return '<div class="ev"><span><b>'+esc(p.n)+'</b> <span class="small mut">'+p.p+' · '+p.a+' años · '+esc(clubName(p))+'</span> <b class="num good">▲'+x.d+'</b> → '+p.o+'</span></div>';}).join('');
+ if(d.ups&&d.ups.length)h+='<h3 style="margin-top:10px">Rasgos que suben</h3>'+d.ups.map(function(x){var p=S.pl[x.i],t=traitById(x.id),T=TIERS[x.t];if(!p||!t)return '';return '<div class="ev"><span><b>'+esc(p.n)+'</b> <span class="small mut">'+esc(clubName(p))+'</span> · '+t.n+' sube a <b style="color:'+T.c+'">'+T.n+'</b></span></div>';}).join('');
+ return h;}
 function modalHTML(){
  if(S.retired&&!S.summary){var st=S.stats;return '<div class="modal" role="dialog" aria-modal="true"><div class="card"><h2>Te has retirado</h2><p>'+esc(S.name)+' cuelga las botas a los '+S.age+' años tras '+S.hist.length+' temporadas, '+st.pj+' partidos y '+S.trophies.filter(function(t){return t.k!=='ind';}).length+' títulos.</p>'+
   (S.pos==='POR'?'<p>Hiciste '+st.sv+' paradas y '+st.cs+' porterías a cero.</p>':'<p>Marcaste '+st.g+' goles y diste '+st.a+' asistencias.</p>')+'<p>Con tu selección: '+S.nt.caps+' partidos y '+S.nt.g+' goles.</p><button class="go block" data-a="menu">Volver al menú</button></div></div>';}
@@ -453,6 +472,7 @@ function modalHTML(){
  return '<div class="modal" role="dialog" aria-modal="true"><div class="card"><h2>Fin de la temporada '+m.season+'</h2><p><b>'+esc(m.club)+'</b> acaba '+m.pos+'º en '+esc(m.league)+(m.champion?'. Sois campeones de liga.':'.')+(m.moved?' '+m.moved+'.':'')+(m.euNext?' La próxima temporada jugáis la '+m.euNext+'.':'')+'</p>'+
   '<div class="kv"><div><b class="num">'+m.apps+'</b><span>Partidos de liga</span></div><div><b class="num">'+(m.apps?ds(m.rating):'-')+'</b><span>Nota media</span></div><div><b class="num good">'+fmt(m.prize)+'</b><span>Premios</span></div></div>'+aw+
   (b&&b.top[0]?'<p class="small" style="margin-top:10px">Balón de Oro: <b class="star">'+esc(b.top[0].n)+'</b> ('+esc(b.top[0].c)+').'+(b.me?' Tú quedas '+b.me+'º.':'')+'</p>':'')+
+  (m.devs?devsHTML(m.devs):'')+
   (m.transfers&&m.transfers.length?'<p class="small mut">Mercado: '+m.transfers.map(esc).join('; ')+'.</p>':'')+
   '<p class="small mut" style="margin-top:10px">Cumples '+S.age+' años. Valoración: '+ds(m.ovBefore)+' → '+ds(m.ovAfter)+(S.age>=31?'. Pierdes algo de nivel físico por la edad.':'.')+(m.renew?' Tu contrato se renueva automáticamente.':'')+(m.retire?' Es el momento de retirarte.':' Mira las ofertas en Club.')+'</p>'+
   '<button class="go block" data-a="closesum" style="margin-top:12px">Continuar</button></div></div>';

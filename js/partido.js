@@ -429,6 +429,7 @@ function endSeason(){
  if(S.age>=31)S.skills.forEach(function(k){k.pen+=Math.round((S.age-30)*(PHYS[k.id]?0.8:0.3)*10)/10;});
  ageRosters();
  sm.transfers=aiTransfers().slice(0,6);
+ sm.devs=aiSeasonEvolve();
  /* contrato */
  S.contract.years--;
  if(S.contract.years<=0){S.contract.years=2;S.contract.wage=wageFor(S.clubs[me.c].str,overall());sm.renew=true;logm('Renuevas con '+S.clubs[me.c].n+' dos años. Nuevo salario: '+fmt(S.contract.wage)+'.');}

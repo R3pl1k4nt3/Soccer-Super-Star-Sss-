@@ -147,7 +147,13 @@ function addProg(k,n){var cap=capFor(k),up=0;while(n>0&&k.lvl<cap){k.prog++;n--;
 function gearB(id){if(!S||!S.gear)return 0;var b=0;Object.keys(S.gear).forEach(function(sl){var g=S.gear[sl];if(g&&g.sk.indexOf(id)>=0)b+=g.b;});return b;}
 
 /* habilidades de un jugador de la IA: se generan con su semilla, no se guardan */
-function pskills(p){var r=rng(p.s);return (p.p==='POR'?SKG:SKO).map(function(s){var w=skW(p.p,s[0],s[2]);return {id:s[0],n:s[1],cat:s[2],v:Math.round(clamp(p.o+(w-2.5)*3.5+(r()-.5)*12,8,99))};});}
+/* sus rasgos suben las habilidades del rasgo (más cuanto más rango) y bajan las que limitan; solo un principal en Platino llega a 99 */
+function pskills(p){var r=rng(p.s),tr=typeof aiTraits==='function'?aiTraits(p):[];
+ return (p.p==='POR'?SKG:SKO).map(function(s){var w=skW(p.p,s[0],s[2]),v=p.o+(w-2.5)*3.5+(r()-.5)*12,top=98,inT=false;
+  tr.forEach(function(z){var t=traitById(z.id);if(!t)return;
+   if(t.sk.indexOf(s[0])>=0){inT=true;v+=(z.r==='p'?4:2)+z.t*2;if(z.r==='p'&&z.t===3)top=99;}});
+  tr.forEach(function(z){var t=traitById(z.id);if(t&&t.lim&&t.lim[s[0]]!=null)v=Math.min(v,25+t.lim[s[0]]*5+(z.r==='p'?5:15));});
+  return {id:s[0],n:s[1],cat:s[2],v:Math.round(clamp(v,8,top)),tr:inT};});}
 function pskill(p,id){if(p.me)return Math.round(skv(id));var l=pskills(p);for(var i=0;i<l.length;i++)if(l[i].id===id)return l[i].v;return p.o;}
 
 /* ---------- nombres ---------- */

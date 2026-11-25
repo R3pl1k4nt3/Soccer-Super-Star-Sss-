@@ -14,7 +14,12 @@ function potBand(){var p=S.pot,lo=Math.max(40,Math.floor((p-4)/2)*2),hi=lo+8;var
 function ageGrowth(a){return a<=19?1.35:a<=21?1.25:a<=23?1.12:a<=26?1:a<=28?0.85:a<=30?0.65:a<=32?0.45:0.3;}
 /* cuanto más cerca del techo, más cuesta mejorar */
 function potGrowth(){var ov=overall(),gap=S.pot-ov;return gap>=10?1:gap>=5?0.8:gap>=2?0.55:gap>=0?0.3:0.12;}
-function growthF(){return ageGrowth(S.age)*potGrowth();}
+/* nivel de tu liga: en ligas fuertes mejoras más rápido; en las bajas marcas más, pero tu valoración se estanca antes */
+function lgLevel(){var me=S.pl[S.me];if(!me||me.c==null||me.c<0)return 50;var lg=lgOf(me.c),s=0;if(!lg)return S.clubs[me.c].str;lg.clubs.forEach(function(id){s+=S.clubs[id].str;});return s/lg.clubs.length;}
+function leagueCeil(){return Math.round(lgLevel()+14);}
+function leagueF(){var L=lgLevel(),f=clamp(0.65+(L-40)/60,0.6,1.35),c=leagueCeil(),ov=overall();if(ov>c)f*=clamp(1-(ov-c)/10,0.25,1);return f;}
+function leagueTxt(){var f=leagueF(),ov=overall(),c=leagueCeil();return 'Ritmo por tu liga: <b class="num '+(f>=1?'good':f<0.75?'bad':'')+'">'+Math.round(f*100)+'%</b>'+(ov>c?' <span class="bad">(te has quedado pequeño para esta liga: por encima de '+c+' casi no mejoras)</span>':' · techo de la liga ≈'+c);}
+function growthF(){return ageGrowth(S.age)*potGrowth()*leagueF();}
 function growthTxt(){var g=growthF();return g>=1.1?'Creces muy rápido':g>=0.85?'Creces a buen ritmo':g>=0.55?'Creces despacio':g>=0.3?'Cerca de tu techo':'En tu techo o por encima';}
 
 /* ---------- entrenar sin jugar rinde cada vez menos ---------- */

@@ -42,7 +42,7 @@ function mkPlayer(club,pos,first,young){
  var p={i:S.pl.length,n:mkName(club.guest&&nat===club.gco?club.cul:nation(nat).cul),p:pos,a:a,d:d,o:50,s:Math.floor(Math.random()*1e9),t:Math.random()<0.3?pick(pool).id:'',nat:nat,c:club.id,st:{},ms:[0,0,0,0]};
  S.pl.push(p);return p;
 }
-function setOv(c){c.ros.forEach(function(id){var p=S.pl[id];if(!p.me)p.o=clamp(Math.round(c.str+p.d),12,97);});}
+function setOv(c){c.ros.forEach(function(id){var p=S.pl[id];if(!p.me){p.o=clamp(Math.round(c.str+p.d),12,97);if(p.tt==null)initAITrait(p);}});}
 function genRoster(c){if(c.rd!=null)return realRoster(c);var seen={};c.ros=SLOTS.map(function(pos){var first=!seen[pos];seen[pos]=1;return mkPlayer(c,pos,first,false).i;});setOv(c);}
 /* plantilla real: los jugadores del archivo, ordenados por valor, cubriendo cada puesto; si faltan, se generan */
 function realRoster(c){
@@ -56,7 +56,7 @@ function realRoster(c){
  c.ros=ros.filter(function(x){return x!=null;});
  /* fuerza del club: media del mejor once menos 2,5 (como en la versión ficticia) */
  var xi=bestXI(c.ros,null,null),s=0;xi.forEach(function(id){s+=S.pl[id].o;});c.str=Math.round(s/xi.length-2.5);
- c.ros.forEach(function(id){var p=S.pl[id];p.d=p.o-c.str;});
+ c.ros.forEach(function(id){var p=S.pl[id];p.d=p.o-c.str;initAITrait(p);});
  var seen={};c.ros.forEach(function(id){seen[S.pl[id].p]=(seen[S.pl[id].p]||0)+1;});
  SLOTS.forEach(function(pos){if(seen[pos]>0){seen[pos]--;return;}if(c.ros.length>=22&&pos!=='POR')return;var np=mkPlayer(c,pos,false,false);c.ros.push(np.i);});
  setOv(c);
@@ -331,6 +331,7 @@ function ageRosters(){
  S.clubs.forEach(function(c){
   var keep=[];
   c.ros.forEach(function(id){var p=S.pl[id];if(!p)return;if(p.me){keep.push(id);return;}
+   if(!p.h){p.h=[p.o];p.hs=S.season;}
    p.a++;p.d+=p.a<=21?1.6:p.a<=24?1:p.a>=31?-1.4:0;p.d=clamp(p.d,-25,14);
    var good=p.d>2?2:p.d>-3?1:0,pr=(p.a-32-good)*0.2;
    if(p.a>=40||(p.a>=33+good&&Math.random()<pr)){S.pl[id]=0;retired++;return;}
@@ -347,6 +348,37 @@ function ageRosters(){
   setOv(c);
  });
  return {retired:retired,newbies:newbies};
+}
+/* ---------- rasgos y evolución de los jugadores de la IA ----------
+   Principal (p.t, rango p.tt) y, los mejores, secundario (p.t2, rango p.tt2, como mucho Oro).
+   El rango sigue a la valoración: Bronce, Plata desde 67, Oro desde 77, Platino desde 86. */
+function tierForO(o){return o>=86?3:o>=77?2:o>=67?1:0;}
+function aiTraitPick(p,not){var pool=TRAITS.filter(function(t){return !!t.gk===(p.p==='POR')&&t.id!==not;}),e=EMP[p.p]||{};
+ return wrand(pool,function(t){return 1+t.sk.reduce(function(s,id){return s+(e[id]||0);},0);}).id;}
+function initAITrait(p){
+ if(!p||p.me||p.tt!=null)return;
+ if(!p.t&&Math.random()<clamp((p.o-45)/40,0.12,0.92))p.t=aiTraitPick(p);
+ if(p.t)p.tt=clamp(tierForO(p.o)-(Math.random()<0.25?1:0),0,3);else p.tt=-1;
+ if(p.t&&!p.t2&&p.o>=74&&Math.random()<0.45){p.t2=aiTraitPick(p,p.t);p.tt2=clamp(tierForO(p.o)-1,0,2);}
+}
+/* rasgos efectivos de un jugador de la IA (las partidas antiguas no los tienen guardados) */
+function aiTraits(p){var out=[];if(p.t){out.push({id:p.t,t:p.tt!=null&&p.tt>=0?p.tt:tierForO(p.o),r:'p'});}if(p.t2)out.push({id:p.t2,t:p.tt2||0,r:'s'});return out;}
+/* fin de temporada: guarda la valoración de cada jugador y hace evolucionar sus rasgos. Devuelve lo más destacado */
+function aiSeasonEvolve(){
+ var ris=[],ups=[];
+ S.pl.forEach(function(p){if(!p||p.me||p.c<0)return;
+  if(p.tt==null)initAITrait(p);
+  if(!p.h){p.h=[p.o];p.hs=S.season+1;}else p.h.push(p.o);if(p.h.length>12){p.h.shift();p.hs++;}
+  var d=p.h[p.h.length-1]-p.h[p.h.length-2];if(d>=4&&p.a<=24)ris.push({p:p,d:d});
+  var tg=tierForO(p.o);
+  if(p.t){if(tg>p.tt&&Math.random()<0.65){p.tt++;if(p.tt>=2)ups.push({p:p,id:p.t,t:p.tt});}
+   else if(p.a>=32&&tg<p.tt&&Math.random()<0.35)p.tt--;}
+  else if(Math.random()<clamp((p.o-55)/60,0,0.3)){p.t=aiTraitPick(p);p.tt=0;}
+  if(p.t&&!p.t2&&p.o>=74&&Math.random()<0.2){p.t2=aiTraitPick(p,p.t);p.tt2=0;}
+  else if(p.t2&&p.tt2<2&&tg-1>p.tt2&&Math.random()<0.5)p.tt2++;
+ });
+ ris.sort(function(a,b){return b.d-a.d||b.p.o-a.p.o;});ups.sort(function(a,b){return b.t-a.t||b.p.o-a.p.o;});
+ return {ris:ris.slice(0,6).map(function(x){return {i:x.p.i,d:x.d};}),ups:ups.slice(0,6).map(function(x){return {i:x.p.i,id:x.id,t:x.t};})};
 }
 /* mercado de la IA: los clubes fuertes fichan a los mejores de clubes más débiles */
 function aiTransfers(){
