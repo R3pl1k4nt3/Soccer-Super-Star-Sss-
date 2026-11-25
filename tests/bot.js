@@ -14,7 +14,7 @@ function carrera(G,pos,tp,ts,nat,co,years,opts){
     if(S.event)G.doEvent(Math.random()<0.5?0:1);
     if(S.press){G.pressAnswer(Math.floor(Math.random()*3));continue;}
     G.playN(1);
-    var q=0;while(S.match&&q++<6)G.choose(Math.floor(Math.random()*3));
+    var q=0;while(S.match&&nextDec(S.match)&&q++<8)G.choose(Math.floor(Math.random()*3));if(S.match)G.liveEnd();if(G.UI)G.UI.pop=null;
     if(S.sofs.length)G.signSponsor(0);
     if(typeof newTraitSlot==='function'&&newTraitSlot()){var op=TRAITS.filter(function(x){return !!x.gk===(S.pos==='POR')&&x.id!==S.tp&&x.id!==S.ts&&(S.tx||[]).indexOf(x.id)<0;});if(op.length)addTrait(op[0].id);}
     S.spons.forEach(function(s){G.sponsorPost(s.id);});

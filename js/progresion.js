@@ -7,6 +7,7 @@ function initProgress(){
  if(S.val==null)S.val=mvRaw();
  S.vhist=S.vhist||[];S.moments=S.moments||[];S.valMom=S.valMom||0;S.form=S.form||[];
  if(!S.tl)S.tl={p:{t:0,x:0},s:{t:0,x:0}};
+ S.skills.forEach(function(k){if(k.gr==null){var x=skTalent();k.gr=x.gr;k.cj=x.cj;}});
 }
 function potBand(){var p=S.pot,lo=Math.max(40,Math.floor((p-4)/2)*2),hi=lo+8;var t=p>=88?'Clase mundial':p>=82?'Muy alto':p>=75?'Alto':p>=68?'Medio':'Modesto';return t+' ('+lo+'-'+hi+')';}
 /* crecimiento según la edad: rápido hasta los 23, estable hasta los 28, luego baja */
@@ -132,10 +133,10 @@ function traitBadge(r){
 function traitBar(z){
  var t=traitById(z.id);if(!t)return '';var st=S.tl&&S.tl[z.r]||{t:2,x:0},mx=TIERMAX[z.r],nx=st.t<mx?TIERS[st.t+1]:null,prev=TIERS[st.t].xp,pc=nx?clamp((st.x-prev)/(nx.xp-prev),0,1):1;
  var pips=TIERS.map(function(T,i){var cls=i<=st.t?'on':i<=mx?'':'lock';return '<span class="tpip '+cls+'" style="--tc:'+T.c+'" title="'+T.n+(i>mx?' (bloqueado para este rasgo)':'')+'">'+(i>mx?'🔒 ':'')+T.n+'</span>';}).join('');
- var lim=Object.keys(t.lim||{}).filter(function(id){return mySk(id);}).map(function(id){return SKNAME[id]+' '+traitCap(id).cap;}).join(', ');
+ var lim=Object.keys(t.lim||{}).filter(function(id){return mySk(id);}).map(function(id){return SKNAME[id]+' '+capVal(id);}).join(', ');
  return '<div class="tdev"><div class="rowb"><b class="tname">'+(typeof icoRasgo==='function'?icoRasgo(t.id,24):'')+t.n+'</b><span class="small mut">'+roleName(z.r)+' · máximo '+TIERS[mx].n+'</span></div>'+
   '<div class="tpips">'+pips+'</div><div class="bar big" aria-hidden="true"><i style="width:'+Math.round(pc*100)+'%;background:'+TIERS[nx?st.t+1:st.t].c+'"></i></div>'+
-  '<div class="small mut">'+(nx?Math.floor(st.x)+' / '+nx.xp+' XP para '+nx.n+'. Sube jugando bien y usando el rasgo.':'Rango máximo alcanzado.')+' Mejora '+t.sk.filter(function(id){return mySk(id);}).map(function(id){return SKNAME[id];}).join(', ')+' (techo nivel '+boostCap(t.sk.filter(function(id){return mySk(id);})[0]||'')+')'+(lim?'. Limita: '+lim:'')+'.</div></div>';
+  '<div class="small mut">'+(nx?Math.floor(st.x)+' / '+nx.xp+' XP para '+nx.n+'. Sube jugando bien y usando el rasgo.':'Rango máximo alcanzado.')+' Mejora '+t.sk.filter(function(id){return mySk(id);}).map(function(id){return SKNAME[id];}).join(', ')+' (techo '+(function(f){return f?capVal(f)+(capTop(f)>capVal(f)?', '+capTop(f)+' en '+TIERS[mx].n:''):'';})(t.sk.filter(function(id){return mySk(id);})[0])+')'+(lim?'. Limita: '+lim:'')+'.</div></div>';
 }
 function traitsCard(){
  var h='<div class="card wide"><h3>Rasgos y desarrollo</h3><div class="tdevs">'+myTraits().map(traitBar).join('')+'</div>';
@@ -143,7 +144,7 @@ function traitsCard(){
  if(newTraitSlot()){
   var r='x'+n,opts=TRAITS.filter(function(t){return !!t.gk===(S.pos==='POR')&&t.id!==S.tp&&t.id!==S.ts&&(S.tx||[]).indexOf(t.id)<0;});
   h+='<h3 style="margin-top:14px">Elige un rasgo nuevo</h3><p class="small mut" style="margin-top:0">Llegará como mucho a <b>'+TIERS[TIERMAX[r]].n+'</b>. Da algo menos de bonificación que tus rasgos principales y también trae sus limitaciones (3 niveles más suaves).</p><div class="tcards">'+
-   opts.map(function(t){var lim=Object.keys(t.lim||{}).filter(function(id){return mySk(id);}).map(function(id){var c=t.lim[id]+3,cur=traitCap(id).cap;return SKNAME[id]+' máx. '+Math.min(c,cur)+(mySk(id).lvl>c?' (ya tienes nivel '+mySk(id).lvl+')':'');});
+   opts.map(function(t){var lim=Object.keys(t.lim||{}).filter(function(id){return mySk(id);}).map(function(id){var c=25+t.lim[id]*5+LIMOFF['x'+n],cur=capVal(id);return SKNAME[id]+' máx. '+Math.min(c,cur)+(skVal(mySk(id))>c?' (ya tienes '+Math.round(skVal(mySk(id)))+')':'');});
     return '<button class="tcard" data-a="addtrait" data-id="'+t.id+'"><b class="tname">'+(typeof icoRasgo==='function'?icoRasgo(t.id,26):'')+t.n+'</b><span class="mut">'+t.d+'</span><span class="tup">▲ Mejora: '+t.sk.filter(function(id){return mySk(id);}).map(function(id){return SKNAME[id];}).join(', ')+'</span>'+(lim.length?'<span class="tdown">▼ Limita: '+lim.join(', ')+'</span>':'')+'</button>';}).join('')+'</div>';
  }else if(n<2)h+='<p class="small mut" style="margin-top:10px">'+(n===0?'Cuando tu rasgo principal llegue a Oro podrás elegir un tercer rasgo (hasta Plata).':'Cuando tu rasgo secundario llegue a Oro podrás elegir un cuarto rasgo (hasta Bronce).')+'</p>';
  return h+'</div>';

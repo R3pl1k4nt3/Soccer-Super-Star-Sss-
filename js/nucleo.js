@@ -60,7 +60,10 @@ var EMP={POR:{arr:4,cap:4,ref:4,pos:3,uno:3,sac:2,con:3},DFC:{mar:4,ent:4,ant:4,
  EI:{reg:4,ace:4,vel:4,cen:4,fin:3,agi:3},ED:{reg:4,ace:4,vel:4,cen:4,fin:3,agi:3}};
 function skW(pos,id,cat){var e=EMP[pos];if(e&&e[id])return e[id];return Math.max(1,CATW[pos][['men','fis','def','med','ata'].indexOf(cat)]);}
 function catName(c){if(S&&S.pos==='POR'){if(c==='def')return 'Portería';if(c==='med')return 'Distribución';}for(var i=0;i<CATS.length;i++)if(CATS[i][0]===c)return CATS[i][1];return c;}
-function newSkills(pos){return (pos==='POR'?SKG:SKO).map(function(s){var w=skW(pos,s[0],s[2]);return {id:s[0],n:s[1],cat:s[2],w:w,lvl:1,prog:0,pen:0,base:Math.round(22+Math.random()*12+w*2)};});}
+function newSkills(pos){return (pos==='POR'?SKG:SKO).map(function(s){var w=skW(pos,s[0],s[2]);return Object.assign({id:s[0],n:s[1],cat:s[2],w:w,lvl:1,prog:0,pen:0,base:Math.round(22+Math.random()*12+w*2)},skTalent());});}
+/* talento propio de cada habilidad: gr, ritmo de mejora (0,7 a 1,35); cj, variación del techo (−3 a +3) */
+function skTalent(){return {gr:Math.round((0.7+Math.random()*0.65)*100)/100,cj:Math.round(clamp((Math.random()+Math.random()+Math.random()-1.5)*3,-3,3))};}
+function grTxt(g){return g>=1.15?'rápida':g>=0.9?'normal':'lenta';}
 
 /* ---------- rasgos ---------- */
 /* Rasgos. sk: habilidades que mejora (+8 si es el principal, +4 si es el secundario) y que pueden llegar al nivel 14.
@@ -101,14 +104,36 @@ function boostCap(id){var c=0,a=traitById(S.tp),b=traitById(S.ts);if(a&&a.sk.ind
 function traitCapOf(tp,ts,id){var cap=MAXL,by=null;[[tp,0],[ts,2]].forEach(function(z){var t=traitById(z[0]);if(!t||!t.lim||t.lim[id]==null)return;var c=t.lim[id]+z[1];if(c<cap){cap=c;by=t;}});return {cap:cap,by:by};}
 /* límites: principal tal cual, secundario +2 niveles, rasgos añadidos +3 */
 function traitCap(id){var r=traitCapOf(S.tp,S.ts,id);(S.tx||[]).forEach(function(xid){var x=traitById(xid);if(x&&x.lim&&x.lim[id]!=null&&x.lim[id]+3<r.cap)r={cap:x.lim[id]+3,by:x};});return r;}
-function capFor(k){return Math.min(Math.max(BASECAP,boostCap(k.id)),traitCap(k.id).cap);}
+/* ---------- techos por habilidad, estilo 2K: cada habilidad tiene un valor máximo (de 99) ----------
+   Según la posición: las habilidades clave del puesto llegan más alto; las que no son de tu puesto se quedan bajas.
+   Los rasgos suben el techo de sus habilidades según su rango; solo el rasgo principal en Platino llega a 99.
+   Los límites de los rasgos bajan el techo. Cada jugador tiene una pequeña variación propia por habilidad. */
+var CAPKEY={4:88,3:84},CAPCAT=[66,70,76,80,80];
+var CAPT={p:[90,93,96,99],s:[88,91,94],x0:[86,89],x1:[85]},LIMOFF={p:0,s:10,x0:15,x1:15};
+var SKCAT={};SKG.concat(SKO).forEach(function(s){SKCAT[s[0]]=s[2];});function skCat(id){return SKCAT[id]||'men';}
+function isKeySk(pos,id){var e=EMP[pos];return !!(e&&e[id]>=3);}
+function capBase(pos,id){var e=EMP[pos];if(e&&e[id]>=3)return CAPKEY[e[id]];return CAPCAT[Math.min(4,CATW[pos][['men','fis','def','med','ata'].indexOf(skCat(id))])];}
+/* roles: [{r:'p',id,t}] rasgos con su rango; cj: variación propia del jugador */
+function capValOf(pos,roles,id,cj){
+ var c=Math.min(96,capBase(pos,id)+(cj||0)),by=null,boost=null;
+ roles.forEach(function(z){var t=traitById(z.id);if(!t||t.sk.indexOf(id)<0)return;var L=CAPT[z.r],v=L[Math.min(z.t,L.length-1)];if(v>c){c=v;boost=t;}});
+ roles.forEach(function(z){var t=traitById(z.id);if(!t||!t.lim||t.lim[id]==null)return;var v=25+t.lim[id]*5+LIMOFF[z.r];if(v<c){c=v;by=t;boost=null;}});
+ return {cap:c,by:by,boost:boost};
+}
+function myRoles(top){return [{r:'p',id:S.tp},{r:'s',id:S.ts}].concat((S.tx||[]).map(function(id,i){return {r:'x'+i,id:id};})).filter(function(z){return z.id;}).map(function(z){z.t=top?TIERMAX[z.r]:tierOf(z.r);return z;});}
+/* techo actual (con el rango de tus rasgos hoy) y techo máximo (con tus rasgos en su rango más alto) */
+function capInfo(id){var k=mySk(id);return capValOf(S.pos,myRoles(false),id,k&&k.cj);}
+function capVal(id){return capInfo(id).cap;}
+function capTop(id){var k=mySk(id);return capValOf(S.pos,myRoles(true),id,k&&k.cj).cap;}
+/* nivel máximo de entrenamiento: el primero con el que la habilidad alcanza su techo */
+function capFor(k){var cap=capVal(k.id),raw=k.base-k.pen+tb(k.id);return clamp(1+Math.ceil((cap-raw)/5),1,MAXL);}
 function traitDec(o){var b=0;TRAITS.forEach(function(t){var w=trW(t.id);if(w&&t.sk.some(function(id){return o.sk.indexOf(id)>=0;}))b+=0.06*w;});return Math.min(b,0.12);}
 function traitLine(){var a=traitById(S.tp),b=traitById(S.ts);return 'Rasgos: '+(a?a.n:'-')+' (principal) · '+(b?b.n:'-')+' (secundario)';}
 function defCat(pos){var w=CATW[pos],b=0;for(var i=1;i<5;i++)if(w[i]>=w[b])b=i;return ['men','fis','def','med','ata'][b];}
 
 /* ---------- valor de habilidades del jugador ---------- */
 function need(l){return 8+3*l;}
-function skVal(k){return clamp(k.base+(k.lvl-1)*5-k.pen+tb(k.id)+gearB(k.id),1,99);}
+function skVal(k){var cap=capVal(k.id);return clamp(Math.min(k.base+(k.lvl-1)*5-k.pen+tb(k.id),cap)+gearB(k.id),1,cap>=99?99:98);}
 function skRaw(k){return Math.max(1,k.base+(k.lvl-1)*5-k.pen+tb(k.id));}
 function skv(id){var k=mySk(id);return k?skVal(k):30;}
 function mySk(id){for(var i=0;i<S.skills.length;i++)if(S.skills[i].id===id)return S.skills[i];return null;}

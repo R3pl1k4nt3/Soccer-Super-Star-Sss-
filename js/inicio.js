@@ -9,7 +9,7 @@ var SUBS={
 /* pestañas antiguas (partidas guardadas) → pestaña y sección nuevas */
 var OLDTAB={train:['player','train'],shop:['player','shop'],comp:['career','comp'],club:['career','club'],money:['life','money']};
 function normTab(){
- if(S.pot==null||S.val==null)initProgress();
+ if(S.pot==null||S.val==null||(S.skills[0]&&S.skills[0].gr==null))initProgress();
  if(OLDTAB[S.tab]){var o=OLDTAB[S.tab];S.tab=o[0];subSet(o[0],o[1]);}
  if(S.tab==='career'&&!S.sub)subSet('career','hist');
  if(['home','match','player','career','life'].indexOf(S.tab)<0)S.tab='home';
@@ -29,7 +29,7 @@ function viewLifeHub(){var s=subOf('life');return subTabs('life')+(s==='money'?v
 /* ---------- bandeja: lo que está pendiente ---------- */
 function pendingItems(){
  var p=[];
- if(S.match)p.push({k:'hl',t:'Tienes una jugada a medias en el partido.',go:'match',btn:'Ir al partido'});
+ if(S.match)p.push({k:'hl',t:'Tienes un partido en juego.',go:'match',btn:'Ir al partido'});
  if(S.press)p.push({k:'hl',t:'Te espera una rueda de prensa.',go:'match',btn:'Responder'});
  if(newTraitSlot())p.push({k:'hl',t:'Puedes elegir un rasgo nuevo.',go:'player',sub:'train',btn:'Elegir rasgo'});
  if(S.event)p.push({t:EVENTS[S.event.i].t+'.',go:'life',sub:'rel',btn:'Decidir'});

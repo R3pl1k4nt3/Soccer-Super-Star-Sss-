@@ -3,13 +3,13 @@
 const fs=require('fs'),path=require('path'),vm=require('vm');
 const root=path.join(__dirname,'..');
 const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
-const srcs=[...html.matchAll(/<script src="([^"]+)"><\/script>/g)].map(m=>m[1]);
+const srcs=[...html.matchAll(/<script src="([^"]+)"><\/script>/g)].map(m=>m[1].split('?')[0]);
 const el={innerHTML:'',scrollTop:0,value:''};
 const store={};
 const ctx={console,Math,JSON,Date,performance:{now:()=>Date.now()},
  document:{querySelector:()=>el,addEventListener(){}},
  localStorage:{getItem:k=>store[k]||null,setItem:(k,v)=>{store[k]=v;},removeItem:k=>{delete store[k];}},
- setTimeout:()=>0};
+ setTimeout:()=>0,clearTimeout:()=>0};
 ctx.window=ctx;ctx.global=ctx;vm.createContext(ctx);
 for(const s of srcs)vm.runInContext(fs.readFileSync(path.join(root,s),'utf8'),ctx,{filename:s});
 vm.runInContext(fs.readFileSync(path.join(__dirname,'bot.js'),'utf8'),ctx,{filename:'bot.js'});

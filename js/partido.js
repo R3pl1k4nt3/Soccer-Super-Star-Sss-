@@ -150,14 +150,35 @@ function prepMatch(desc){
  var imp=matchImp(desc);
  var M={desc:desc,home:home,role:role,mins:mins,ev:ev,mg:0,ma:0,dr:0,decs:[],imp:imp,hn:H.n,an:A.n,hs:H.str,as:A.str,oxi:O.xi,txi:T.xi,fm:{}};
  if(mins>0){
-  var nd=(mins>=60?2:1)+(imp>=1.7&&mins>=60?1:0),st=90-mins,set=shuffle(SITS[SITKEY[S.pos]].slice());
-  for(var i=0;i<nd;i++){var sit=set[i%set.length],mn=st+3+Math.floor(Math.random()*(mins-6));
+  /* número de jugadas: el mínimo de siempre (1 con menos de 60 minutos, 2 con 60 o más, +1 en partidos importantes) y a veces más */
+  var nd=(mins>=60?2:1)+(imp>=1.7&&mins>=60?1:0),st=90-mins,set=shuffle(SITS[SITKEY[S.pos]].slice()),xr=Math.random();
+  var extra=xr<0.4?0:xr<0.72?1:xr<0.9?2:3;if(mins<45)extra=Math.min(extra,1);nd=Math.min(6,nd+extra);
+  var used={};
+  for(var i=0;i<nd;i++){var sit=set[i%set.length],mn,tries=0;do{mn=st+3+Math.floor(Math.random()*(mins-6));}while((used[mn]||used[mn-1]||used[mn+1])&&tries++<20);used[mn]=1;
    var opts=shuffle(sit.o.slice()).map(function(o){var x={n:o.n,sk:o.sk,ok:o.ok,rk:o.rk,ef:o.ef,shot:o.shot||0};x.op=oppFor(O.xi,o.vs||sit.v);x.min=mn;if(M.fm[x.op]==null)M.fm[x.op]=Math.round(norm()*2);x.fm=M.fm[x.op];return x;});
    M.decs.push({min:mn,sit:sit.t,main:opts[0].op,opts:opts,done:-1});}
   M.decs.sort(function(x,y){return x.min-y.min;});
   M.decs.forEach(function(d,i){if(i&&d.min<=M.decs[i-1].min)d.min=Math.min(89,M.decs[i-1].min+2);});
+  preAssign(M,T);
  }
+ M.clock=0;
  return M;
+}
+/* antes de empezar se decide tu participación en los goles del equipo (solo en los minutos que juegas),
+   la falta directa y los efectos de tus rasgos. Así el partido en directo puede cantar tus goles al momento. */
+function preAssign(M,T){
+ var mins=M.mins,st=90-mins,side=mySide(M),ov=overall(),P=POSD[S.pos];
+ if(tx('fk')&&Math.random()<0.06*(1+skv('bpa')/60)*tx('fk')*(mins/90)){M.ev.push({min:Math.min(89,st+2+Math.floor(Math.random()*Math.max(1,mins-3))),side:side,sc:S.me,as:-1,fk:1,mine:1});M.mg++;}
+ var opg=M.ev.filter(function(e){return e.side!==side&&!e.x&&!e.pen&&e.min>=st;});
+ if(opg.length&&Math.random()<tx('cancel'))opg[0].x=1;
+ M.ev.forEach(function(e){if(e.side!==side||e.x||e.mine||e.min<st)return;
+  var rt=clamp(ov/T.str,0.6,1.5),f=0.75*rt*rt;/* solo cuentan los goles con él en el campo */
+  if(Math.random()<P.sg*f*(1+0.6*tx('gs'))){e.sc=S.me;if(e.as===S.me)e.as=-1;M.mg++;e.mine=1;}
+  else if(Math.random()<P.sa*f*(1+0.6*tx('as'))){e.as=S.me;M.ma++;e.mine=1;}});
+ /* el portero líbero a veces encaja por salir lejos */
+ if(tx('risk')&&Math.random()<tx('risk'))M.ev.push({min:Math.min(89,st+2+Math.floor(Math.random()*Math.max(1,mins-3))),side:side==='h'?'a':'h',sc:wpickXI(M.oxi,-1,'sg'),as:-1,err:1});
+ M.ev.sort(function(x,y){return x.min-y.min;});
+ M.pre=1;
 }
 /* marcador en un minuto dado */
 function scoreAt(M,min){var h=0,a=0;M.ev.forEach(function(e){if(e.x||e.min>min)return;if(e.side==='h')h++;else a++;});return [h,a];}
@@ -170,8 +191,8 @@ function resolveDec(M,d,oi){
  d.done=oi;d.ok=ok;
  if(ok){M.dr+=PAY[o.rk]*mult;
   if(o.ef==='att'){var gc=(o.shot?[0.12,0.3,0.5]:[0.08,0.22,0.4])[o.rk]*(d.dec?1.3:1)*(S.pos==='POR'?0.3:1);
-   if(Math.random()<gc){if(o.shot){M.ev.push({min:d.min,side:side,sc:S.me,as:Math.random()<0.5?wpickXI(M.txi,S.me,'sa'):-1,mine:1});M.mg++;d.res='¡Gol! Superas a '+opp.n;}
-    else{M.ev.push({min:d.min,side:side,sc:wpickXI(M.txi,S.me,'sg'),as:S.me,mine:1});M.ma++;d.res='Asistencia de gol. Superas a '+opp.n;}}
+   if(Math.random()<gc){if(o.shot){M.ev.push({min:d.min,side:side,sc:S.me,as:Math.random()<0.5?wpickXI(M.txi,S.me,'sa'):-1,mine:1,shown:1});M.mg++;d.res='¡Gol! Superas a '+opp.n;}
+    else{M.ev.push({min:d.min,side:side,sc:wpickXI(M.txi,S.me,'sg'),as:S.me,mine:1,shown:1});M.ma++;d.res='Asistencia de gol. Superas a '+opp.n;}}
    else d.res='Ganas el duelo a '+opp.n;}
   else{var nx=M.ev.filter(function(e){return e.side===os&&!e.x&&e.min>=d.min&&e.min<=d.min+20;})[0];
    if(nx&&Math.random()<[0.5,0.7,0.9][o.rk]){nx.x=1;d.res='Evitas el gol de '+S.pl[nx.sc].n;}
@@ -189,18 +210,8 @@ function autoDec(M,d){var best=0,bv=-9;d.opts.forEach(function(o,i){var p=duelP(
 function finishMatch(M){
  var desc=M.desc,nat=!!desc.nat,me=S.pl[S.me],home=M.home,ov=overall(),pos=S.pos,P=POSD[pos],mins=M.mins,side=mySide(M);
  var H=teamOf(desc,'h'),A=teamOf(desc,'a'),T=home?H:A;
- if(mins>0){
-  if(tx('fk')&&Math.random()<0.06*(1+skv('bpa')/60)*tx('fk')*(mins/90)){M.ev.push({min:20+Math.floor(Math.random()*70),side:side,sc:S.me,as:-1,fk:1,mine:1});M.mg++;}
-  var opg=M.ev.filter(function(e){return e.side!==side&&!e.x&&!e.pen;});
-  if(opg.length&&Math.random()<tx('cancel'))opg[0].x=1;
-  /* participación del jugador en los goles de su equipo */
-  M.ev.forEach(function(e){if(e.side!==side||e.x||e.mine)return;
-   var rt=clamp(ov/T.str,0.6,1.5),f=0.75*rt*rt*(mins/90);
-   if(Math.random()<P.sg*f*(1+0.6*tx('gs'))){e.sc=S.me;if(e.as===S.me)e.as=-1;M.mg++;e.mine=1;}
-   else if(Math.random()<P.sa*f*(1+0.6*tx('as'))){e.as=S.me;M.ma++;e.mine=1;}});
- }
- /* el portero líbero a veces encaja por salir lejos */
- if(mins>0&&tx('risk')&&Math.random()<tx('risk'))M.ev.push({min:10+Math.floor(Math.random()*80),side:side==='h'?'a':'h',sc:wpickXI(M.oxi,-1,'sg'),as:-1,err:1});
+ /* partidas guardadas a mitad de partido con la versión anterior */
+ if(mins>0&&!M.pre)preAssign(M,T);
  M.ev.sort(function(x,y){return x.min-y.min;});
  var ev=M.ev.filter(function(e){return !e.x;});
  var gh=ev.filter(function(e){return e.side==='h';}).length,ga=ev.length-gh;
@@ -231,8 +242,8 @@ function finishMatch(M){
  var vis=nat?1.3:Math.exp((S.clubs[me.c].str-50)/40),pts;
  if(mins>0)pts=Math.round((1+Math.max(0,r-5)*0.9+(gf>gc?1:0))*(0.45+0.55*mins/90)*(S.skills.length/8)*(0.8+0.2*M.imp)*growthF())+itemLvl('coach');
  else pts=Math.round(S.skills.length/8)+itemLvl('coach');
- var gains={},ups=[],tw=0;S.skills.forEach(function(k){tw+=k.w;});
- for(var j=0;j<pts;j++){var x=Math.random()*tw,k=null,acc=0;for(var q=0;q<S.skills.length;q++){acc+=S.skills[q].w;if(x<acc){k=S.skills[q];break;}}
+ var gains={},ups=[],tw=0,gw=function(k){return k.w*(k.gr||1);};S.skills.forEach(function(k){tw+=gw(k);});
+ for(var j=0;j<pts;j++){var x=Math.random()*tw,k=null,acc=0;for(var q=0;q<S.skills.length;q++){acc+=gw(S.skills[q]);if(x<acc){k=S.skills[q];break;}}
   if(!k||k.lvl>=capFor(k))continue;gains[k.n]=(gains[k.n]||0)+1;if(addProg(k,1))ups.push(k.n+' sube a nivel '+k.lvl);}
  ups.forEach(function(u){logm(u+'.');});
  /* medallas y primas */
@@ -317,11 +328,36 @@ function choose(oi){
  var d=markDec(M);if(!d)return;
  resolveDec(M,d,oi);
  /* resultado de la jugada en una ventana emergente */
- var o=d.opts[oi],fin=M.decs.every(function(x){return x.done>=0;});
- if(typeof UI!=='undefined')UI.pop={k:'dec',min:d.min,n:o.n,ok:d.ok,res:d.res,dec:d.dec,sc:scoreAt(M,90),scNow:scoreAt(M,d.min),hn:M.hn,an:M.an,opp:S.pl[o.op].n,fin:fin};
- if(fin){S.match=null;var rep=finishMatch(M);endSlot(rep);if(rep){pressAfter(rep,true);if(typeof UI!=='undefined')UI.pendRep=rep;}}
- else markDec(M);
+ var o=d.opts[oi],gk=/^¡Gol!/.test(d.res)?'g':/^Asistencia/.test(d.res)?'a':null;
+ M.clock=Math.max(M.clock||0,d.min);
+ if(typeof UI!=='undefined')UI.pop={k:'dec',min:d.min,n:o.n,ok:d.ok,res:d.res,dec:d.dec,gk:gk,scNow:scoreAt(M,d.min),hn:M.hn,an:M.an,opp:S.pl[o.op].n};
+ markDec(M);
  save();render();
+}
+/* ---------- partido en directo: el reloj corre y se para en tus jugadas y en tus goles ---------- */
+function liveTarget(M){var d=nextDec(M);return d?d.min:90;}
+/* el gol o la asistencia tuya que cae en este minuto, si lo hay */
+function liveGoalAt(M,min){return M.ev.filter(function(e){return e.min===min&&!e.x&&!e.shown&&(e.sc===S.me||e.as===S.me);})[0];}
+/* avanza un minuto. Devuelve 'min', 'goal' (tu gol o asistencia), 'dec' (llega una jugada) o 'end' */
+function liveStep(){
+ var M=S.match;if(!M)return 'end';
+ if(M.clock>=liveTarget(M))return nextDec(M)?'dec':liveEnd();
+ M.clock++;
+ var g=liveGoalAt(M,M.clock);
+ if(g){g.shown=1;if(typeof UI!=='undefined'){var mine=g.sc===S.me,o=g.sc===S.me?g.as:g.sc;
+  UI.pop={k:'goal',gk:mine?'g':'a',min:g.min,fk:g.fk,with:o>=0&&S.pl[o]?S.pl[o].n:null,scNow:scoreAt(M,g.min),hn:M.hn,an:M.an};}return 'goal';}
+ if(M.clock>=liveTarget(M))return nextDec(M)?'dec':liveEnd();
+ return 'min';
+}
+/* salta hasta la próxima parada (jugada, gol tuyo o final) */
+function liveJump(){var r,g=0;do{r=liveStep();}while(r==='min'&&g++<100);if(r!=='end'){save();render();}}
+/* termina el partido: con quick (bot) resuelve solo lo que quede, sin ventanas */
+function liveEnd(quick){
+ var M=S.match;if(!M)return 'end';
+ if(quick)M.decs.forEach(function(d){if(d.done<0){markDec(M);autoDec(M,d);}});
+ S.match=null;var rep=finishMatch(M);endSlot(rep);
+ if(rep){pressAfter(rep,true);if(!quick&&typeof UI!=='undefined')UI.pop={k:'match',rep:rep};}
+ save();if(!quick)render();return 'end';
 }
 function endSlot(rep){
  var sl=S.cal[S.slot],m0=slotMonth(S.slot);
@@ -362,6 +398,7 @@ function playN(n){
  while(c<n&&!S.summary&&!S.retired&&guard++<200){var r=playSlot(n===1);if(!r)break;if(r.paused)break;if(!r.none){c++;if(n===1)pressAfter(r,true);else pressAfter(r,false);}if(S.press)break;}
  var b=batch;batch=null;
  if(n===1&&b&&b.n===1&&S.last&&!S.match&&typeof UI!=='undefined')UI.pop={k:'match',rep:S.last};
+ if(S.match)S.tab='match';
  save();render();
  if(b&&b.n>1)toast(b.n+' partidos: +'+b.pts+' puntos, '+fmt(b.money)+', '+b.medals+' medallas');
 }
@@ -432,7 +469,7 @@ function newGame(name,pos,tp,ts,nat,co,real,look){
 /* ---------- entrenamiento ---------- */
 function train(id){
  var k=mySk(id);
- if(k.lvl>=capFor(k)){var tcp=traitCap(k.id);toast(k.lvl>=MAXL?'Habilidad al máximo.':tcp.by&&tcp.cap===capFor(k)?'Tu rasgo '+tcp.by.n+' limita '+k.n+' al nivel '+tcp.cap+'.':boostCap(k.id)?'Sube el rango de tu rasgo para pasar del nivel '+capFor(k)+'.':'Solo las habilidades de tus rasgos pasan del nivel '+capFor(k)+'.',1);return;}
+ if(k.lvl>=capFor(k)){var ci=capInfo(k.id);toast(ci.by?'Tu rasgo '+ci.by.n+' limita '+k.n+' a '+ci.cap+'.':capTop(k.id)>ci.cap?'Sube el rango de tu rasgo para pasar de '+ci.cap+' en '+k.n+'.':k.n+' ya está en su techo para tu puesto ('+ci.cap+').',1);return;}
  var n=S.mult,done=0,up=0;
  for(var i=0;i<n;i++){var c=pointCost(k,k.lvl);if(S.money<c)break;S.money-=c;up+=addProg(k,1);done++;S.weekTrain=(S.weekTrain||0)+1;if(k.lvl>=capFor(k))break;}
  if(!done){toast('No tienes dinero para entrenar '+k.n+'.',1);return;}

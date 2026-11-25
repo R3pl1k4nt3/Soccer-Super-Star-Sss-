@@ -30,6 +30,31 @@ function decisionCard(){
  M.decs.filter(function(x){return x.done>=0;}).forEach(function(x){h+='<div class="ev"><b class="num">'+x.min+"'</b><span>"+x.opts[x.done].n+': <b class="'+(x.ok?'good':'bad')+'">'+esc(x.res)+'</b></span></div>';});
  return h+'</div>';
 }
+/* ---------- partido en directo ---------- */
+var VELMS={1:700,2:350,4:120};
+function liveSpeed(){var v=+(localStorage.getItem('estrella_vel')||2);return VELMS[v]?v:2;}
+function goalLine(M,e){var side=mySide(M),tn=e.side==='h'?M.hn:M.an,nm=function(id){return id===S.me?'<b>'+esc(S.name)+' (tú)</b>':esc(S.pl[id]?S.pl[id].n:'');};
+ return 'Gol de '+nm(e.sc)+(e.fk?', de falta directa':e.pen?', de penalti':'')+(e.as>=0?' (asist. '+nm(e.as)+')':'')+' · '+esc(tn);}
+function liveInner(){
+ var M=S.match,c=M.clock||0,sc=scoreAt(M,c),st=90-M.mins,d=nextDec(M),atDec=d&&c>=d.min,feed=[];
+ M.ev.forEach(function(e){if(e.x||e.min>c)return;var mine=e.sc===S.me||e.as===S.me;feed.push({min:e.min,cls:mine?'me':e.side===mySide(M)?'':'mut',t:goalLine(M,e)});});
+ M.decs.forEach(function(x){if(x.done>=0)feed.push({min:x.min,cls:x.ok?'good':'bad',t:(x.dec?'<span class="star">◆</span> ':'')+esc(x.opts[x.done].n)+': '+esc(x.res)});});
+ if(st>0&&c>=st)feed.push({min:st,cls:'mut',t:'Entras al campo'});
+ feed.sort(function(a,b){return b.min-a.min;});
+ var stat=atDec?'<span class="star">Jugada en el minuto '+d.min+"'</span>":c<st?'Estás en el banquillo: entras en el minuto '+st+"'":c>=90?'Final':'En juego · '+(d?'próxima jugada tuya por llegar':'ya no te quedan jugadas');
+ return '<div class="lvhead"><span class="lvclock num" aria-label="Minuto '+c+'">'+c+"'</span>"+
+  '<div class="lvscore"><span>'+esc(M.hn)+'</span><b class="num">'+sc[0]+' - '+sc[1]+'</b><span>'+esc(M.an)+'</span></div></div>'+
+  '<div class="bar big lvbar" aria-hidden="true"><i style="width:'+Math.round(c/90*100)+'%"></i></div>'+
+  '<div class="small mut" style="margin:6px 0">'+stat+'</div>'+
+  (feed.length?feed.slice(0,10).map(function(f){return '<div class="ev"><b class="num">'+f.min+"'</b><span class='"+f.cls+"'>"+f.t+'</span></div>';}).join(''):'<div class="small mut">Sin goles todavía.</div>');
+}
+function liveCard(){
+ var M=S.match,d=nextDec(M),atDec=d&&(M.clock||0)>=d.min,v=liveSpeed();
+ return '<div class="card wide live"><div class="rowb"><h3 style="margin:0">'+esc(compName(M.desc.ck))+(M.desc.rn?' · '+esc(M.desc.rn):'')+'</h3>'+
+  '<span class="mults">Velocidad: '+[1,2,4].map(function(n){return chip(v===n,'livespeed',null,'x'+n,n);}).join('')+
+  (atDec?'':' <button class="chip" data-a="livejump">Saltar a la siguiente parada</button>')+'</span></div>'+
+  '<div id="livein" aria-live="off">'+liveInner()+'</div></div>';
+}
 /* ficha del rival en ese momento: forma del día y cansancio según el minuto */
 function oppCard(d){
  var p=S.pl[d.main],o=d.opts.filter(function(x){return x.op===d.main;})[0]||d.opts[0],min=d.min,fm=o.fm||0;
@@ -68,7 +93,7 @@ function viewMatch(){
  if(S.retired)return '<div class="card"><h2>Carrera terminada</h2><p>Mira tu resumen en la pestaña Carrera.</p></div>';
  var h='';
  if(S.press)h+=pressCard();
- if(S.match)h+=decisionCard();
+ if(S.match){var dn=nextDec(S.match);if(dn&&(S.match.clock||0)>=dn.min)h+=decisionCard();h+=liveCard();}
  var me=myClub(),en=Math.round(S.energy),p=Math.round(starterP(me)*100),sl=S.cal[S.slot];
  h+='<div class="card"><h3>Próximo partido</h3>'+nextInfo()+
   '<div class="rowb small" style="margin-top:8px"><span>Energía</span><span class="num">'+en+'%</span></div><div class="bar big en '+(en<30?'low':'')+'"><i style="width:'+en+'%"></i></div>'+
@@ -76,7 +101,7 @@ function viewMatch(){
   '<div class="small mut" style="margin-top:8px">'+(S.injured>0?'<span class="bad">Lesionado: '+S.injured+' semana(s) de baja.</span>':'Titular en tu club: <b class="num">'+p+'%</b> (tu valoración '+ds(overall())+' frente a tu rival por el puesto).')+'</div>'+
   '<div class="mults" style="margin-top:8px">Decisiones: '+chip(!S.auto,'auto',null,'Elegir yo',0)+chip(S.auto,'auto',null,'Automáticas',1)+'</div>';
  if(S.event)h+='<div class="small" style="margin-top:8px;color:var(--gold)">Tienes un asunto pendiente en la pestaña Vida.</div>';
- if(S.match)h+='<div class="rowb" style="margin-top:10px;flex-wrap:wrap"><span class="small mut">Resuelve la jugada para terminar el partido. Se guarda: puedes seguir más tarde.</span><button class="go alt" data-a="go" data-id="home">Seguir más tarde</button></div></div>';
+ if(S.match)h+='<div class="rowb" style="margin-top:10px;flex-wrap:wrap"><span class="small mut">Tienes un partido en juego. Se guarda: puedes seguir más tarde.</span><button class="go alt" data-a="go" data-id="home">Seguir más tarde</button></div></div>';
  else if(S.press)h+='<div class="small mut" style="margin-top:10px">Tienes una rueda de prensa pendiente. Si juegas el siguiente partido sin responder, se da por no atendida.</div><div class="btns" style="margin-top:10px"><button class="go full" data-a="play" data-n="1">Jugar siguiente partido</button><button class="go alt" data-a="go" data-id="home">Volver a Inicio</button></div></div>';
  else h+='<div class="btns" style="margin-top:12px"><button class="go full" data-a="play" data-n="1">'+(S.injured>0?'Descansar':'Jugar siguiente partido')+'</button><button class="go alt" data-a="play" data-n="5">Jugar 5 partidos</button><button class="go alt" data-a="play" data-n="99">Hasta fin de temporada</button></div></div>';
  var r=S.last;
@@ -356,22 +381,40 @@ function viewCareer(){
 /* ---------- Entreno ---------- */
 function viewTrain(){
  var ov=overall(),a=traitById(S.tp),b=traitById(S.ts);
- var h=traitsCard()+'<div class="card wide"><div class="rowb"><b>Valoración total</b><b class="star num">★ '+ds(ov)+'</b></div><div class="bar big"><i style="width:'+clamp(ov,0,100)+'%"></i></div>'+
-  '<div class="small mut" style="margin-top:8px">'+traitBadge('p')+' · '+traitBadge('s')+'<br>Las habilidades de tus rasgos llegan hasta el nivel que marque su rango (12 en Bronce, 13 en Plata, 14 en Oro y 15 en Platino; el secundario, uno menos). Las demás, hasta el '+BASECAP+'. El material suma aparte.</div>'+
+ var h=keySkillsCard()+traitsCard()+'<div class="card wide"><div class="rowb"><b>Valoración total</b><b class="star num">★ '+ds(ov)+'</b></div><div class="bar big"><i style="width:'+clamp(ov,0,100)+'%"></i></div>'+
+  '<div class="small mut" style="margin-top:8px">'+traitBadge('p')+' · '+traitBadge('s')+'<br>Cada habilidad tiene un techo según tu puesto y tus rasgos. Al subir de rango un rasgo, sube el techo de sus habilidades. Solo las de tu rasgo principal en Platino llegan a 99. El material suma aparte.</div>'+
   '<div class="small" style="margin-top:8px">Potencial: <b>'+potBand()+'</b> · '+growthTxt()+' · forma: '+formTxt()+'</div>'+((S.weekTrain||0)>0?'<div class="small warn">Has entrenado '+S.weekTrain+' puntos esta semana: cada punto extra cuesta un 4 % más hasta la semana que viene. Jugar hace crecer más que entrenar.</div>':'')+
   '<div class="mults">Puntos por pulsación: '+[1,5,25].map(function(m){return chip(S.mult===m,'mult',null,'×'+m,m);}).join('')+'</div></div>';
  h+='<div class="card wide"><div class="cats" role="group" aria-label="Categoría">'+CATS.filter(function(c){return catAvg(c[0])>0;}).map(function(c){return chip(S.cat===c[0],'cat',c[0],catName(c[0])+' <span class="num">'+Math.round(catAvg(c[0]))+'</span>');}).join('')+'</div>';
  h+='<div class="hdr"><span>Entrenar</span><span>Habilidad</span><span>Promoción</span></div>';
  S.skills.filter(function(k){return k.cat===S.cat;}).forEach(function(k){
-  var cap=capFor(k),max=k.lvl>=cap,nd=need(k.lvl),cost=costFor(k,S.mult),pc=nd-k.prog,mark=tb(k.id)>0?'<span class="star" title="Rasgo">◆</span> ':'',gb=gearB(k.id);
+  var cap=capFor(k),max=k.lvl>=cap,nd=need(k.lvl),cost=costFor(k,S.mult),pc=nd-k.prog,mark=tb(k.id)>0?'<span class="star" title="Rasgo">◆</span> ':'',gb=gearB(k.id),ci=capInfo(k.id),top=capTop(k.id);
   h+='<div class="sk"><button class="tr '+(max||S.money<pointCost(k,k.lvl)?'dis':'')+'" data-a="train" data-id="'+k.id+'" aria-label="Entrenar '+k.n+(max?' (al máximo)':' por '+fmt(cost))+'"><span class="star">★</span><span class="num">'+(max?'MAX':fmt(cost))+'</span></button>'+
-   '<div class="mid"><div class="nm">'+mark+k.n+' <span class="stars">'+stars(k.lvl)+'</span><span class="lv'+(traitCap(k.id).by&&traitCap(k.id).cap===cap?' lim':'')+'">Nv '+k.lvl+'/'+cap+(traitCap(k.id).by&&traitCap(k.id).cap===cap?' · límite por '+traitCap(k.id).by.n:'')+'</span><span class="val num">★ '+Math.round(skVal(k))+(gb?' <span class="small good">(+'+gb+')</span>':'')+'</span></div>'+
+   '<div class="mid"><div class="nm">'+mark+k.n+(isKeySk(S.pos,k.id)?' <span class="kchip">Clave</span>':'')+'<span class="lv'+(ci.by?' lim':'')+'">Máx. '+ci.cap+(top>ci.cap?' → '+top:'')+(ci.by?' · límite por '+ci.by.n:'')+' · mejora '+grTxt(k.gr||1)+'</span><span class="val num">★ '+Math.round(skVal(k))+(gb?' <span class="small good">(+'+gb+')</span>':'')+'</span></div>'+capBar(k.id,skVal(k))+
    '<div class="bar"><i style="width:'+(max?100:k.prog/nd*100)+'%"></i><span class="num">'+(max?'MAX':k.prog+'/'+nd)+'</span></div></div>'+
    '<button class="pr '+(max||S.medals<pc?'dis':'')+'" data-a="promo" data-id="'+k.id+'" aria-label="Subir '+k.n+' de nivel con '+(max?'medallas (al máximo)':pc+' medallas')+'"><span class="medal"></span><span class="num">'+(max?'-':pc)+'</span></button></div>';
  });
  h+='<div class="bono"><div class="mid"><div class="rowb"><b>Bono '+(S.pos==='POR'?'1v1':'de duelo')+'</b><span class="good num">+'+S.bono+' / 70</span></div><div class="bar big"><i style="width:'+(S.bono/70*100)+'%"></i></div><div class="small mut" style="margin-top:4px">Mejora tu nota en cada partido. Cada subida suma 2.</div></div>'+
   '<button class="go" data-a="bono">'+(S.bono>=70?'MAX':fmt(bonoCost()))+'</button></div></div>';
  return h;
+}
+
+/* barra de techo, estilo 2K: valor actual, margen hasta el techo de hoy, lo que desbloquean tus rasgos y lo bloqueado */
+function capBarHTML(v,cap,top,label){v=Math.round(Math.min(v,99));
+ return '<div class="capbar" role="img" aria-label="'+esc(label)+': '+v+' de un máximo de '+cap+(top>cap?', '+top+' con tus rasgos al máximo':'')+'">'+
+  '<i class="cv" style="width:'+v+'%"></i>'+(cap>v?'<i class="cu" style="left:'+v+'%;width:'+(cap-v)+'%"></i>':'')+
+  (top>cap?'<i class="ct" style="left:'+Math.max(cap,v)+'%;width:'+Math.max(0,top-Math.max(cap,v))+'%"></i>':'')+
+  '<i class="cl" style="left:'+Math.max(top,v)+'%;width:'+Math.max(0,99-Math.max(top,v))+'%"></i><b class="cm" style="left:'+cap+'%"></b></div>';}
+function capBar(id,v){var ci=capInfo(id);return capBarHTML(v,ci.cap,capTop(id),SKNAME[id]);}
+function capLegend(){return '<div class="capleg small mut"><span><i class="cv"></i>Ahora</span><span><i class="cu"></i>Puedes subir hasta tu techo</span><span><i class="ct"></i>Se desbloquea al subir tus rasgos</span><span><i class="cl"></i>Bloqueado para tu puesto</span></div>';}
+/* características principales: las clave del puesto y las de tus rasgos, con su techo */
+function keySkillsCard(){
+ var ks=S.skills.filter(function(k){return isKeySk(S.pos,k.id)||tb(k.id)>0;}).sort(function(a,b){return capTop(b.id)-capTop(a.id)||skVal(b)-skVal(a);});
+ var h='<div class="card wide"><h3>Características principales · '+POS[S.pos]+'</h3>'+capLegend();
+ ks.forEach(function(k){var ci=capInfo(k.id),top=capTop(k.id),v=Math.round(skVal(k));
+  h+='<div class="krow"><div class="rowb"><span>'+(tb(k.id)>0?'<span class="star" title="Rasgo">◆</span> ':'')+'<b>'+k.n+'</b>'+(isKeySk(S.pos,k.id)?' <span class="kchip">Clave</span>':'')+'</span>'+
+   '<span class="small"><b class="num">'+v+'</b><span class="mut"> / máx. '+ci.cap+(top>ci.cap?' → <b class="star">'+top+'</b>':'')+' · mejora '+grTxt(k.gr||1)+'</span></span></div>'+capBar(k.id,v)+'</div>';});
+ return h+'<p class="small mut" style="margin:8px 0 0">Las habilidades que no son de tu puesto tienen un techo más bajo. Cada rasgo sube el techo de sus habilidades al pasar de rango; solo el principal en Platino llega a 99. Cada jugador mejora a distinto ritmo en cada habilidad.</p></div>';
 }
 
 /* ---------- ventanas ---------- */
@@ -557,31 +600,38 @@ function momentumBar(M,d){
  var v=clamp(50+(my-op)*1.2+diff*8,8,92);
  return '<div class="mom" aria-label="Dominio del partido: '+Math.round(v)+' % tu equipo"><div class="rowb small"><span>Tu equipo</span><span class="mut">Dominio</span><span>Rival</span></div><div class="mombar"><i style="width:'+v+'%"></i></div></div>';
 }
-/* gráfico de límites: nivel máximo de cada habilidad de la posición con los rasgos elegidos (de Bronce a Platino) */
+/* gráfico de techos (estilo 2K): valor máximo de cada habilidad con tu puesto y tus rasgos, en Bronce y en su rango más alto */
 function limitChart(pos,tp,ts){
- var all=pos==='POR'?SKG:SKO,A=traitById(tp),B=traitById(ts),h='<div class="lchart" role="table" aria-label="Nivel máximo de cada habilidad">';
- h+='<div class="lleg small mut"><span><i class="lg-b"></i>Con tus rasgos (Bronce → Platino)</span><span><i class="lg-n"></i>Normal (hasta 11)</span><span><i class="lg-l"></i>Limitada por un rasgo</span></div>';
+ var all=pos==='POR'?SKG:SKO,A=traitById(tp),B=traitById(ts),lo=[{r:'p',id:tp,t:0},{r:'s',id:ts,t:0}],hi=[{r:'p',id:tp,t:3},{r:'s',id:ts,t:2}];
+ var h='<div class="lchart" role="table" aria-label="Techo de cada habilidad">'+capLegend();
  CATS.forEach(function(c){var ls=all.filter(function(s){return s[2]===c[0];});if(!ls.length)return;
   h+='<div class="lcat">'+(pos==='POR'&&c[0]==='def'?'Portería':pos==='POR'&&c[0]==='med'?'Distribución':c[1])+'</div>';
-  ls.forEach(function(s){var id=s[0],bp=A&&A.sk.indexOf(id)>=0,bs=B&&B.sk.indexOf(id)>=0;
-   var lo=bp?TIERS[0].cap:bs?TIERS[0].cap-1:BASECAP,hi=bp?TIERS[3].cap:bs?TIERS[3].cap-1:BASECAP,lim=traitCapOf(tp,ts,id),cap=Math.min(hi,lim.cap),cap0=Math.min(lo,lim.cap),kind=lim.cap<BASECAP?'l':bp||bs?'b':'n';
-   var segs='';for(var i=1;i<=MAXL;i++){var cl=i<=cap0?(kind==='l'?'s-l':kind==='b'?'s-b':'s-n'):i<=cap?'s-up':'';segs+='<i class="'+cl+'"></i>';}
-   h+='<div class="lrow" role="row"><span role="cell" class="lname">'+(bp||bs?'<b>'+SKNAME[id]+'</b>':SKNAME[id])+'</span><span role="cell" class="lbar" aria-label="máximo nivel '+cap+'">'+segs+'</span><span role="cell" class="lval num">'+(cap0!==cap?cap0+'→'+cap:cap)+' <span class="mut">≈'+skApprox(pos,id,cap)+'</span></span>'+
-    (lim.by&&lim.cap<hi?'<span role="cell" class="lwhy small bad">límite de '+lim.by.n+'</span>':'<span role="cell"></span>')+'</div>';});
+  ls.sort(function(a,b){return capValOf(pos,hi,b[0]).cap-capValOf(pos,hi,a[0]).cap;}).forEach(function(s){var id=s[0],bt=(A&&A.sk.indexOf(id)>=0)||(B&&B.sk.indexOf(id)>=0),c0=capValOf(pos,lo,id),c1=capValOf(pos,hi,id),start=skApprox(pos,id,1);
+   h+='<div class="lrow" role="row"><span role="cell" class="lname">'+(bt?'<span class="star">◆</span> <b>'+SKNAME[id]+'</b>':SKNAME[id])+(isKeySk(pos,id)?' <span class="kchip">Clave</span>':'')+'</span>'+
+    '<span role="cell" class="lbar2">'+capBarHTML(start,c0.cap,c1.cap,SKNAME[id])+'</span>'+
+    '<span role="cell" class="lval num">'+(c1.cap>c0.cap?c0.cap+'→<b class="star">'+c1.cap+'</b>':c0.cap)+'</span>'+
+    (c1.by?'<span role="cell" class="lwhy small bad">límite de '+c1.by.n+'</span>':'<span role="cell"></span>')+'</div>';});
  });
- return h+'</div><p class="small mut">El número es el nivel máximo (de 15) y, tras ≈, el valor aproximado que alcanzaría la habilidad. Las barras claras son lo que ganas al subir tus rasgos hasta Platino.</p>';
+ return h+'</div><p class="small mut">El número es el valor máximo (de 99) que puede alcanzar cada habilidad: primero con tus rasgos en Bronce y, en dorado, al subirlos (el principal hasta Platino, el secundario hasta Oro). Solo las habilidades de tu rasgo principal en Platino llegan a 99. Cada jugador tiene además una pequeña variación propia de ±3.</p>';
 }
 /* ---------- ventanas emergentes: resultado de la jugada y resumen del partido ---------- */
 function popHTML(){
  var P=UI.pop;if(!P)return '';
+ var score=function(){return '<div class="popscore"><span>'+esc(P.hn)+'</span><b class="num">'+P.scNow[0]+' - '+P.scNow[1]+'</b><span>'+esc(P.an)+'</span></div>';};
+ var shout=function(gk){return '<div class="gooool '+(gk==='g'?'gg':'ga')+'" aria-hidden="true">'+(gk==='g'?'¡GOOOL!':'¡ASISTENCIA!')+'</div>';};
+ if(P.k==='goal'){
+  return '<div class="modal" role="dialog" aria-modal="true" aria-label="'+(P.gk==='g'?'Gol tuyo':'Asistencia tuya')+'"><div class="card pop pgood pgoal">'+
+   '<div class="pophead"><span class="small mut">Minuto '+P.min+"'</span></div>"+shout(P.gk)+
+   '<h2>'+(P.gk==='g'?'Marcas'+(P.fk?' de falta directa':'')+(P.with?'. Te la pone '+esc(P.with):''):'Das el pase de gol'+(P.with?' a '+esc(P.with):''))+'</h2>'+score()+
+   '<button class="go block" data-a="popclose" style="margin-top:14px">Seguir</button></div></div>';
+ }
  if(P.k==='dec'){
-  var good=P.ok,big=/gol|Gol/.test(P.res);
-  return '<div class="modal" role="dialog" aria-modal="true" aria-label="Resultado de la jugada"><div class="card pop '+(good?'pgood':'pbad')+'">'+
+  var good=P.ok;
+  return '<div class="modal" role="dialog" aria-modal="true" aria-label="Resultado de la jugada"><div class="card pop '+(good?'pgood':'pbad')+(P.gk?' pgoal':'')+'">'+
    '<div class="pophead">'+(P.dec?'<span class="badge">JUGADA DECISIVA</span>':'<span class="small mut">Jugada · minuto '+P.min+"'</span>")+'</div>'+
-   '<div class="popicon" aria-hidden="true">'+(good?(big?POPI.gol:POPI.ok):POPI.ko)+'</div>'+
-   '<h2>'+esc(P.res)+'</h2><p class="mut">Elegiste: <b>'+esc(P.n)+'</b> contra '+esc(P.opp)+'.</p>'+
-   '<div class="popscore"><span>'+esc(P.hn)+'</span><b class="num">'+P.scNow[0]+' - '+P.scNow[1]+'</b><span>'+esc(P.an)+'</span></div>'+
-   '<button class="go block" data-a="popclose" style="margin-top:14px">'+(P.fin?'Ver resumen del partido':'Continuar')+'</button></div></div>';
+   (P.gk?shout(P.gk):'<div class="popicon" aria-hidden="true">'+(good?POPI.ok:POPI.ko)+'</div>')+
+   '<h2>'+esc(P.res)+'</h2><p class="mut">Elegiste: <b>'+esc(P.n)+'</b> contra '+esc(P.opp)+'.</p>'+score()+
+   '<button class="go block" data-a="popclose" style="margin-top:14px">Seguir el partido</button></div></div>';
  }
  return '<div class="modal" role="dialog" aria-modal="true" aria-label="Resumen del partido"><div class="card pop">'+reportHTML(P.rep)+'<button class="go block" data-a="popclose" style="margin-top:12px">Cerrar</button></div></div>';
 }
