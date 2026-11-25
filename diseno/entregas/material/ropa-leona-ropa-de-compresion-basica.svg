@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <clipPath id="ropa-leona-compresion-basica-clip">
+      <path d="M 130 128 C 102 158, 76 232, 54 344 L 44 410 L 92 418 L 116 320 C 128 274, 138 250, 148 236 Z"/>
+      <path d="M 382 128 C 410 158, 436 232, 458 344 L 468 410 L 420 418 L 396 320 C 384 274, 374 250, 364 236 Z"/>
+      <path d="M 198 94 Q 256 110 314 94 C 346 100, 368 112, 382 128 L 364 236 C 356 296, 350 356, 356 442 Q 256 456 156 442 C 162 356, 156 296, 148 236 L 130 128 C 144 112, 166 100, 198 94 Z"/>
+      <path d="M 202 72 Q 256 84 310 72 L 314 96 Q 256 112 198 96 Z"/>
+    </clipPath>
+    <linearGradient id="ropa-leona-compresion-basica-luz" x1="12%" y1="8%" x2="80%" y2="85%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.16"/>
+      <stop offset="52%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="ropa-leona-compresion-basica-sombra" x1="25%" y1="18%" x2="92%" y2="95%">
+      <stop offset="45%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.18"/>
+    </linearGradient>
+  </defs>
+  <g id="ropa-leona-compresion-basica">
+    <g id="ropa-leona-compresion-basica-base">
+      <path d="M 206 72 Q 256 60 306 72 L 302 98 Q 256 112 210 98 Z" fill="#e53935"/>
+      <path d="M 206 72 Q 256 60 306 72 L 302 98 Q 256 112 210 98 Z" fill="#000000" opacity="0.38"/>
+      <path d="M 130 128 C 102 158, 76 232, 54 344 L 44 410 L 92 418 L 116 320 C 128 274, 138 250, 148 236 Z" fill="#e53935"/>
+      <path d="M 382 128 C 410 158, 436 232, 458 344 L 468 410 L 420 418 L 396 320 C 384 274, 374 250, 364 236 Z" fill="#e53935"/>
+      <path d="M 198 94 Q 256 110 314 94 C 346 100, 368 112, 382 128 L 364 236 C 356 296, 350 356, 356 442 Q 256 456 156 442 C 162 356, 156 296, 148 236 L 130 128 C 144 112, 166 100, 198 94 Z" fill="#e53935"/>
+      <path d="M 202 72 Q 256 84 310 72 L 314 96 Q 256 112 198 96 Z" fill="#1e222b" opacity="0.92"/>
+    </g>
+    <g id="ropa-leona-compresion-basica-detalles" clip-path="url(#ropa-leona-compresion-basica-clip)">
+      
+      <g transform="translate(256, 168) scale(1.05)"><circle cx="0" cy="2" r="8" fill="#1e222b"/><path d="M 0 -16 L 4 -8 L -4 -8 Z M 13 -11 L 9 -3 L 4 -7 Z M 17 2 L 9 5 L 9 -2 Z M -13 -11 L -4 -7 L -9 -3 Z M -17 2 L -9 -2 L -9 5 Z M 11 13 L 4 8 L 8 4 Z M -11 13 L -8 4 L -4 8 Z" fill="#1e222b"/></g>
+    </g>
+    <g id="ropa-leona-compresion-basica-volumen" clip-path="url(#ropa-leona-compresion-basica-clip)">
+      <rect x="0" y="0" width="512" height="512" fill="url(#ropa-leona-compresion-basica-luz)"/>
+      <rect x="0" y="0" width="512" height="512" fill="url(#ropa-leona-compresion-basica-sombra)"/>
+    </g>
+  </g>
+</svg>

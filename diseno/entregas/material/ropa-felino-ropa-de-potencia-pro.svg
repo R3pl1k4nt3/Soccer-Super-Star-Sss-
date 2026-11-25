@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <clipPath id="ropa-felino-potencia-pro-clip">
+      <path d="M 130 150 Q 256 162 382 150 C 394 218, 404 304, 396 392 Q 336 402 276 388 L 256 286 L 236 388 Q 176 402 116 392 C 108 304, 118 218, 130 150 Z"/>
+      <path d="M 134 114 Q 256 124 378 114 L 382 152 Q 256 164 130 152 Z"/>
+    </clipPath>
+    <linearGradient id="ropa-felino-potencia-pro-luz" x1="12%" y1="8%" x2="80%" y2="85%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.28"/>
+      <stop offset="52%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="ropa-felino-potencia-pro-sombra" x1="25%" y1="18%" x2="92%" y2="95%">
+      <stop offset="45%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.23"/>
+    </linearGradient>
+  </defs>
+  <g id="ropa-felino-potencia-pro">
+    <g id="ropa-felino-potencia-pro-base">
+      <path d="M 130 150 Q 256 162 382 150 C 394 218, 404 304, 396 392 Q 336 402 276 388 L 256 286 L 236 388 Q 176 402 116 392 C 108 304, 118 218, 130 150 Z" fill="#ffd400"/>
+      <path d="M 134 114 Q 256 124 378 114 L 382 152 Q 256 164 130 152 Z" fill="#181c24"/>
+    </g>
+    <g id="ropa-felino-potencia-pro-detalles" clip-path="url(#ropa-felino-potencia-pro-clip)">
+      <path d="M 256 158 L 256 286" fill="none" stroke="#000000" stroke-width="2.5" opacity="0.16"/>
+      
+      <path d="M 130 150 C 148 220, 152 308, 144 394 L 116 392 C 108 304, 118 218, 130 150 Z" fill="#181c24" opacity="0.24"/>
+      <path d="M 382 150 C 364 220, 360 308, 368 394 L 396 392 C 404 304, 394 218, 382 150 Z" fill="#181c24" opacity="0.24"/>
+      <path d="M 142 230 Q 190 250 232 238" fill="none" stroke="#fff3a1" stroke-width="3.2" stroke-linecap="round" opacity="0.78"/>
+      <path d="M 370 230 Q 322 250 280 238" fill="none" stroke="#fff3a1" stroke-width="3.2" stroke-linecap="round" opacity="0.78"/>
+      <path d="M 118 374 Q 176 384 238 372 L 236 388 Q 176 402 116 392 Z" fill="#fff3a1" opacity="0.82"/>
+      <path d="M 394 374 Q 336 384 274 372 L 276 388 Q 336 402 396 392 Z" fill="#fff3a1" opacity="0.82"/>
+      <g transform="translate(256, 136) scale(0.55)"><path d="M -16 -12 C -6 -4, 0 4, 4 14 C -4 6, -10 0, -20 -6 Z" fill="#ffd400"/><path d="M -4 -16 C 6 -6, 12 4, 14 14 C 6 5, 1 -2, -8 -10 Z" fill="#ffd400"/><path d="M 8 -14 C 16 -6, 20 2, 22 10 C 16 3, 12 -3, 4 -9 Z" fill="#ffd400"/></g>
+      <g transform="translate(334, 326) scale(0.85)"><path d="M -16 -12 C -6 -4, 0 4, 4 14 C -4 6, -10 0, -20 -6 Z" fill="#181c24"/><path d="M -4 -16 C 6 -6, 12 4, 14 14 C 6 5, 1 -2, -8 -10 Z" fill="#181c24"/><path d="M 8 -14 C 16 -6, 20 2, 22 10 C 16 3, 12 -3, 4 -9 Z" fill="#181c24"/></g>
+    </g>
+    <g id="ropa-felino-potencia-pro-volumen" clip-path="url(#ropa-felino-potencia-pro-clip)">
+      <rect x="0" y="0" width="512" height="512" fill="url(#ropa-felino-potencia-pro-luz)"/>
+      <rect x="0" y="0" width="512" height="512" fill="url(#ropa-felino-potencia-pro-sombra)"/>
+    </g>
+  </g>
+</svg>

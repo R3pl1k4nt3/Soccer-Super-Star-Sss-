@@ -81,7 +81,7 @@ Preparada para más adelante: `lisa.svg`, `rayas-verticales.svg`, `rayas-horizon
 
 ## Lo que falta
 
-Las 8 prendas de ropa (compresión y potencia): encargo `prompts/08-lo-que-falta.md`. Mientras no estén, en la tienda aparecen sin imagen.
+Nada: están todas las piezas que usa el juego. Si en el futuro se añaden cosas nuevas, se preparará un encargo nuevo en `prompts/` solo con lo que falte.
 
 Los .zip y los visores .html que traen las herramientas se pueden dejar en las carpetas: el juego no los usa y no se suben a GitHub.
 

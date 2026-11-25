@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <clipPath id="ropa-tribanda-compresion-elite-clip">
+      <path d="M 130 128 C 102 158, 76 232, 54 344 L 44 410 L 92 418 L 116 320 C 128 274, 138 250, 148 236 Z"/>
+      <path d="M 382 128 C 410 158, 436 232, 458 344 L 468 410 L 420 418 L 396 320 C 384 274, 374 250, 364 236 Z"/>
+      <path d="M 198 94 Q 256 110 314 94 C 346 100, 368 112, 382 128 L 364 236 C 356 296, 350 356, 356 442 Q 256 456 156 442 C 162 356, 156 296, 148 236 L 130 128 C 144 112, 166 100, 198 94 Z"/>
+      <path d="M 202 72 Q 256 84 310 72 L 314 96 Q 256 112 198 96 Z"/>
+    </clipPath>
+    <linearGradient id="ropa-tribanda-compresion-elite-luz" x1="12%" y1="8%" x2="80%" y2="85%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.34"/>
+      <stop offset="52%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="ropa-tribanda-compresion-elite-sombra" x1="25%" y1="18%" x2="92%" y2="95%">
+      <stop offset="45%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.26"/>
+    </linearGradient>
+  </defs>
+  <g id="ropa-tribanda-compresion-elite">
+    <g id="ropa-tribanda-compresion-elite-base">
+      <path d="M 206 72 Q 256 60 306 72 L 302 98 Q 256 112 210 98 Z" fill="#1a202c"/>
+      <path d="M 206 72 Q 256 60 306 72 L 302 98 Q 256 112 210 98 Z" fill="#000000" opacity="0.38"/>
+      <path d="M 130 128 C 102 158, 76 232, 54 344 L 44 410 L 92 418 L 116 320 C 128 274, 138 250, 148 236 Z" fill="#1a202c"/>
+      <path d="M 382 128 C 410 158, 436 232, 458 344 L 468 410 L 420 418 L 396 320 C 384 274, 374 250, 364 236 Z" fill="#1a202c"/>
+      <path d="M 198 94 Q 256 110 314 94 C 346 100, 368 112, 382 128 L 364 236 C 356 296, 350 356, 356 442 Q 256 456 156 442 C 162 356, 156 296, 148 236 L 130 128 C 144 112, 166 100, 198 94 Z" fill="#1a202c"/>
+      <path d="M 202 72 Q 256 84 310 72 L 314 96 Q 256 112 198 96 Z" fill="#e8edf7" opacity="0.92"/>
+    </g>
+    <g id="ropa-tribanda-compresion-elite-detalles" clip-path="url(#ropa-tribanda-compresion-elite-clip)">
+      
+      <path d="M 148 236 C 172 260, 180 340, 174 442 L 156 442 C 162 356, 156 296, 148 236 Z" fill="#e8edf7" opacity="0.22"/>
+      <path d="M 364 236 C 340 260, 332 340, 338 442 L 356 442 C 350 356, 356 296, 364 236 Z" fill="#e8edf7" opacity="0.22"/>
+      <path d="M 198 96 Q 168 164 148 236" fill="none" stroke="#f5c542" stroke-width="2.5" opacity="0.55"/>
+      <path d="M 314 96 Q 344 164 364 236" fill="none" stroke="#f5c542" stroke-width="2.5" opacity="0.55"/>
+      <path d="M 186 196 Q 222 222 256 218 Q 290 222 326 196" fill="none" stroke="#f5c542" stroke-width="2.8" stroke-linecap="round" opacity="0.72"/>
+      <path d="M 192 260 Q 256 280 320 260" fill="none" stroke="#f5c542" stroke-width="2.2" stroke-dasharray="6 5" opacity="0.55"/>
+      <path d="M 46 396 L 94 404 L 92 418 L 44 410 Z" fill="#f5c542" opacity="0.85"/>
+      <path d="M 466 396 L 418 404 L 420 418 L 468 410 Z" fill="#f5c542" opacity="0.85"/>
+      <path d="M 200 92 Q 256 108 312 92" fill="none" stroke="#f5c542" stroke-width="3.2" stroke-linecap="round"/>
+      <path d="M 156 436 Q 256 450 356 436" fill="none" stroke="#f5c542" stroke-width="3.2" stroke-linecap="round"/>
+      <path d="M 198 150 C 218 140, 294 140, 314 150" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" opacity="0.24"/>
+      <g transform="translate(256, 168) scale(1.05)"><path d="M -18 14 L -6 -14 L 0 -14 L -12 14 Z" fill="#f5c542"/><path d="M -5 14 L 7 -14 L 13 -14 L 1 14 Z" fill="#f5c542"/><path d="M 8 14 L 20 -14 L 26 -14 L 14 14 Z" fill="#f5c542"/></g>
+    </g>
+    <g id="ropa-tribanda-compresion-elite-volumen" clip-path="url(#ropa-tribanda-compresion-elite-clip)">
+      <rect x="0" y="0" width="512" height="512" fill="url(#ropa-tribanda-compresion-elite-luz)"/>
+      <rect x="0" y="0" width="512" height="512" fill="url(#ropa-tribanda-compresion-elite-sombra)"/>
+    </g>
+  </g>
+</svg>
