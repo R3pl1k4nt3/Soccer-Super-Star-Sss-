@@ -67,9 +67,11 @@ function viewHome(){
   '<div class="hform"><span class="small mut">Forma</span>'+formChips()+'</div></div>'+
   '<div class="hbars"><div class="rowb small"><span>Energía</span><span class="num">'+en+'%</span></div><div class="bar big en '+(en<30?'low':'')+'"><i style="width:'+en+'%"></i></div>'+
   '<div class="rowb small" style="margin-top:8px"><span>Moral</span><span class="num">'+S.moral+'</span></div><div class="bar big '+(S.moral<35?'low':'en')+'"><i style="width:'+S.moral+'%"></i></div></div></div></div>';
+ h+=tutCard();
  /* próximo partido */
  h+='<div class="card"><h3>Próximo partido</h3>'+nextInfo()+(S.match||S.press?'<button class="go block" data-a="go" data-id="match" style="margin-top:10px">Ir al partido</button>':
   '<div class="btns" style="margin-top:10px"><button class="go" data-a="play" data-n="1">Jugar siguiente</button><button class="go alt" data-a="go" data-id="match">Ver partido</button></div>')+'</div>';
+ h+=gateCard();
  /* pendiente */
  var P=pendingItems();
  h+='<div class="card"><h3>Pendiente</h3>'+(P.length?P.map(function(x){return '<div class="item"><div><p style="margin:0;color:var(--'+(x.k==='bad'?'bad':x.k==='hl'?'gold':'txt')+')">'+x.t+'</p></div>'+(x.go?'<button class="go alt" data-a="go" data-id="'+x.go+'"'+(x.sub?' data-k="'+x.sub+'"':'')+'>'+x.btn+'</button>':'<span></span>')+'</div>';}).join(''):'<p class="small mut">Todo al día.</p>')+'</div>';

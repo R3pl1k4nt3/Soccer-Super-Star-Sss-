@@ -40,6 +40,7 @@ function carrera(G,pos,tp,ts,nat,co,years,opts){
    S.summary=null;
   }catch(e){errs.push(e.stack||String(e));break;}
  }
+ if(S.freePending)G.freeStart();if(S.pre)G.preAutoSign();
  Object.keys(G.views).forEach(function(t){try{S.tab=t;G.views[t]();}catch(e){errs.push(t+': '+(e.stack||e));}});
  Object.keys(SUBS).forEach(function(t){SUBS[t].forEach(function(s){try{subSet(t,s[0]);G.views[t]();}catch(e){errs.push(t+'/'+s[0]+': '+(e.stack||e));}});});
  try{G.newBoardMeeting(true);if(S.bm)G.boardAns(0);if(S.offers.length){G.negOpen('fich',0);negHTML();G.negQuit();}}catch(e){errs.push('directiva/negociación: '+(e.stack||e));}

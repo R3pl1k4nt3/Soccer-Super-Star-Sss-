@@ -470,7 +470,7 @@ function setupHTML(){
  if(st.tp&&!ts.some(function(t){return t.id===st.tp;}))st.tp=null;
  if(st.ts&&(!ts.some(function(t){return t.id===st.ts;})||st.ts===st.tp))st.ts=null;
  if(!st.look)st.look=randomLook(st.pos);
- var hasReal=typeof REALDATA!=='undefined';if(!hasReal)st.ver='fic';var real=st.ver==='real';
+ var hasReal=typeof REALDATA!=='undefined'&&!isApp();if(!hasReal)st.ver='fic';var real=st.ver==='real';
  var h='<div class="setup"><div class="setup-in">'+
   '<div class="rowb"><h1>Nueva carrera</h1><button class="go alt" data-a="menu">Cancelar</button></div>'+
   '<ol class="stepper" aria-label="Pasos">'+SETUP_STEPS.map(function(s,i){var n=i+1,cur=n===st.step,ok=n<=st.maxStep;return '<li><button data-a="step" data-n="'+n+'"'+(cur?' aria-current="step"':'')+(ok?'':' disabled')+' class="'+(cur?'cur':n<st.step?'done':'')+'"><span class="sn">'+n+'</span><span class="sl">'+s+'</span></button></li>';}).join('')+'</ol>';
@@ -594,6 +594,7 @@ function limitChart(pos,tp,ts){
 /* ---------- ventanas emergentes: resultado de la jugada y resumen del partido ---------- */
 function popHTML(){
  var P=UI.pop;if(!P)return '';
+ if(P.k==='gate'||P.k==='ad'||P.k==='buy')return monetPop(P);
  var score=function(){return '<div class="popscore"><span>'+esc(P.hn)+'</span><b class="num">'+P.scNow[0]+' - '+P.scNow[1]+'</b><span>'+esc(P.an)+'</span></div>';};
  var shout=function(gk){return '<div class="gooool '+(gk==='g'?'gg':'ga')+'" aria-hidden="true">'+(gk==='g'?'¡GOOOL!':'¡ASISTENCIA!')+'</div>';};
  if(P.k==='goal'){

@@ -395,6 +395,8 @@ function playN(n){
  if(S.summary||S.retired||S.match)return;
  if(S.freePending)freeStart();
  if(S.pre)return;
+ /* límite de temporadas por día en la app (movil.js) */
+ if(typeof seasonGate==='function'&&!seasonGate()){if(typeof UI!=='undefined'){UI.pop={k:'gate'};render();}return;}
  /* la rueda de prensa no bloquea: si sigues jugando sin responder, se da por no atendida */
  if(S.press){S.press=null;rel('press',-1);logm('No atiendes a la prensa tras el último partido.');}
  batch={n:0,pts:0,money:0,medals:0};
@@ -453,7 +455,7 @@ function endSeason(){
 /* ---------- nueva partida ---------- */
 function wageFor(str,ov){var m=clamp((ov||str)/str,0.75,1.35);return Math.round(4000*Math.exp((str-40)/14)*m*agentWage()*(1+(S.rel.board-50)*0.002)/100)*100;}
 function newGame(name,pos,tp,ts,nat,co,real,look){
- real=!!real&&typeof REALDATA!=='undefined';
+ real=!!real&&typeof REALDATA!=='undefined'&&!(typeof isApp==='function'&&isApp());
  S={v:VER,name:name,pos:pos,tp:tp,ts:ts,nat:nat,cat:defCat(pos),age:16,season:1,slot:0,money:60000,medals:5,energy:100,injured:0,bono:0,mult:1,moral:55,
   skills:newSkills(pos),pl:[],offers:[],items:{},invest:{},spons:[],sofs:[],agent:'a1',cm:null,gear:{},inv:[],
   stats:{pj:0,min:0,g:0,a:0,cs:0,sv:0,rsum:0,rn:0},ss:{pj:0,g:0,a:0,rsum:0,rn:0,cs:0},nt:{calls:0,caps:0,g:0,a:0,first:0},

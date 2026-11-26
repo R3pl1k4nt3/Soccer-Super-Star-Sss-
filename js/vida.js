@@ -253,7 +253,7 @@ function transferWithdraw(){if(!S.listed)return;S.listed=0;rel('board',3);rel('f
 var ADS=[
  {n:'Anuncio de televisión de una bebida isotónica',f:1,en:12,pr:2},{n:'Campaña de una marca de relojes',f:1.4,en:6,pr:1},
  {n:'Portada de una revista de moda',f:0.8,en:5,pr:3,fol:.02},{n:'Videojuego: sale tu cara en la portada',f:2,en:4,pr:2,fol:.04,min:200000},
- {n:'Anuncio de una casa de apuestas',f:1.8,en:5,pr:-4,fans:-4},{n:'Spot de una campaña solidaria',f:0.3,en:6,pr:4,fans:4},
+ {n:'Anuncio de una cadena de comida rápida',f:1.5,en:5,pr:-1,fans:1},{n:'Spot de una campaña solidaria',f:0.3,en:6,pr:4,fans:4},
  {n:'Gira de promoción por Asia',f:2.5,en:25,pr:1,fol:.05,min:500000}
 ];
 function adPay(a){return Math.round(Math.max(5000,S.fol*0.05)*a.f*(0.8+0.1*agentLvl())/100)*100;}

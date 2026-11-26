@@ -135,6 +135,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&UI.pop){var
   popclose:function(){if(UI.pop&&UI.pop.k==='dec'&&UI.pendRep){UI.pop={k:'match',rep:UI.pendRep};UI.pendRep=null;}else UI.pop=null;save();render();},
   livespeed:function(){localStorage.setItem('estrella_vel',String(n));render();},
   livejump:function(){liveJump();},
+  adwatch:adWatch,adclaim:adReward,buygame:buyGame,buyok:buyConfirm,tutok:function(){S.tutDone=1;save();render();},
   report:function(){UI.pop={k:'match',rep:(S.reports||[])[i]};render();},
   menu:toMenu,export:exportCurrent
  };
@@ -149,6 +150,7 @@ document.addEventListener('change',function(e){var t=e.target;if(!t)return;
  if(t.id==='ps')setupState.pos=t.value;else if(t.id==='tp')setupState.tp=t.value;else if(t.id==='ts')setupState.ts=t.value;else if(t.id==='na')setupState.nat=t.value;else if(t.id==='co')setupState.co=t.value;else return;render();});
 window.__dbg={get S(){return S;},set S(v){S=v;},newGame:newGame,playN:playN,playSlot:playSlot,choose:choose,liveEnd:function(){return liveEnd(true);},pressAnswer:pressAnswer,doEvent:doEvent,doAct:doAct,train:train,promo:promo,render:render,UI:UI,
  overall:overall,leaders:leaders,genOffers:genOffers,accept:accept,signSponsor:signSponsor,buyGear:buyGear,gearCatalog:gearCatalog,hireAgent:hireAgent,hireCM:hireCM,sponsorPost:sponsorPost,squad:function(c,p){UI.sq={club:c,p:p};var h=squadHTML();UI.sq=null;return h;},views:VIEWS,viewComp:viewComp,preAutoSign:function(){preAutoSign();},negOpen:negOpen,freeStart:freeStart,negAdj:negAdj,negPropose:negPropose,negAcceptCur:negAcceptCur,negQuit:negQuit,boardAns:boardAns,newBoardMeeting:newBoardMeeting,transferReq:transferReq,transferForce:transferForce,adDo:adDo,bizBuy:bizBuy,bizUp:bizUp,bizMg:bizMg,bizSell:bizSell,doActCheck:actState,save:save,saveNow:saveNow,metaAll:metaAll,toMenu:toMenu,openSlot:openSlot};
+appInit();
 if(gfxMode()==='mejorados')loadGfx();
 applyGfxBackground();
 bootSaves();
