@@ -420,8 +420,7 @@ function devsHTML(d){var h='';
  if(d.ups&&d.ups.length)h+='<h3 style="margin-top:10px">Rasgos que suben</h3>'+d.ups.map(function(x){var p=S.pl[x.i],t=traitById(x.id),T=TIERS[x.t];if(!p||!t)return '';return '<div class="ev"><span><b>'+esc(p.n)+'</b> <span class="small mut">'+esc(clubName(p))+'</span> · '+t.n+' sube a <b style="color:'+T.c+'">'+T.n+'</b></span></div>';}).join('');
  return h;}
 function modalHTML(){
- if(S.retired&&!S.summary){var st=S.stats;return '<div class="modal" role="dialog" aria-modal="true"><div class="card"><h2>Te has retirado</h2><p>'+esc(S.name)+' cuelga las botas a los '+S.age+' años tras '+S.hist.length+' temporadas, '+st.pj+' partidos y '+S.trophies.filter(function(t){return t.k!=='ind';}).length+' títulos.</p>'+
-  (S.pos==='POR'?'<p>Hiciste '+st.sv+' paradas y '+st.cs+' porterías a cero.</p>':'<p>Marcaste '+st.g+' goles y diste '+st.a+' asistencias.</p>')+'<p>Con tu selección: '+S.nt.caps+' partidos y '+S.nt.g+' goles.</p><button class="go block" data-a="menu">Volver al menú</button></div></div>';}
+ if(S.retired&&!S.summary){if(UI.retHide)return '';return retireHTML();}
  var m=S.summary;if(!m)return '';
  var aw=m.awards.length?'<h3 style="margin-top:10px">Tus premios</h3>'+m.awards.map(function(a){return '<div class="ev"><span><span class="star">◆</span> '+esc(a.t)+'</span></div>';}).join(''):'';
  var b=S.bdo[S.bdo.length-1];

@@ -46,6 +46,7 @@ function pendingItems(){
  S.spons.forEach(function(s){if(s.done<s.posts)p.push({t:byId(BRANDS,s.id).n+': te faltan '+(s.posts-s.done)+' publicación(es) este mes.',go:'life',sub:'red',btn:'Publicar'});});
  var free=ACTS.filter(function(a){return actState(a).ok;}).length;
  if(S.acts>0&&free)p.push({t:'Te quedan '+S.acts+' acciones esta semana ('+free+' disponibles).',go:'life',sub:'team',btn:'Ver acciones'});
+ var bk=backupDue();if(bk)p.push({t:'Hace '+bk+' temporadas que no haces una copia de tu partida. El navegador podría borrarla: guárdala en un archivo.',a:'export',btn:'Hacer copia'});
  if(S.injured>0)p.push({k:'bad',t:'Estás lesionado: '+S.injured+' semana(s) de baja.'});
  else if(S.energy<35)p.push({k:'bad',t:'Energía baja ('+Math.round(S.energy)+' %): rindes menos y te puedes lesionar.'});
  if(S.moral<35)p.push({k:'bad',t:'Moral baja ('+S.moral+'). Un buen partido o una rueda de prensa positiva ayudan.'});
@@ -74,7 +75,7 @@ function viewHome(){
  h+=gateCard();
  /* pendiente */
  var P=pendingItems();
- h+='<div class="card"><h3>Pendiente</h3>'+(P.length?P.map(function(x){return '<div class="item"><div><p style="margin:0;color:var(--'+(x.k==='bad'?'bad':x.k==='hl'?'gold':'txt')+')">'+x.t+'</p></div>'+(x.go?'<button class="go alt" data-a="go" data-id="'+x.go+'"'+(x.sub?' data-k="'+x.sub+'"':'')+'>'+x.btn+'</button>':'<span></span>')+'</div>';}).join(''):'<p class="small mut">Todo al día.</p>')+'</div>';
+ h+='<div class="card"><h3>Pendiente</h3>'+(P.length?P.map(function(x){return '<div class="item"><div><p style="margin:0;color:var(--'+(x.k==='bad'?'bad':x.k==='hl'?'gold':'txt')+')">'+x.t+'</p></div>'+(x.go?'<button class="go alt" data-a="go" data-id="'+x.go+'"'+(x.sub?' data-k="'+x.sub+'"':'')+'>'+x.btn+'</button>':x.a?'<button class="go alt" data-a="'+x.a+'">'+x.btn+'</button>':'<span></span>')+'</div>';}).join(''):'<p class="small mut">Todo al día.</p>')+'</div>';
  /* novedades */
  h+='<div class="card"><div class="rowb"><h3 style="margin:0">Novedades'+(un?' <span class="badge">'+un+' nuevas</span>':'')+'</h3>'+(un?'<button class="chip" data-a="seen">Marcar leídas</button>':'')+'</div>';
  S.log.slice(0,8).forEach(function(l,i){h+='<div class="ev'+(i<un?' new':'')+'"><b style="min-width:74px;font-size:13px">'+l.t+'</b><span>'+esc(l.m)+'</span></div>';});

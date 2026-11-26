@@ -51,7 +51,11 @@ function downloadJSON(o){
  var blob=new Blob([JSON.stringify(o)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');
  a.href=url;a.download=fileName(o);document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(url);a.remove();},500);
 }
-function exportCurrent(){if(!S)return;saveNow();downloadJSON(S);toast('Partida exportada a un archivo.');}
+function exportCurrent(){if(!S)return;S.bkSeason=S.season;saveNow();downloadJSON(S);toast('Copia guardada en un archivo. Guárdala bien: con ella recuperas la partida en cualquier navegador.');}
+/* temporadas desde la última copia de seguridad (para el recordatorio en Inicio) */
+function backupDue(){if(!S||S.pre)return 0;var n=S.season-(S.bkSeason||1);return n>=3?n:0;}
+/* pide al navegador que no borre las partidas por falta de espacio o por no visitar la web (Safari) */
+function askPersist(){try{if(typeof navigator!=='undefined'&&navigator.storage&&navigator.storage.persist)navigator.storage.persisted().then(function(p){if(!p)return navigator.storage.persist();return p;}).then(function(p){UI.persist=!!p;}).catch(function(){});}catch(e){}}
 function exportSlot(id){loadSlot(id,function(o){if(o)downloadJSON(o);else toast('No se ha podido leer esa partida.',1);});}
 function importFile(file){
  if(!file)return;
@@ -66,6 +70,7 @@ function importFile(file){
 
 /* arranque: abre la base de datos y pasa al menú (migra la partida antigua de localStorage si la hay) */
 function bootSaves(){
+ askPersist();
  idbOpen(function(){
   try{var old=localStorage.getItem(KEY);if(old){var o=JSON.parse(old);if(o&&o.v===VER&&!metaAll()[1]){S=o;CUR=1;saveNow();}localStorage.removeItem(KEY);}}catch(e){}
   S=null;CUR=null;UI.screen='menu';UI.booted=true;render();

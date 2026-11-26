@@ -38,7 +38,8 @@ function hitoWhere(h){
 function viewHitos(){
  var H=hitosMig(),by={};H.forEach(function(h){(by[h.k]=by[h.k]||[]).push(h);});
  var big=['bdo','bota','pom','tom','toy','eux','wxi','liga','copa','euro','asc','sel'];
- var h='<div class="card wide"><h3>Resumen de tu carrera</h3><div class="kv hitkv">'+big.map(function(k){var c=HCAT.filter(function(x){return x.k===k;})[0],n=(by[k]||[]).length;return '<div class="'+(n?'':'mut')+'"><b class="num'+(n&&(c.g==='w'||c.g==='t')?' star':'')+'">'+n+'</b><span>'+c.n+'</span></div>';}).join('')+'</div>'+
+ var h='<div class="card wide"><div class="rowb"><h3 style="margin:0">Tu carrera en cifras</h3><div class="btns" style="margin:0"><button class="go" data-a="share">Compartir mi carrera</button>'+(S.retired?'<button class="go alt" data-a="retshow">Resumen final</button>':'')+'</div></div>'+careerHTML(careerStats())+'</div>';
+ h+='<div class="card wide"><h3>Resumen de tu carrera</h3><div class="kv hitkv">'+big.map(function(k){var c=HCAT.filter(function(x){return x.k===k;})[0],n=(by[k]||[]).length;return '<div class="'+(n?'':'mut')+'"><b class="num'+(n&&(c.g==='w'||c.g==='t')?' star':'')+'">'+n+'</b><span>'+c.n+'</span></div>';}).join('')+'</div>'+
   '<p class="small mut" style="margin-bottom:0">Cada hito guarda la temporada, el club y la división (con su nivel medio) en la que lo conseguiste.</p></div>';
  HGRP.forEach(function(g){
   var cs=HCAT.filter(function(c){return c.g===g[0]&&(by[c.k]||[]).length;});

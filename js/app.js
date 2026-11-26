@@ -59,7 +59,7 @@ function render(){
  if(S.pre){app.innerHTML=preHTML()+(S.neg?negHTML():'')+toastsHTML();var stp=$('.setup');if(stp)stp.scrollTop=UI.preScroll||0;return;}
  normTab();
  var v=(VIEWS[S.tab]||viewHome)();
- app.innerHTML=sideHTML()+topHTML()+'<main id="view"><div class="page">'+pageHead()+v+'</div></main>'+navHTML()+(UI.sq?squadHTML():'')+modalHTML()+(S.neg&&!S.summary?negHTML():'')+popHTML()+
+ app.innerHTML=sideHTML()+topHTML()+'<main id="view"><div class="page">'+pageHead()+v+'</div></main>'+navHTML()+(UI.sq?squadHTML():'')+modalHTML()+(S.neg&&!S.summary?negHTML():'')+popHTML()+(UI.share?shareHTML():'')+(UI.busy?'<div class="busy" role="status"><div class="spin" aria-hidden="true"></div><b>'+UI.busy+'</b></div>':'')+
   toastsHTML();
  if(UI.lastTab===S.tab&&$('#view'))$('#view').scrollTop=sc;else if($('#view'))$('#view').scrollTop=0;
  UI.lastTab=S.tab;
@@ -107,7 +107,11 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&UI.pop){var
   seen:function(){S.logSeen=S.logN;save();render();},
   mult:function(){S.mult=n;save();render();},
   train:function(){train(id);},promo:function(){promo(id);},bono:bono,
-  play:function(){playN(n);},
+  play:function(){
+   /* varias semanas o el cierre de temporada tardan algo en móviles: primero se pinta el aviso y luego se calcula */
+   var heavy=n>1||S.slot>=S.cal.length-1;if(!heavy){playN(n);return;}
+   UI.busy=S.slot>=S.cal.length-1||n>=30?'Cerrando la temporada…':'Jugando '+n+' partidos…';render();
+   setTimeout(function(){UI.busy=null;playN(n);render();},40);},
   accept:function(){negOpen('fich',i);},buy:function(){buy(id);},invest:function(){bizBuy(id);},
   negadj:function(){negAdj(id,n);},negprop:negPropose,negacc:negAcceptCur,negquit:negQuit,
   bm:function(){boardAns(i);},treq:function(){transferReq();},treqno:transferWithdraw,tforce:transferForce,
@@ -135,6 +139,8 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&UI.pop){var
   popclose:function(){if(UI.pop&&UI.pop.k==='dec'&&UI.pendRep){UI.pop={k:'match',rep:UI.pendRep};UI.pendRep=null;}else UI.pop=null;save();render();},
   livespeed:function(){localStorage.setItem('estrella_vel',String(n));render();},
   livejump:function(){liveJump();},
+  share:shareCareer,sharecopy:shareCopy,shareclose:shareClose,
+  retview:function(){UI.retHide=1;S.tab='career';subSet('career','hitos');render();},retshow:function(){UI.retHide=0;render();},
   adwatch:adWatch,adclaim:adReward,buygame:buyGame,buyok:buyConfirm,tutok:function(){S.tutDone=1;save();render();},
   report:function(){UI.pop={k:'match',rep:(S.reports||[])[i]};render();},
   menu:toMenu,export:exportCurrent
@@ -150,7 +156,9 @@ document.addEventListener('change',function(e){var t=e.target;if(!t)return;
  if(t.id==='ps')setupState.pos=t.value;else if(t.id==='tp')setupState.tp=t.value;else if(t.id==='ts')setupState.ts=t.value;else if(t.id==='na')setupState.nat=t.value;else if(t.id==='co')setupState.co=t.value;else return;render();});
 window.__dbg={get S(){return S;},set S(v){S=v;},newGame:newGame,playN:playN,playSlot:playSlot,choose:choose,liveEnd:function(){return liveEnd(true);},pressAnswer:pressAnswer,doEvent:doEvent,doAct:doAct,train:train,promo:promo,render:render,UI:UI,
  overall:overall,leaders:leaders,genOffers:genOffers,accept:accept,signSponsor:signSponsor,buyGear:buyGear,gearCatalog:gearCatalog,hireAgent:hireAgent,hireCM:hireCM,sponsorPost:sponsorPost,squad:function(c,p){UI.sq={club:c,p:p};var h=squadHTML();UI.sq=null;return h;},views:VIEWS,viewComp:viewComp,preAutoSign:function(){preAutoSign();},negOpen:negOpen,freeStart:freeStart,negAdj:negAdj,negPropose:negPropose,negAcceptCur:negAcceptCur,negQuit:negQuit,boardAns:boardAns,newBoardMeeting:newBoardMeeting,transferReq:transferReq,transferForce:transferForce,adDo:adDo,bizBuy:bizBuy,bizUp:bizUp,bizMg:bizMg,bizSell:bizSell,doActCheck:actState,save:save,saveNow:saveNow,metaAll:metaAll,toMenu:toMenu,openSlot:openSlot};
-appInit();
+appInit();playClock();
+/* web instalable y sin conexión (sw.js); no en archivos locales ni dentro de la app nativa */
+try{if(typeof navigator!=='undefined'&&'serviceWorker' in navigator&&/^https?:$/.test(location.protocol)&&!isNative())navigator.serviceWorker.register('sw.js').catch(function(){});}catch(e){}
 if(gfxMode()==='mejorados')loadGfx();
 applyGfxBackground();
 bootSaves();

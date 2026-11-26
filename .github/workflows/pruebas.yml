@@ -1,0 +1,23 @@
+# Pruebas automáticas: en cada subida, el bot juega 3 temporadas con cinco carreras distintas
+# (posiciones, países y nacionalidades) y comprueba que no hay errores y que la partida cabe en el navegador.
+name: Pruebas del juego
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  simulacion:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Comprobar la sintaxis de los scripts
+        run: for f in js/*.js sw.js tests/*.js; do node --check "$f" || exit 1; done
+      - name: Jugar carreras con el bot
+        run: node tests/simulacion.js 3
