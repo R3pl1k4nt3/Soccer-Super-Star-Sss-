@@ -387,3 +387,12 @@ tr:hover td{background:rgba(148,163,184,.07)}
 .negadj{display:flex;align-items:center;gap:8px;justify-content:flex-end}
 .negadj .chip{min-width:34px;min-height:34px;font-size:18px;line-height:1;padding:0}
 .negadj b{min-width:88px;text-align:center}.negt td:first-child,.negt th:first-child{text-align:left}
+.hitkv{grid-template-columns:repeat(auto-fill,minmax(110px,1fr))}
+.hit{border-top:1px solid var(--line);padding:6px 0}
+.hit summary{display:flex;justify-content:space-between;align-items:center;cursor:pointer;padding:6px 0;list-style:none}
+.hit summary::-webkit-details-marker{display:none}
+.hit summary::before{content:'▸';color:var(--dim);margin-right:8px}
+.hit[open] summary::before{content:'▾'}
+.hit summary b{flex:1}
+.hitchips{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 6px}
+.lv.star{color:var(--gold)}

@@ -393,6 +393,8 @@ function weekly(rep){
 }
 function playN(n){
  if(S.summary||S.retired||S.match)return;
+ if(S.freePending)freeStart();
+ if(S.pre)return;
  /* la rueda de prensa no bloquea: si sigues jugando sin responder, se da por no atendida */
  if(S.press){S.press=null;rel('press',-1);logm('No atiendes a la prensa tras el último partido.');}
  batch={n:0,pts:0,money:0,medals:0};
@@ -423,8 +425,8 @@ function endSeason(){
  /* clasificación europea antes de mover clubes */
  S.euq=euQualify(true);
  var euIn=null;S.euq.forEach(function(list,i){if(list.indexOf(me.c)>=0)euIn=EUNAMES[S.real?'real':'fic'][i];});sm.euNext=euIn;
- var moves=promoteRelegate();
- moves.forEach(function(m){if(m[0].id===me.c)sm.moved=m[2]>0?'Ascendéis a '+lgOf(me.c).n:'Descendéis a '+lgOf(me.c).n;});
+ var hc0=hitoCtx(),moves=promoteRelegate();
+ moves.forEach(function(m){if(m[0].id===me.c){sm.moved=m[2]>0?'Ascendéis a '+lgOf(me.c).n:'Descendéis a '+lgOf(me.c).n;if(m[2]>0)hito('asc','Ascenso a '+lgOf(me.c).n,hc0);}});
  driftClubs();
  /* edad */
  S.age++;
@@ -435,9 +437,9 @@ function endSeason(){
  sm.devs=aiSeasonEvolve();
  /* contrato */
  S.contract.years--;
- /* sin renovación negociada, se renueva a la baja y pierdes los bonus */
- if(S.contract.years<=0){var k0=ctr();S.contract={wage:Math.round(wageFor(S.clubs[me.c].str,overall())*0.95/100)*100,years:2,gb:0,ab:0,apb:0,so:k0.so};sm.renew=true;logm('Renuevas con '+S.clubs[me.c].n+' dos años sin negociar. Nuevo salario: '+fmt(S.contract.wage)+'.');}
- S.renewDue=S.contract.years<=1?1:0;S.neg=null;S.bm=null;
+ /* sin renovación, te quedas libre al cerrar el resumen (vida.js · freeStart) */
+ if(S.contract.years<=0){sm.free=S.clubs[me.c].n;S.freePending=1;logm('Se acaba tu contrato con '+S.clubs[me.c].n+'. Quedas libre.');}
+ S.renewDue=S.contract.years===1?1:0;S.neg=null;S.bm=null;
  sponsorSeason();
  S.season++;
  startSeason();
@@ -455,7 +457,7 @@ function newGame(name,pos,tp,ts,nat,co,real,look){
  S={v:VER,name:name,pos:pos,tp:tp,ts:ts,nat:nat,cat:defCat(pos),age:16,season:1,slot:0,money:60000,medals:5,energy:100,injured:0,bono:0,mult:1,moral:55,
   skills:newSkills(pos),pl:[],offers:[],items:{},invest:{},spons:[],sofs:[],agent:'a1',cm:null,gear:{},inv:[],
   stats:{pj:0,min:0,g:0,a:0,cs:0,sv:0,rsum:0,rn:0},ss:{pj:0,g:0,a:0,rsum:0,rn:0,cs:0},nt:{calls:0,caps:0,g:0,a:0,first:0},
-  hist:[],log:[],trophies:[],aw:[],champs:[],bdo:[],last:null,tab:'home',retired:false,summary:null,rel:{coach:50,team:50,press:50,fans:50,board:50},
+  hist:[],log:[],trophies:[],hitos:[],aw:[],champs:[],bdo:[],last:null,tab:'home',retired:false,summary:null,rel:{coach:50,team:50,press:50,fans:50,board:50},
   fol:300,fund:0,auto:false,match:null,event:null,press:null,acts:2,post:0,posts:0,wres:[],contract:{wage:0,years:3}};
  S.real=real;S.realSeason=real?REALDATA.temporada:null;S.look=look?JSON.parse(JSON.stringify(look)):randomLook(pos);
  var w=buildWorld(real);S.clubs=w.clubs;S.lgs=w.lgs;

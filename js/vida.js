@@ -38,12 +38,15 @@ function negOpen(kind,i){
   var o=S.offers[i];if(!o)return;
   if(!windowOpen()){toast('El mercado está cerrado. Abre al inicio de temporada y en enero.',1);return;}
   c=S.clubs[o.club];base={wage:o.wage,years:o.years,prima:Math.round(o.bonus/1000)*1000,gb:0,ab:0,apb:0,so:0};
+ }else if(kind==='libre'){
+  var x=S.pre&&S.pre.clubs[i];if(!x||!x.offer)return;
+  c=S.clubs[x.id];base={wage:x.offer.wage,years:x.offer.years,prima:x.offer.bonus,gb:0,ab:0,apb:0,so:0};
  }else{
   c=S.clubs[me.c];var k=ctr(),mk=wageFor(c.str,ov);
   base={wage:Math.max(k.wage,Math.round(Math.max(k.wage*1.03,mk)/100)*100),years:Math.max(2,k.years+1),prima:Math.round(mk*2/1000)*1000,gb:k.gb,ab:k.ab,apb:k.apb,so:k.so};
  }
- var tol=0.04+0.05*agl+(S.rel.board-50)/300+clamp((ov-c.str)/50,-0.1,0.2)+(kind==='ren'&&S.rel.board>=65?0.03:0);
- S.neg={k:kind,club:c.id,oi:kind==='fich'?i:-1,base:base,cur:JSON.parse(JSON.stringify(base)),ask:JSON.parse(JSON.stringify(base)),tol:Math.max(0.03,tol),pat:1+agl,pat0:1+agl,msg:kind==='fich'?c.n+' te presenta su oferta.':'La directiva te presenta su propuesta de renovación.',hist:[]};
+ var tol=0.04+0.05*agl+(S.rel.board-50)/300+clamp((ov-c.str)/50,-0.1,0.2)+(kind==='ren'&&S.rel.board>=65?0.03:0)+(kind==='libre'?0.05:0);
+ S.neg={k:kind,club:c.id,oi:kind==='ren'?-1:i,base:base,cur:JSON.parse(JSON.stringify(base)),ask:JSON.parse(JSON.stringify(base)),tol:Math.max(0.03,tol),pat:1+agl,pat0:1+agl,msg:kind!=='ren'?c.n+' te presenta su oferta.':'La directiva te presenta su propuesta de renovación.',hist:[]};
  save();render();
 }
 function negShow(f){return agentLvl()>=f.lvl;}
@@ -70,7 +73,8 @@ function negPropose(){
 function negAcceptCur(){var N=S.neg;if(!N)return;negSign(N.cur);}
 function negBreak(){
  var N=S.neg,c=S.clubs[N.club];S.neg=null;
- if(N.k==='fich'){S.offers.splice(N.oi,1);logm(c.n+' rompe la negociación: tus exigencias son demasiado altas.');toast(c.n+' se retira de la negociación',1);}
+ if(N.k==='libre'){var x=S.pre&&S.pre.clubs[N.oi];if(x){x.offer=null;x.st='roto';S.pre.log.unshift(c.n+' rompe la negociación.');}toast(c.n+' se retira de la negociación',1);}
+ else if(N.k==='fich'){S.offers.splice(N.oi,1);logm(c.n+' rompe la negociación: tus exigencias son demasiado altas.');toast(c.n+' se retira de la negociación',1);}
  else{rel('board',-5);logm('La directiva rompe la negociación de tu renovación.');toast('La directiva rompe la negociación',1);}
  save();render();
 }
@@ -79,6 +83,7 @@ function negSign(t){
  var N=S.neg;S.neg=null;var c=S.clubs[N.club];
  var terms={wage:t.wage,years:t.years,gb:t.gb,ab:t.ab,apb:t.apb,so:t.so};
  if(N.k==='fich'){accept(N.oi,terms,t.prima);return;}
+ if(N.k==='libre'){freeSign(N.oi,terms,t.prima);return;}
  S.contract=terms;S.money+=t.prima;S.renewDue=0;S.negSeason=S.season;rel('board',2);
  logm('Renuevas con '+c.n+': '+fmt(t.wage)+'/semana, '+t.years+' año(s)'+(t.prima?', prima de '+fmt(t.prima):'')+bonusTxt(terms)+'.');
  toast('Renovación firmada');save();render();
@@ -90,7 +95,7 @@ function contractBonus(mins,g,a){var k=ctr();if(mins<=0)return 0;return g*k.gb+a
 /* ventana de negociación */
 function negHTML(){
  var N=S.neg;if(!N)return '';var c=S.clubs[N.club],agl=agentLvl(),r=negRatio(N.ask),lim=1+N.tol;
- var h='<div class="modal" role="dialog" aria-modal="true" aria-label="Negociación de contrato"><div class="card neg"><div class="rowb"><h2 style="margin:0;display:flex;align-items:center;gap:10px">'+crestSVG(c,32)+(N.k==='fich'?'Fichaje · ':'Renovación · ')+esc(c.n)+'</h2></div>'+
+ var h='<div class="modal" role="dialog" aria-modal="true" aria-label="Negociación de contrato"><div class="card neg"><div class="rowb"><h2 style="margin:0;display:flex;align-items:center;gap:10px">'+crestSVG(c,32)+(N.k==='fich'?'Fichaje · ':N.k==='libre'?'Jugador libre · ':'Renovación · ')+esc(c.n)+'</h2></div>'+
   '<p class="small mut">Negocia '+esc(agent().n)+' (nivel '+agl+'). '+(agl<5?'Un representante mejor ve más cláusulas y la directiva le tolera más exigencias.':'Ves todas las cláusulas y el límite exacto de la directiva.')+'</p>'+
   '<p class="negmsg">'+esc(N.msg)+'</p>';
  h+='<div class="tw"><table class="negt"><tr><th>Cláusula</th><th>Oferta del club</th><th>Tu petición</th></tr>';
@@ -111,6 +116,50 @@ function negHTML(){
  return h;
 }
 
+/* ---------- jugador libre: se acaba el contrato sin renovar ---------- */
+function freeOffer(c,f){var w=Math.max(300,Math.round(wageFor(c.str,overall())*f*(0.92+Math.random()*0.16)/100)*100);
+ return {wage:w,years:1+Math.floor(Math.random()*3)+(S.age<=28?1:0),bonus:Math.round(w*(6+2*agentLvl())/1000)*1000};}
+/* clubes que se pueden interesar: según tu valoración y el alcance de tu representante */
+function freePool(P){
+ var me=S.pl[S.me],ov=overall(),lvl=agentLvl(),old=P&&P.old!=null?S.clubs[P.old]:null,co=old?old.co:S.startCo,can=S.cantera!=null?S.clubs[S.cantera].co:co,have={};
+ (P&&P.clubs||[]).forEach(function(x){have[x.id]=1;});
+ var okCo=function(c){return lvl>=3||c===co||(lvl>=2&&(c===can||c===me.nat));};
+ var c=S.clubs.filter(function(x){return !x.guest&&!have[x.id]&&okCo(x.co)&&x.str<=ov+2+2*lvl&&x.str>=ov-14;});
+ return shuffle(c).sort(function(a,b){return (b.str+Math.random()*8)-(a.str+Math.random()*8);});
+}
+function freeStart(){
+ if(!S.freePending||S.retired)return;S.freePending=0;
+ var me=S.pl[S.me],old=S.clubs[me.c];
+ if(old){var j=old.ros.indexOf(S.me);if(j>=0)old.ros.splice(j,1);}
+ me.c=-1;S.offers=[];S.listed=0;S.bm=null;S.neg=null;S.bobj=null;S.renewDue=0;S.match=null;S.press=null;
+ var P={free:1,wk:1,weeks:3,used:false,co:old?old.co:S.startCo,old:old?old.id:null,clubs:[],log:[]};
+ var pool=freePool(P),ov=overall(),lvl=agentLvl();
+ var dir=pool.filter(function(x){return x.str<=ov-1;}).slice(0,1+lvl),tri=pool.filter(function(x){return x.str>ov-1&&dir.indexOf(x)<0;}).slice(0,2+Math.floor(lvl/2));
+ if(old&&S.rel.board>=35)P.clubs.push({id:old.id,st:'directa',offer:freeOffer(old,S.rel.board>=60?1:0.9)});
+ dir.forEach(function(x){if(old&&x.id===old.id)return;P.clubs.push({id:x.id,st:'directa',offer:freeOffer(x,1)});});
+ tri.forEach(function(x){if(old&&x.id===old.id)return;P.clubs.push({id:x.id,st:'prueba'});});
+ if(!P.clubs.some(function(x){return x.offer;})){S.pre=P;freeFallback();}
+ S.pre=P;
+ logm('Eres jugador libre. '+P.clubs.filter(function(x){return x.offer;}).length+' club(es) te ofrecen contrato.');
+}
+/* si no queda ninguna oferta, siempre hay un club modesto que te ficha */
+function freeFallback(){
+ var P=S.pre,lgs=S.lgs.filter(function(l){return l.co===P.co;}).sort(function(a,b){return b.t-a.t;}),have={};P.clubs.forEach(function(x){have[x.id]=1;});
+ var id=shuffle(lgs[0].clubs.filter(function(i){return !have[i];}))[0];if(id==null)id=lgs[0].clubs[0];
+ var x={id:id,st:'directa',offer:freeOffer(S.clubs[id],0.85)};P.clubs.push(x);P.log.unshift(S.clubs[id].n+' te ofrece un contrato para no quedarte en el paro.');return x;
+}
+function freeSign(i,terms,prima){
+ var P=S.pre,x=P&&P.clubs[i];if(!x||!x.offer)return;var o=x.offer,c=S.clubs[x.id],me=S.pl[S.me];
+ me.c=c.id;c.ros.push(S.me);
+ S.contract=terms||{wage:o.wage,years:o.years,gb:0,ab:0,apb:0,so:0};
+ var pr=prima!=null?prima:o.bonus;S.money+=pr;
+ var back=c.id===P.old;
+ S.rel.coach=back?S.rel.coach:50;S.rel.team=back?S.rel.team:45;S.rel.board=back?Math.max(45,S.rel.board):50;S.rel.fans=c.id===S.cantera?75:back?S.rel.fans:45;
+ S.pre=null;S.neg=null;
+ logm((back?'Vuelves a firmar con ':'Fichas como jugador libre por ')+c.n+' ('+lgName(c)+'): '+fmt(S.contract.wage)+' por semana, '+S.contract.years+' año(s), prima de '+fmt(pr)+bonusTxt(S.contract)+'.');
+ toast('Firmas con '+c.n);genOffers();S.tab='home';save();render();
+}
+
 /* ---------- directiva: reuniones cada pocas semanas ---------- */
 function atkPos(){return ['DC','SD','EI','ED','MP'].indexOf(S.pos)>=0;}
 var BM={
@@ -120,7 +169,7 @@ var BM={
      {n:'No me comprometo a nada',f:function(){rel('board',-2);return 'A la directiva no le gusta tu falta de compromiso.';}}]},
  ren:{t:'La directiva quiere renovarte',d:function(){return 'Te queda '+ctr().years+' año de contrato y quieren sentarse a negociar.';},
   o:[{n:'Sentarte a negociar',f:function(){S.bm=null;negOpen('ren');return null;}},
-     {n:'Esperar a final de temporada',f:function(){rel('board',-1);S.renewDue=0;return 'Prefieres esperar. Si no renuevas, a final de temporada se renueva a la baja.';}},
+     {n:'Esperar a final de temporada',f:function(){rel('board',-1);S.renewDue=0;return 'Prefieres esperar. Si no renuevas, al final de la temporada quedarás libre.';}},
      {n:'Decir que quieres salir',f:function(){rel('board',-6);S.listed=S.season;S.renewDue=0;return 'La directiva te pone en el mercado.';}}]},
  perf:{t:'La directiva está preocupada',d:function(){return 'Tu rendimiento de las últimas semanas no convence en los despachos.';},
   o:[{n:'Prometer que vas a mejorar',f:function(){rel('board',2);moral(-2);return 'Te dan un voto de confianza.';}},
@@ -281,6 +330,7 @@ function contractCard(){
  var k=ctr(),c=myClub(),st=transferReqState(),o=S.bobj&&S.bobj.s===S.season?S.bobj:null;
  var h='<div class="card"><h3>Tu contrato y la directiva</h3><div class="kv"><div><b class="num good">'+fmt(k.wage)+'</b><span>Salario semanal</span></div><div><b class="num">'+k.years+'</b><span>Años</span></div><div><b class="num">'+fmt(k.gb)+'</b><span>Por gol</span></div><div><b class="num">'+fmt(k.ab)+'</b><span>Por asistencia</span></div><div><b class="num">'+fmt(k.apb)+'</b><span>Por partido</span></div><div><b class="num">'+k.so+'%</b><span>De tu próxima venta</span></div></div>';
  if(o){var v=o.k==='ga'?S.ss.g+S.ss.a:S.ss.pj;h+='<p class="small" style="margin-top:8px">Objetivo de temporada: <b class="num">'+v+' / '+o.tgt+'</b> '+o.lbl+' · prima '+fmt(o.cash)+'</p>';}
+ if(k.years<=1)h+='<p class="small warn" style="margin-top:8px">Último año de contrato: si no renuevas antes de que acabe la temporada, quedarás libre.</p>';
  if(S.listed)h+='<p class="small warn" style="margin-top:8px">Estás en el mercado: '+esc(c.n)+' escucha ofertas por ti.</p>';
  var a=byId(ACTS,'contrato'),as=actState(a);
  h+='<div class="btns" style="margin-top:10px"><button class="go alt '+(as.ok?'':'dis')+'" data-a="act" data-id="contrato">Pedir mejora de contrato</button>'+

@@ -3,7 +3,7 @@
    y Vida (relaciones y redes, negocio). */
 var SUBS={
  player:[['train','Entreno'],['shop','Material'],['look','Aspecto']],
- career:[['club','Club'],['comp','Competiciones'],['hist','Trayectoria']],
+ career:[['club','Club'],['comp','Competiciones'],['hist','Trayectoria'],['hitos','Hitos']],
  life:[['team','Equipo'],['red','Redes y publicidad'],['agent','Representante']],
  biz:[['res','Resumen'],['spon','Patrocinios'],['emp','Empresas']]
 };
@@ -11,7 +11,7 @@ var SUBS={
 var OLDTAB={train:['player','train'],shop:['player','shop'],comp:['career','comp'],club:['career','club'],money:['biz','res']};
 function normTab(){
  if(S.pot==null||S.val==null||(S.skills[0]&&S.skills[0].gr==null))initProgress();
- ctr();bizMig();
+ ctr();bizMig();hitosMig();
  if(OLDTAB[S.tab]){var o=OLDTAB[S.tab];S.tab=o[0];subSet(o[0],o[1]);}
  if(S.sub&&S.sub.life==='money'){S.sub.life='team';if(S.tab==='life'){S.tab='biz';subSet('biz','res');}}
  if(S.sub&&S.sub.life==='rel')S.sub.life='team';
@@ -27,7 +27,7 @@ function lookCard(){
  return '<div class="card wide"><h3>Tu aspecto</h3><p class="small mut" style="margin-top:0">Cambia peinado, barba, camiseta, medias y más cuando quieras. La altura no se puede cambiar y los tatuajes se pueden añadir, pero no quitar.</p>'+lookEditor(S.look,'game',kit)+'</div>';
 }
 function viewPlayer(){var s=subOf('player');return subTabs('player')+(s==='shop'?viewShop():s==='look'?lookCard():viewTrain());}
-function viewCareerHub(){var s=subOf('career');return subTabs('career')+(s==='club'?viewClub():s==='comp'?viewComp():viewCareer());}
+function viewCareerHub(){var s=subOf('career');return subTabs('career')+(s==='club'?viewClub():s==='comp'?viewComp():s==='hitos'?viewHitos():viewCareer());}
 function viewLifeHub(){return subTabs('life')+viewLife();}
 
 /* ---------- bandeja: lo que está pendiente ---------- */
@@ -38,6 +38,7 @@ function pendingItems(){
  if(newTraitSlot())p.push({k:'hl',t:'Puedes elegir un rasgo nuevo.',go:'player',sub:'train',btn:'Elegir rasgo'});
  if(S.neg)p.push({k:'hl',t:'Tienes una negociación de contrato abierta.',go:'life',sub:'team',btn:'Negociar'});
  if(S.bm)p.push({k:'hl',t:'La directiva quiere reunirse contigo: '+BM[S.bm.k].t.toLowerCase()+'.',go:'life',sub:'team',btn:'Ir a la reunión'});
+ if(S.contract&&S.contract.years<=1&&!S.bm&&!S.neg)p.push({k:'bad',t:'Último año de contrato: si no renuevas, al acabar la temporada quedarás libre.',go:'life',sub:'team',btn:'Ver contrato'});
  if(S.event)p.push({t:EVENTS[S.event.i].t+'.',go:'life',sub:'team',btn:'Decidir'});
  if(windowOpen()&&S.offers.length)p.push({t:S.offers.length+(S.offers.length>1?' clubes quieren ficharte':' club quiere ficharte')+' y el mercado está abierto.',go:'career',sub:'club',btn:'Ver ofertas'});
  if(S.sofs.length)p.push({t:S.sofs.length+(S.sofs.length>1?' marcas quieren':' marca quiere')+' patrocinarte.',go:'biz',sub:'spon',btn:'Ver propuestas'});

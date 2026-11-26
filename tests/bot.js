@@ -3,7 +3,7 @@
 (function(root){
 function carrera(G,pos,tp,ts,nat,co,years,opts){
  opts=opts||{};
- var errs=[],rows=[];
+ var errs=[],rows=[],libres=0;
  G.newGame('Bot',pos,tp,ts,nat,co,!!opts.real);
  var S=G.S;if(S.pre&&G.preAutoSign)G.preAutoSign();S.auto=!opts.manual;
  for(var y=0;y<years&&!S.retired;y++){
@@ -11,6 +11,10 @@ function carrera(G,pos,tp,ts,nat,co,years,opts){
    for(var i=0;i<15;i++){var k=S.skills[Math.floor(Math.random()*S.skills.length)];S.mult=25;G.train(k.id);G.promo(k.id);}
    var g=0;
    while(!S.summary&&!S.retired&&g++<150){
+    if(S.freePending)G.freeStart();
+    if(S.pre){var fr=S.pre.clubs.map(function(x,j){return x.offer?j:-1;}).filter(function(j){return j>=0;});
+     if(fr.length&&Math.random()<0.5){G.negOpen('libre',fr[0]);if(S.neg){G.negAdj('wage',2);G.negPropose();if(S.neg)G.negAcceptCur();}}
+     if(S.pre)G.preAutoSign();libres++;continue;}
     if(S.event)G.doEvent(Math.random()<0.5?0:1);
     if(S.bm)G.boardAns(Math.floor(Math.random()*BM[S.bm.k].o.length));
     if(S.neg){var t=0;NEGF.forEach(function(f){if(Math.random()<0.5)G.negAdj(f.k,1+Math.floor(Math.random()*3));});
@@ -42,7 +46,7 @@ function carrera(G,pos,tp,ts,nat,co,years,opts){
  ['W','L:ENG1','L:IRL2','C:ESP','P:ESP','P:GER','P:IRL','E:E1','E:E3','T:WC','T:EC'].forEach(function(c){['tabla','g','a','r','mes','temp'].forEach(function(tb){try{G.UI.comp=c;G.UI.ctab=tb;G.viewComp();}catch(e){errs.push(c+'/'+tb+': '+(e.stack||e));}});});
  G.UI.comp=null;G.UI.ctab='tabla';
  try{G.squad(0,null);G.squad(0,S.clubs[0].ros[0]);G.squad(S.pl[S.me].c,S.me);}catch(e){errs.push('plantilla: '+(e.stack||e));}
- return {rows:rows,errs:errs,size:JSON.stringify(S).length,trofeos:S.trophies.map(function(t){return 'T'+t.s+' '+t.n;}),seleccion:S.nt,balon:S.bdo.map(function(b){return 'T'+b.s+': '+b.top.slice(0,3).map(function(x){return x.n+' ('+x.c+')';}).join(', ')+(b.me?' · tú '+b.me+'º':'');})};
+ return {libres:libres,rows:rows,errs:errs,size:JSON.stringify(S).length,trofeos:S.trophies.map(function(t){return 'T'+t.s+' '+t.n;}),seleccion:S.nt,balon:S.bdo.map(function(b){return 'T'+b.s+': '+b.top.slice(0,3).map(function(x){return x.n+' ('+x.c+')';}).join(', ')+(b.me?' · tú '+b.me+'º':'');})};
 }
 root.botCarrera=carrera;
 if(typeof module!=='undefined')module.exports=carrera;

@@ -55,7 +55,8 @@ function render(){
   if(setupErr&&scr==='new'&&$('#nm')&&UI.focusName){UI.focusName=0;$('#nm').focus();}
   return;}
  var sc=$('#view')?$('#view').scrollTop:0,fid=document.activeElement&&document.activeElement.getAttribute&&document.activeElement.getAttribute('data-a')?[document.activeElement.getAttribute('data-a'),document.activeElement.getAttribute('data-id')]:null;
- if(S.pre){app.innerHTML=preHTML()+toastsHTML();var stp=$('.setup');if(stp)stp.scrollTop=UI.preScroll||0;return;}
+ if(S.freePending&&!S.summary)freeStart();
+ if(S.pre){app.innerHTML=preHTML()+(S.neg?negHTML():'')+toastsHTML();var stp=$('.setup');if(stp)stp.scrollTop=UI.preScroll||0;return;}
  normTab();
  var v=(VIEWS[S.tab]||viewHome)();
  app.innerHTML=sideHTML()+topHTML()+'<main id="view"><div class="page">'+pageHead()+v+'</div></main>'+navHTML()+(UI.sq?squadHTML():'')+modalHTML()+(S.neg&&!S.summary?negHTML():'')+popHTML()+
@@ -129,7 +130,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&UI.pop){var
   retire:function(){S.retired=true;save();render();},
   reset1:function(){UI.reset=true;render();},reset0:function(){UI.reset=false;render();},
   reset2:function(){UI.reset=false;var id=CUR;S=null;CUR=null;UI.sq=null;if(id)deleteSlot(id);UI.screen='menu';render();},
-  pretrial:function(){UI.preScroll=$('.setup')?$('.setup').scrollTop:0;preTrial(i,id);},presign:function(){preSign(i);},prenext:function(){UI.preScroll=0;preNext();},
+  pretrial:function(){UI.preScroll=$('.setup')?$('.setup').scrollTop:0;preTrial(i,id);},presign:function(){preSign(i);},preneg:function(){negOpen('libre',i);},prenext:function(){UI.preScroll=0;preNext();},
   addtrait:function(){addTrait(id);},
   popclose:function(){if(UI.pop&&UI.pop.k==='dec'&&UI.pendRep){UI.pop={k:'match',rep:UI.pendRep};UI.pendRep=null;}else UI.pop=null;save();render();},
   livespeed:function(){localStorage.setItem('estrella_vel',String(n));render();},
@@ -147,7 +148,7 @@ document.addEventListener('change',function(e){var t=e.target;if(!t)return;
  if(S)return;
  if(t.id==='ps')setupState.pos=t.value;else if(t.id==='tp')setupState.tp=t.value;else if(t.id==='ts')setupState.ts=t.value;else if(t.id==='na')setupState.nat=t.value;else if(t.id==='co')setupState.co=t.value;else return;render();});
 window.__dbg={get S(){return S;},set S(v){S=v;},newGame:newGame,playN:playN,playSlot:playSlot,choose:choose,liveEnd:function(){return liveEnd(true);},pressAnswer:pressAnswer,doEvent:doEvent,doAct:doAct,train:train,promo:promo,render:render,UI:UI,
- overall:overall,leaders:leaders,genOffers:genOffers,accept:accept,signSponsor:signSponsor,buyGear:buyGear,gearCatalog:gearCatalog,hireAgent:hireAgent,hireCM:hireCM,sponsorPost:sponsorPost,squad:function(c,p){UI.sq={club:c,p:p};var h=squadHTML();UI.sq=null;return h;},views:VIEWS,viewComp:viewComp,preAutoSign:function(){preAutoSign();},negOpen:negOpen,negAdj:negAdj,negPropose:negPropose,negAcceptCur:negAcceptCur,negQuit:negQuit,boardAns:boardAns,newBoardMeeting:newBoardMeeting,transferReq:transferReq,transferForce:transferForce,adDo:adDo,bizBuy:bizBuy,bizUp:bizUp,bizMg:bizMg,bizSell:bizSell,doActCheck:actState,save:save,saveNow:saveNow,metaAll:metaAll,toMenu:toMenu,openSlot:openSlot};
+ overall:overall,leaders:leaders,genOffers:genOffers,accept:accept,signSponsor:signSponsor,buyGear:buyGear,gearCatalog:gearCatalog,hireAgent:hireAgent,hireCM:hireCM,sponsorPost:sponsorPost,squad:function(c,p){UI.sq={club:c,p:p};var h=squadHTML();UI.sq=null;return h;},views:VIEWS,viewComp:viewComp,preAutoSign:function(){preAutoSign();},negOpen:negOpen,freeStart:freeStart,negAdj:negAdj,negPropose:negPropose,negAcceptCur:negAcceptCur,negQuit:negQuit,boardAns:boardAns,newBoardMeeting:newBoardMeeting,transferReq:transferReq,transferForce:transferForce,adDo:adDo,bizBuy:bizBuy,bizUp:bizUp,bizMg:bizMg,bizSell:bizSell,doActCheck:actState,save:save,saveNow:saveNow,metaAll:metaAll,toMenu:toMenu,openSlot:openSlot};
 if(gfxMode()==='mejorados')loadGfx();
 applyGfxBackground();
 bootSaves();

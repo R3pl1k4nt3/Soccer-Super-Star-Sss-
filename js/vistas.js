@@ -234,7 +234,8 @@ function poView(co){
  h+='<div class="card"><h3>Balón de Oro · carrera de esta temporada</h3>'+(live.length?'<div class="tw"><table><tr><th>#</th><th>Jugador</th><th>Club</th><th>Puntos</th></tr>'+live.map(function(x,i){return '<tr class="'+(x.p.me?'mine':'')+'"><td class="num">'+(i+1)+'</td><td>'+pName(x.p)+' <span class="small mut">'+natName(x.p.nat)+'</span></td><td class="small">'+esc(clubName(x.p))+'</td><td class="num">'+Math.round(x.s)+'</td></tr>';}).join('')+'</table></div>':'<p class="mut small">Hacen falta al menos 12 partidos para entrar en la carrera.</p>')+'</div>';
  if(last){h+='<div class="card"><h3>Balón de Oro · temporada '+last.s+'</h3><div class="tw"><table><tr><th>#</th><th>Jugador</th><th>Club</th><th>Goles</th></tr>'+last.top.map(function(x,i){return '<tr class="'+(x.me?'mine':'')+'"><td class="num">'+(i+1)+'</td><td>'+esc(x.n)+' <span class="small mut">'+natName(x.nat)+'</span></td><td class="small">'+esc(x.c)+'</td><td class="num">'+x.g+'</td></tr>';}).join('')+'</table></div>'+
   '<div class="small mut" style="margin-top:6px">'+(last.me?'Tu puesto: <b>'+last.me+'º</b>. ':'No entras entre los 30 primeros. ')+(last.young?'Mejor joven: '+esc(last.young.n)+'. ':'')+(last.bota?'Bota de Oro: '+esc(last.bota.n)+' ('+last.bota.r+' goles).':'')+'</div></div>';
-  var w=S.aw.filter(function(a){return a.k==='TOYW';}).pop();if(w)h+='<div class="card">'+xiHTML(w.xi,'Equipo mundial del año · T'+w.s)+'</div>';}
+  var w=S.aw.filter(function(a){return a.k==='TOYW';}).pop();if(w)h+='<div class="card">'+xiHTML(w.xi,'Equipo mundial del año · T'+w.s)+'</div>';
+  var we=S.aw.filter(function(a){return a.k==='TOYE';}).pop();if(we&&we.xi.length)h+='<div class="card">'+xiHTML(we.xi,'Equipo europeo de la temporada · T'+we.s)+(we.best?'<div class="small mut" style="margin-top:6px">Mejor jugador de Europa: <b>'+esc(we.best.n)+'</b> ('+esc(we.best.c)+').</div>':'')+'</div>';}
  else h+='<div class="card small mut">Los premios mundiales se entregan al final de cada temporada.</div>';
  var ch=S.champs.filter(function(c){return c.s===S.season-1;});
  if(ch.length){h+='<div class="card"><h3>Campeones de liga · T'+(S.season-1)+'</h3>'+ch.map(function(c){var lg=byId(S.lgs,c.lg);return '<div class="ev"><span class="small mut" style="width:150px">'+country(lg.co).n+' · '+lg.n+'</span><span>'+esc(S.clubs[c.c].n)+'</span></div>';}).join('')+'</div>';}
@@ -430,7 +431,7 @@ function modalHTML(){
   (m.obj?'<p class="small">'+esc(m.obj)+'</p>':'')+
   (m.devs?devsHTML(m.devs):'')+
   (m.transfers&&m.transfers.length?'<p class="small mut">Mercado: '+m.transfers.map(esc).join('; ')+'.</p>':'')+
-  '<p class="small mut" style="margin-top:10px">Cumples '+S.age+' años. Valoración: '+ds(m.ovBefore)+' → '+ds(m.ovAfter)+(S.age>=31?'. Pierdes algo de nivel físico por la edad.':'.')+(m.renew?' Tu contrato se renueva sin negociar, a la baja y sin bonus.':S.renewDue?' Te queda un año de contrato: la directiva querrá negociar.':'')+(m.retire?' Es el momento de retirarte.':' Mira las ofertas en Club.')+'</p>'+
+  '<p class="small mut" style="margin-top:10px">Cumples '+S.age+' años. Valoración: '+ds(m.ovBefore)+' → '+ds(m.ovAfter)+(S.age>=31?'. Pierdes algo de nivel físico por la edad.':'.')+(m.free&&!m.retire?' <b class="warn">Se acaba tu contrato con '+esc(m.free)+': quedas libre. Al continuar, buscas club como jugador libre.</b>':S.renewDue?' Te queda un año de contrato: si no renuevas, al final de la temporada quedarás libre.':'')+(m.retire?' Es el momento de retirarte.':m.free?'':' Mira las ofertas en Club.')+'</p>'+
   '<button class="go block" data-a="closesum" style="margin-top:12px">Continuar</button></div></div>';
 }
 

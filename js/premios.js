@@ -43,8 +43,8 @@ function monthEnd(m){
   var sc=function(p){return p.ms[1]/p.ms[0]+p.ms[2]*0.05+p.ms[3]*0.03;};
   var xi=xiBy(c,sc),best=null,bs=-1;c.forEach(function(p){var s=sc(p);if(s>bs){bs=s;best=p;}});
   S.aw.push({k:'TOM',s:S.season,m:m,lg:lg.id,xi:xi,best:snap(best,bs)});
-  if(xi.some(function(x){return x.me;})){var t='Equipo del mes ('+MONTHS[m]+') · '+lg.n;myAward(t,2,0);}
-  if(best.me)myAward('Jugador del mes ('+MONTHS[m]+') · '+lg.n,5,Math.round(S.contract.wage*2));
+  if(xi.some(function(x){return x.me;})){var t='Equipo del mes ('+MONTHS[m]+') · '+lg.n;myAward(t,2,0);hito('tom',t,{m:MONTHS[m]});}
+  if(best.me){var t2='Jugador del mes ('+MONTHS[m]+') · '+lg.n;myAward(t2,5,Math.round(S.contract.wage*2));hito('pom',t2,{m:MONTHS[m]});}
  });
  S.pl.forEach(function(p){if(p)p.ms=[0,0,0,0];});
  S.aw=S.aw.filter(function(a){return a.k==='TOM'?a.s===S.season:a.s>=S.season-1;});
@@ -52,7 +52,14 @@ function monthEnd(m){
  bizMonth();
 }
 function myAward(t,medals,cash){S.medals+=medals||0;S.money+=cash||0;S.trophies.push({s:S.season,n:t,k:'ind'});logm('Premio: '+t+'.');toast('Premio: '+t);}
-function addTrophy(n,k){S.trophies.push({s:S.season,n:n,k:k||'copa'});S.stats.titles=(S.stats.titles||0)+1;logm('¡Título! '+n+'.');if(typeof titleMoment==='function')titleMoment(n);}
+/* ---------- hitos: cada logro con su temporada, club y división ---------- */
+function hitoCtx(){var me=S.pl[S.me],c=me&&me.c>=0?S.clubs[me.c]:null,lg=c&&!c.guest?lgOf(c.id):null;
+ return {club:c?c.n:'',lg:lg?lg.n:'',tier:lg?lg.t:0,niv:c&&lg?Math.round(lgLevelOf(c.id)):0,co:c?country(c.co).n:''};}
+function hito(k,t,x){
+ if(!S.hitos&&typeof hitosMig==='function'){hitosMig();S.hitos=S.hitos.filter(function(h){return !(h.s===S.season&&h.t===t);});}
+ S.hitos=S.hitos||[];var h=hitoCtx();h.k=k;h.s=S.season;h.t=t;if(x)Object.keys(x).forEach(function(q){h[q]=x[q];});S.hitos.push(h);}
+function trophyKind(n,k){if(k==='liga'||k==='sel'||k==='asc')return k;return (S.eu||[]).some(function(T){return T.n===n;})?'euro':'copa';}
+function addTrophy(n,k){S.trophies.push({s:S.season,n:n,k:k||'copa'});hito(trophyKind(n,k),n);S.stats.titles=(S.stats.titles||0)+1;logm('¡Título! '+n+'.');if(typeof titleMoment==='function')titleMoment(n);}
 function trophyCheck(kind,win,n){var me=S.pl[S.me];
  if(kind==='club'&&win===me.c)addTrophy(n,'copa');
  if(kind==='nat'&&win===me.nat&&S.tourCalled)addTrophy(n+' con '+nation(me.nat).n,'sel');}
@@ -75,7 +82,7 @@ function ballonScore(p,champ){
 }
 function seasonAwards(){
  var out=[],me=S.pl[S.me];
- function mine(t,medals,cash){out.push({t:t,medals:medals,cash:cash});S.trophies.push({s:S.season,n:t,k:'ind'});}
+ function mine(t,medals,cash,k){out.push({t:t,medals:medals,cash:cash});S.trophies.push({s:S.season,n:t,k:'ind'});if(k)hito(k,t);}
  /* puntos por títulos para el Balón de Oro */
  var champ={};
  S.lgs.forEach(function(lg){var t=table(lg)[0];champ[t.id]=(champ[t.id]||0)+6*lgW(lg);});
@@ -90,11 +97,11 @@ function seasonAwards(){
   var mx=0;ps.forEach(function(p){mx=Math.max(mx,stOf(p,'L')[0]);});
   var xi=xiBy(ps.filter(function(p){return stOf(p,'L')[0]>=mx*0.5;}),function(p){return avgR(p,'L');});
   S.aw.push({k:'TOY',s:S.season,lg:lg.id,xi:xi,top:g?snap(g,stOf(g,'L')[1]):null,ast:a?snap(a,stOf(a,'L')[2]):null,mvp:b?snap(b,avgR(b,'L')):null,yng:young?snap(young,avgR(young,'L')):null});
-  if(g&&g.me)mine('Máximo goleador · '+lg.n+' ('+stOf(g,'L')[1]+' goles)',10,S.contract.wage*4);
-  if(a&&a.me)mine('Máximo asistente · '+lg.n+' ('+stOf(a,'L')[2]+')',6,S.contract.wage*2);
-  if(b&&b.me)mine('Mejor jugador · '+lg.n,10,S.contract.wage*6);
-  if(young&&young.me)mine('Mejor jugador joven · '+lg.n,6,S.contract.wage*2);
-  if(xi.some(function(x){return x.me;}))mine('Equipo de la temporada · '+lg.n,4,0);
+  if(g&&g.me)mine('Máximo goleador · '+lg.n+' ('+stOf(g,'L')[1]+' goles)',10,S.contract.wage*4,'pich');
+  if(a&&a.me)mine('Máximo asistente · '+lg.n+' ('+stOf(a,'L')[2]+')',6,S.contract.wage*2,'ast');
+  if(b&&b.me)mine('Mejor jugador · '+lg.n,10,S.contract.wage*6,'mvp');
+  if(young&&young.me)mine('Mejor jugador joven · '+lg.n,6,S.contract.wage*2,'yng');
+  if(xi.some(function(x){return x.me;}))mine('Equipo de la temporada · '+lg.n,4,0,'toy');
  });
  /* competiciones europeas y torneos de selecciones */
  S.eu.concat(S.tours).forEach(function(T){
@@ -102,29 +109,36 @@ function seasonAwards(){
   var g=leaders(ck,'g',1)[0],b=leaders(ck,'r',1)[0];
   var xi=xiBy(ps.filter(function(p){return stOf(p,L)[0]>=2;}),function(p){return avgR(p,L)+stOf(p,L)[0]*0.05;});
   S.aw.push({k:'TOC',s:S.season,comp:T.id,n:T.n,xi:xi,top:g?snap(g,stOf(g,L)[1]):null,mvp:b?snap(b,avgR(b,L)):null,win:T.win==null?'':T.kind==='nat'?nation(T.win).n:S.clubs[T.win].n});
-  if(g&&g.me&&stOf(g,L)[1]>0)mine('Máximo goleador · '+T.n,8,0);
-  if(b&&b.me)mine('Mejor jugador · '+T.n,8,0);
-  if(xi.some(function(x){return x.me;}))mine('Equipo ideal · '+T.n,4,0);
+  if(g&&g.me&&stOf(g,L)[1]>0)mine('Máximo goleador · '+T.n,8,0,'tocg');
+  if(b&&b.me)mine('Mejor jugador · '+T.n,8,0,'tocm');
+  if(xi.some(function(x){return x.me;}))mine('Equipo ideal · '+T.n,4,0,'toc');
  });
+ /* equipo europeo de la temporada: lo mejor de las tres competiciones europeas, ponderado por su nivel */
+ var ecf={};S.eu.forEach(function(T){var w=({E1:1.25,E2:1,E3:0.8})[T.id]||1;T.teams.forEach(function(id){ecf[id]=Math.max(ecf[id]||0,w);});});
+ var eus=S.pl.filter(function(p){return p&&p.c>=0&&ecf[p.c]&&stOf(p,'E')[0]>=4;}),esc2=function(p){var E=stOf(p,'E');return ((E[3]/E[0]-6)*4+E[1]*0.8+E[2]*0.5+E[0]*0.15)*ecf[p.c];};
+ if(eus.length>=11){var exi=xiBy(eus,esc2),eb=null,ebs=-1e9;eus.forEach(function(p){var s=esc2(p);if(s>ebs){ebs=s;eb=p;}});
+  S.aw.push({k:'TOYE',s:S.season,xi:exi,best:eb?snap(eb,ebs):null});
+  if(exi.some(function(x){return x.me;}))mine('Equipo europeo de la temporada',8,S.contract.wage*2,'eux');
+  if(eb&&eb.me)mine('Mejor jugador de Europa',15,S.contract.wage*5,'eum');}
  /* equipo mundial del año y Balón de Oro */
  var all=S.pl.filter(function(p){return p&&p.c>=0;}),scs={};
  all.forEach(function(p){scs[p.i]=ballonScore(p,champ);});
  var cand=all.filter(function(p){return scs[p.i]>0;});
  var wxi=xiBy(cand,function(p){return scs[p.i];});
  S.aw.push({k:'TOYW',s:S.season,xi:wxi});
- if(wxi.some(function(x){return x.me;}))mine('Equipo mundial del año',12,S.contract.wage*4);
+ if(wxi.some(function(x){return x.me;}))mine('Equipo mundial del año',12,S.contract.wage*4,'wxi');
  cand.sort(function(a,b){return scs[b.i]-scs[a.i];});
  var top=cand.slice(0,30),myRank=top.findIndex(function(p){return p.me;})+1;
  S.bdo.push({s:S.season,top:top.slice(0,10).map(function(p){var x=snap(p,scs[p.i]);x.g=stOf(p,'L')[1]+stOf(p,'E')[1]+stOf(p,'T')[1]+stOf(p,'C')[1];return x;}),me:myRank||0,mes:r1(scs[S.me]||0)});
- if(myRank===1)mine('Balón de Oro',40,S.contract.wage*20);
- else if(myRank&&myRank<=3)mine('Podio del Balón de Oro ('+myRank+'º)',15,S.contract.wage*5);
+ if(myRank===1)mine('Balón de Oro',40,S.contract.wage*20,'bdo');
+ else if(myRank&&myRank<=3)mine('Podio del Balón de Oro ('+myRank+'º)',15,S.contract.wage*5,'bdop');
  else if(myRank)logm('Quedas '+myRank+'º en el Balón de Oro.');
  var yg=cand.filter(function(p){return (p.me?S.age:p.a)<=21;})[0];
  S.bdo[S.bdo.length-1].young=yg?snap(yg,scs[yg.i]):null;
- if(yg&&yg.me)mine('Trofeo al mejor joven del mundo',15,S.contract.wage*4);
+ if(yg&&yg.me)mine('Trofeo al mejor joven del mundo',15,S.contract.wage*4,'bdoy');
  /* bota de oro: goles de liga ponderados por el nivel */
  var bota=null,bv=0;all.forEach(function(p){var lg=lgOfPlayer(p);if(!lg)return;var v=stOf(p,'L')[1]*Math.min(2,2*lgW(lg));if(v>bv){bv=v;bota=p;}});
- if(bota){S.bdo[S.bdo.length-1].bota=snap(bota,stOf(bota,'L')[1]);if(bota.me)mine('Bota de Oro ('+stOf(bota,'L')[1]+' goles)',20,S.contract.wage*6);}
+ if(bota){S.bdo[S.bdo.length-1].bota=snap(bota,stOf(bota,'L')[1]);if(bota.me)mine('Bota de Oro ('+stOf(bota,'L')[1]+' goles)',20,S.contract.wage*6,'bota');}
  if(S.bdo.length>40)S.bdo.shift();
  return out;
 }
