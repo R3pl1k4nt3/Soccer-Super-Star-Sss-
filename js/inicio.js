@@ -4,7 +4,7 @@
 var SUBS={
  player:[['train','Entreno'],['shop','Material'],['look','Aspecto']],
  career:[['club','Club'],['comp','Competiciones'],['hist','Trayectoria'],['hitos','Hitos']],
- life:[['team','Equipo'],['red','Redes y publicidad'],['agent','Representante']],
+ life:[['team','Equipo'],['red','Redes y publicidad'],['pers','Vida personal'],['agent','Representante']],
  biz:[['res','Resumen'],['spon','Patrocinios'],['emp','Empresas']]
 };
 /* pestañas antiguas (partidas guardadas) → pestaña y sección nuevas */
@@ -27,7 +27,7 @@ function lookCard(){
  return '<div class="card wide"><h3>Tu aspecto</h3><p class="small mut" style="margin-top:0">Cambia peinado, barba, camiseta, medias y más cuando quieras. La altura no se puede cambiar y los tatuajes se pueden añadir, pero no quitar.</p>'+lookEditor(S.look,'game',kit)+'</div>';
 }
 function viewPlayer(){var s=subOf('player');return subTabs('player')+(s==='shop'?viewShop():s==='look'?lookCard():viewTrain());}
-function viewCareerHub(){var s=subOf('career');return subTabs('career')+(s==='club'?viewClub():s==='comp'?viewComp():s==='hitos'?viewHitos():viewCareer());}
+function viewCareerHub(){var s=subOf('career');return subTabs('career')+(s==='club'?viewClub():s==='comp'?viewComp():s==='hitos'?viewHitos():viewCareer()+diffCard());}
 function viewLifeHub(){return subTabs('life')+viewLife();}
 
 /* ---------- bandeja: lo que está pendiente ---------- */
@@ -72,7 +72,7 @@ function viewHome(){
  /* próximo partido */
  h+='<div class="card"><h3>Próximo partido</h3>'+nextInfo()+(S.match||S.press?'<button class="go block" data-a="go" data-id="match" style="margin-top:10px">Ir al partido</button>':
   '<div class="btns" style="margin-top:10px"><button class="go" data-a="play" data-n="1">Jugar siguiente</button><button class="go alt" data-a="go" data-id="match">Ver partido</button></div>')+'</div>';
- h+=gateCard();
+ h+=gateCard()+rivalCard()+newsCard();
  /* pendiente */
  var P=pendingItems();
  h+='<div class="card"><h3>Pendiente</h3>'+(P.length?P.map(function(x){return '<div class="item"><div><p style="margin:0;color:var(--'+(x.k==='bad'?'bad':x.k==='hl'?'gold':'txt')+')">'+x.t+'</p></div>'+(x.go?'<button class="go alt" data-a="go" data-id="'+x.go+'"'+(x.sub?' data-k="'+x.sub+'"':'')+'>'+x.btn+'</button>':x.a?'<button class="go alt" data-a="'+x.a+'">'+x.btn+'</button>':'<span></span>')+'</div>';}).join(''):'<p class="small mut">Todo al día.</p>')+'</div>';

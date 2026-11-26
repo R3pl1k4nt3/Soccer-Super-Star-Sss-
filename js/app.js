@@ -20,7 +20,7 @@ function ico(k){if(typeof icoPlus==='function'){var ip=icoPlus(k);if(ip)return i
 function pageHead(){
  var sl=S.cal[Math.min(S.slot,S.cal.length-1)],c=myClub();
  var sub={home:MONTHS[sl.m]+' · temporada '+S.season+' · '+slotLabel(sl),match:slotLabel(sl)+' · semana '+(S.slot+1)+' de '+S.cal.length,player:'Valoración '+ds(overall())+' · '+POS[S.pos]+' · valor '+fmv(mv(S.pl[S.me])),
-  career:esc(c.n)+' · '+esc(lgName(c)),life:'Equipo, redes y publicidad, representante',biz:'Dinero '+fmt(S.money)+' · patrocinios y empresas'}[S.tab];
+  career:esc(c.n)+' · '+esc(lgName(c)),life:'Equipo, redes y publicidad, vida personal y representante',biz:'Dinero '+fmt(S.money)+' · patrocinios y empresas'}[S.tab];
  var t=TABS.filter(function(x){return x[0]===S.tab;})[0];
  return '<header class="pagehead"><div><h1>'+t[1]+'</h1><p>'+sub+'</p></div></header>';
 }
@@ -31,7 +31,7 @@ function sideHTML(){
   '<div class="me-card"><div class="face">'+faceSVG(S.look,kit,64)+'</div><div><b>'+esc(S.name)+'</b><span class="small mut">'+POS[S.pos]+' · '+S.age+' años</span><div class="small mut">'+esc(c.n)+'</div></div></div>'+
   '<div class="me-stats"><div><b class="star num">'+ds(overall())+'</b><span>Valoración</span></div><div><b class="money num">'+fmt(S.money)+'</b><span>Dinero</span></div><div><b class="num">'+S.medals+'</b><span>Medallas</span></div></div>'+
   '<nav class="sidenav" aria-label="Secciones">'+TABS.map(function(t){return '<button data-a="tab" data-id="'+t[0]+'"'+(S.tab===t[0]?' aria-current="page"':'')+'>'+ico(t[0])+'<span>'+t[1]+'</span>'+(d[t[0]]?'<span class="dot'+(typeof d[t[0]]==='number'?' n':'')+'" aria-label="Pendiente">'+(typeof d[t[0]]==='number'?d[t[0]]:'')+'</span>':'')+'</button>';}).join('')+'</nav>'+
-  '<button class="go alt block" data-a="menu" style="margin-top:6px">Menú de partidas</button><div class="side-foot">'+MONTHS[S.cal[Math.min(S.slot,S.cal.length-1)].m]+' · temporada '+S.season+(S.real?'<br>Versión real · no comercial, solo para pruebas y uso particular.':'')+'</div></aside>';
+  '<button class="go alt block" data-a="menu" style="margin-top:6px">Menú de partidas</button><a class="lnk small" href="https://github.com/R3pl1k4nt3/Soccer-Super-Star-Sss-/issues/new" target="_blank" rel="noopener" style="display:block;margin-top:8px">Enviar sugerencias o fallos</a><div class="side-foot">'+MONTHS[S.cal[Math.min(S.slot,S.cal.length-1)].m]+' · temporada '+S.season+(S.real?'<br>Versión real · no comercial, solo para pruebas y uso particular.':'')+'</div></aside>';
 }
 function topHTML(){
  var c=myClub(),sl=S.cal[Math.min(S.slot,S.cal.length-1)];
@@ -84,8 +84,9 @@ document.addEventListener('visibilitychange',function(){if(S&&S.match)liveTick()
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&UI.pop){var c=document.querySelector('[data-a=popclose]');if(c)c.click();return;}if(e.key==='Escape'&&UI.sq){UI.sq=null;render();}});document.addEventListener('click',function(e){
  var b=e.target.closest&&e.target.closest('[data-a]');if(!b)return;
  var a=b.getAttribute('data-a'),id=b.getAttribute('data-id'),n=+b.getAttribute('data-n'),i=+b.getAttribute('data-i');
- if(a==='start'){var nm=(($('#nm')?$('#nm').value:setupState.name)||'').trim();if(!nm){setupErr='Escribe un nombre.';setupState.step=2;UI.focusName=1;render();return;}setupErr='';setupState.name=nm;newGame(nm,setupState.pos,setupState.tp,setupState.ts,setupState.nat,setupState.co,setupState.ver==='real',setupState.look);CUR=UI.newSlot||freeSlot()||1;saveNow();UI.comp=null;render();return;}
+ if(a==='start'){var nm=(($('#nm')?$('#nm').value:setupState.name)||'').trim();if(!nm){setupErr='Escribe un nombre.';setupState.step=2;UI.focusName=1;render();return;}setupErr='';setupState.name=nm;newGame(nm,setupState.pos,setupState.tp,setupState.ts,setupState.nat,setupState.co,setupState.ver==='real',setupState.look);S.diff=setupState.diff||'normal';CUR=UI.newSlot||freeSlot()||1;saveNow();UI.comp=null;render();return;}
  if(a==='gfx'){setGfxMode(id);render();return;}
+ if(a==='sdiff'&&!S){setupState.diff=id;render();return;}
  if(a==='ver'&&!S){setupState.ver=id;render();return;}
  if(a==='step'&&!S){var st=setupState;
   if(n>st.step&&st.step<=2&&n>2&&!(st.name||'').trim()){st.step=2;setupErr='Escribe un nombre para seguir.';UI.focusName=1;render();return;}
@@ -139,6 +140,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&UI.pop){var
   popclose:function(){if(UI.pop&&UI.pop.k==='dec'&&UI.pendRep){UI.pop={k:'match',rep:UI.pendRep};UI.pendRep=null;}else UI.pop=null;save();render();},
   livespeed:function(){localStorage.setItem('estrella_vel',String(n));render();},
   livejump:function(){liveJump();},
+  diff:function(){S.diff=id;save();render();},home:function(){moveHome(id);},car:function(){buyCar(id);},
   share:shareCareer,sharecopy:shareCopy,shareclose:shareClose,
   retview:function(){UI.retHide=1;S.tab='career';subSet('career','hitos');render();},retshow:function(){UI.retHide=0;render();},
   adwatch:adWatch,adclaim:adReward,buygame:buyGame,buyok:buyConfirm,tutok:function(){S.tutDone=1;save();render();},

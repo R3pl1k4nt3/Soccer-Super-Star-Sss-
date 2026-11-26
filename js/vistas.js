@@ -515,7 +515,7 @@ function setupHTML(){
    '<p style="margin:0"><b style="font-size:22px">'+esc(st.name||'Sin nombre')+'</b></p><p class="mut" style="margin:4px 0 12px">'+POS[st.pos]+' · '+nation(st.nat).n+' · empiezas en '+country(st.co).n+' · versión '+(real?'real':'ficticia')+'</p>'+
    '<p style="margin:0 0 4px"><b>'+A.n+'</b> <span class="mut small">(principal)</span></p><p class="small" style="margin:0 0 4px"><span class="good">▲</span> '+IA.up.join(', ')+'</p>'+(IA.lim.length||IA.con?'<p class="small" style="margin:0 0 10px"><span class="bad">▼</span> '+IA.lim.join(', ')+(IA.con?' '+IA.con:'')+'</p>':'')+
    '<p style="margin:0 0 4px"><b>'+B.n+'</b> <span class="mut small">(secundario)</span></p><p class="small" style="margin:0 0 4px"><span class="good">▲</span> '+IB.up.join(', ')+'</p>'+(IB.lim.length||IB.con?'<p class="small" style="margin:0"><span class="bad">▼</span> '+IB.lim.join(', ')+(IB.con?' '+IB.con:'')+'</p>':'')+
-   (cf2.length?'<p class="small notice">'+cf2.join(' ')+'</p>':'')+(real?'<p class="small notice">'+REAL_NOTE+'</p>':'')+'</div></div>';
+   diffSetup(st)+(cf2.length?'<p class="small notice">'+cf2.join(' ')+'</p>':'')+(real?'<p class="small notice">'+REAL_NOTE+'</p>':'')+'</div></div>';
  }
  h+='</section><div class="wiznav">'+(st.step>1?'<button class="go alt" data-a="step" data-n="'+(st.step-1)+'">Atrás</button>':'<span></span>')+
   (st.step<5?'<button class="go" data-a="step" data-n="'+(st.step+1)+'">Siguiente: '+SETUP_STEPS[st.step]+'</button>':'<button class="go big" data-a="start">Empezar carrera</button>')+'</div></div></div>';

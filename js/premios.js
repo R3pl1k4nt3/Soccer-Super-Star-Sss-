@@ -57,7 +57,8 @@ function hitoCtx(){var me=S.pl[S.me],c=me&&me.c>=0?S.clubs[me.c]:null,lg=c&&!c.g
  return {club:c?c.n:'',lg:lg?lg.n:'',tier:lg?lg.t:0,niv:c&&lg?Math.round(lgLevelOf(c.id)):0,co:c?country(c.co).n:''};}
 function hito(k,t,x){
  if(!S.hitos&&typeof hitosMig==='function'){hitosMig();S.hitos=S.hitos.filter(function(h){return !(h.s===S.season&&h.t===t);});}
- S.hitos=S.hitos||[];var h=hitoCtx();h.k=k;h.s=S.season;h.t=t;if(x)Object.keys(x).forEach(function(q){h[q]=x[q];});S.hitos.push(h);}
+ S.hitos=S.hitos||[];var h=hitoCtx();h.k=k;h.s=S.season;h.t=t;if(x)Object.keys(x).forEach(function(q){h[q]=x[q];});S.hitos.push(h);
+ if(typeof newsAdd==='function'&&['pom','mvp','pich','ast','yng','bdo','bdop','bdoy','bota','eux','eum','wxi','liga','copa','euro','sel','toy'].indexOf(k)>=0)newsAdd(['liga','copa','euro','sel'].indexOf(k)>=0?'¡Título para '+S.name+'! '+(h.club&&k!=='sel'?h.club+' gana ':'')+t:S.name+' recibe el premio: '+t,'yo');}
 function trophyKind(n,k){if(k==='liga'||k==='sel'||k==='asc')return k;return (S.eu||[]).some(function(T){return T.n===n;})?'euro':'copa';}
 function addTrophy(n,k){S.trophies.push({s:S.season,n:n,k:k||'copa'});hito(trophyKind(n,k),n);S.stats.titles=(S.stats.titles||0)+1;logm('¡Título! '+n+'.');if(typeof titleMoment==='function')titleMoment(n);}
 function trophyCheck(kind,win,n){var me=S.pl[S.me];

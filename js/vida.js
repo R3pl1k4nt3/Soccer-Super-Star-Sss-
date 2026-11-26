@@ -340,7 +340,7 @@ function contractCard(){
  return h;
 }
 function lifeTeam(){
- return boardCard()+contractCard()+'<div class="card"><h3>Relaciones en el club</h3>'+relRow('coach')+relRow('team')+relRow('board')+moralRow()+'</div>'+actsCard(['coach','team','board'],'Acciones con el equipo');
+ return boardCard()+(isCaptain()?'<div class="card"><span class="badge">CAPITÁN</span><p class="small" style="margin:6px 0 0">Llevas el brazalete de '+esc(myClub().n)+': ganas algo más de duelos, el vestuario te respeta y das la cara cuando se pierde.</p></div>':'')+contractCard()+'<div class="card"><h3>Relaciones en el club</h3>'+relRow('coach')+relRow('team')+relRow('board')+moralRow()+'</div>'+actsCard(['coach','team','board'],'Acciones con el equipo');
 }
 function adsCard(){
  var A=S.ads||[];var h='<div class="card"><h3>Publicidad</h3>';
@@ -378,15 +378,15 @@ function lifeAgent(){
 function viewLife(){
  var s=subOf('life');
  return eventCard()+(s!=='team'&&S.bm?'<div class="card"><p style="margin:0">La directiva quiere reunirse contigo.</p><button class="go alt" data-a="sub" data-k="life" data-id="team" style="margin-top:8px">Ir a la reunión</button></div>':'')+
-  (s==='red'?lifeSocial():s==='agent'?lifeAgent():lifeTeam());
+  (s==='red'?lifeSocial():s==='agent'?lifeAgent():s==='pers'?lifePersonal():lifeTeam());
 }
 
 /* ---------- vistas de Negocios ---------- */
 function bizSummary(){
- var k=ctr(),inv=bizIncome(),sp=sponsorIncome(),so=socialIncome(),com=Math.round(k.wage*agentCom()),cm=cmObj(),cmc=cm?cm.c:0,net=k.wage+inv+sp+so-com-cmc;
+ var k=ctr(),inv=bizIncome(),sp=sponsorIncome(),so=socialIncome(),com=Math.round(k.wage*agentCom()),cm=cmObj(),cmc=cm?cm.c:0,hc=homeCost(),net=k.wage+inv+sp+so-com-cmc-hc;
  var B=bizMig(),n=Object.keys(B).length,val=0;Object.keys(B).forEach(function(id){val+=bizSale(B[id]);});
  var h='<div class="card"><div class="rowb"><b>Balance fijo por semana</b><b class="'+(net>=0?'good':'bad')+' num">'+fmt(net)+'</b></div>'+
-  '<div class="small mut" style="margin-top:6px">Salario '+fmt(k.wage)+' · patrocinios '+fmt(sp)+' · negocios '+fmt(inv)+' · redes '+fmt(so)+' · comisión del representante −'+fmt(com)+(cmc?' · community manager −'+fmt(cmc):'')+'. Además cobras primas por partido, bonus de contrato, publicidad y premios.</div>'+
+  '<div class="small mut" style="margin-top:6px">Salario '+fmt(k.wage)+' · patrocinios '+fmt(sp)+' · negocios '+fmt(inv)+' · redes '+fmt(so)+' · comisión del representante −'+fmt(com)+(cmc?' · community manager −'+fmt(cmc):'')+(hc?' · casa −'+fmt(hc):'')+'. Además cobras primas por partido, bonus de contrato, publicidad y premios.</div>'+
   '<div class="kv" style="margin-top:8px"><div><b class="num good">'+fmt(S.money)+'</b><span>Dinero</span></div><div><b class="num">'+n+'</b><span>Negocios</span></div><div><b class="num">'+fmt(val)+'</b><span>Valor de venta</span></div><div><b class="num">'+fmt(S.fund)+'</b><span>Fondo de inversión</span></div></div></div>';
  h+='<div class="card"><h3>Fondo de inversión</h3><div class="rowb"><span>Saldo</span><b class="num">'+fmt(S.fund)+'</b></div><div class="small mut">Rinde de media un 0,25% por semana, con altibajos. Puedes perder dinero.</div>'+
   '<div class="btns" style="margin-top:10px"><button class="go alt" data-a="fundin" data-n="25">Aportar 25%</button><button class="go alt" data-a="fundin" data-n="100">Aportar todo</button><button class="go alt full '+(S.fund>0?'':'dis')+'" data-a="fundout">Retirar todo</button></div></div>';

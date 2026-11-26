@@ -86,6 +86,16 @@ Al abrir el juego aparece el **menú de partidas**: tres huecos para tener varia
 - **Negocios:** 16 empresas (de un piso de alquiler a un club de fútbol modesto) con tres niveles, gestor opcional, riesgo, resultado mensual que sube o baja, sucesos (inspecciones, meses récord, una startup que se dispara o se hunde) y venta. Campañas de publicidad puntuales según tus seguidores.
 - **Hitos (Carrera → Hitos):** resumen de tu carrera y lista completa de trofeos (ligas, ascensos, copas, Europa y selección) y premios: Balón de Oro y podios, Bota de Oro, mejor joven del mundo, equipo mundial del año, **equipo europeo de la temporada** y mejor jugador de Europa, mejor jugador, goleador, asistente y joven de la liga, equipo de la temporada, jugador y equipo del mes, y premios de torneos. Cada hito guarda la temporada, el club y la división (con su nivel medio), y se ve cuántas veces lo has logrado en cada liga, además de tu puesto en el Balón de Oro cada temporada.
 - **Versión app (Android, en preparación):** en la app el juego tiene una temporada gratis al día por dispositivo; para seguir ese día se compra el juego completo o se ven anuncios con recompensa (3 por temporada extra, configurable en `js/movil.js`). La web de GitHub sigue siendo libre. Para probar el modo app en el navegador: `index.html?app=1` (anuncios y compra simulados). La app usa solo la versión ficticia, el botón atrás de Android cierra ventanas o vuelve a Inicio, y al empezar aparece una tarjeta de primeros pasos.
+- **Web instalable:** desde el móvil se puede «Añadir a pantalla de inicio» (icono propio, pantalla completa y funciona sin conexión). El enlace se ve con imagen y descripción al compartirlo.
+- **Partidas a salvo:** el juego pide al navegador almacenamiento persistente y, cada 3 temporadas sin copia, recuerda en Inicio guardar la partida en un archivo.
+- **Fin de carrera y compartir:** al retirarte aparece tu carrera completa (partidos, goles, asistencias, nota, títulos, Balón de Oro, veces mejor jugador de la liga, equipos de la temporada, horas sobre el césped, tiempo jugando, valoración y valor máximos, clubes y mejor temporada). Con «Compartir mi carrera» se crea una imagen vertical: en el móvil se comparte con el menú del sistema (Instagram, WhatsApp, X, Facebook…); en el ordenador, con X, Facebook, WhatsApp, descarga y copiar texto. También desde Carrera → Hitos.
+- **Diario Balón:** titulares cada semana sobre tus partidos, la liga, rumores de fichaje, tu rival y tus premios, con hemeroteca en Inicio.
+- **Capitanía:** tras dos temporadas en un club, con buena relación con el vestuario y entre los mejores de la plantilla, te eligen capitán (sube el salario, ganas algo más de duelos y tienes la «Charla de capitán»). También puedes ser capitán de la selección.
+- **Vida personal (Vida → Vida personal):** cinco casas (más moral y descanso cada semana, con su alquiler), garaje con cinco coches y familia con eventos: conocer a alguien, boda, hijos y crisis.
+- **Rival de tu generación:** un jugador de tu edad y nivel parecido en tu línea; en Inicio comparas valoración, valor, goles, asistencias y Balón de Oro, y llevas la cuenta de temporadas ganadas.
+- **Dificultad:** Fácil, Normal o Leyenda (duelos, ritmo de mejora y salarios). Se elige al crear la carrera y se cambia en Carrera → Trayectoria.
+- **Sugerencias:** enlace en el menú lateral para enviar ideas o fallos.
+- **Pruebas automáticas:** en cada subida a GitHub se comprueba la sintaxis y el bot juega varias carreras (`.github/workflows/pruebas.yml`).
 - **Más vida en el vestuario:** entrenamiento extra, ideas tácticas, charla con el capitán, torneo de videojuegos, directos en redes, visitas a peñas y nuevos eventos (piques, novatadas, filtraciones, palco con la directiva).
 - **Relaciones, moral, eventos, economía, envejecimiento y retirada.**
 
@@ -115,6 +125,9 @@ Al abrir el juego aparece el **menú de partidas**: tres huecos para tener varia
 | `js/vida.js` | Directiva, negociación de contratos, traspasos, publicidad, empresas y vistas de Vida y Negocios |
 | `js/hitos.js` | Pestaña Hitos: trofeos y premios con temporada, club y división |
 | `js/movil.js` | Versión app: límite de temporadas por día, anuncios con recompensa, compra, botón atrás y primeros pasos |
+| `js/contenido.js` | Dificultad, Diario Balón, capitanía, vida personal y rival generacional |
+| `js/compartir.js` | Resumen de carrera, pantalla de retirada e imagen para compartir |
+| `sw.js`, `manifest.webmanifest`, `iconos-app/` | Web instalable y sin conexión |
 | `js/inicio.js` | Pestaña Inicio, bandeja y secciones agrupadas |
 | `js/progresion.js` | Potencial, curva de edad, forma, valor mensual, momentos y gráfico |
 | `diseno/` | Encargos (prompts, guía de estilo e inventario) para pedir gráficos a herramientas de diseño |

@@ -10,9 +10,11 @@ var HCAT=[
  {k:'mvp',g:'l',n:'Mejor jugador de la liga'},{k:'pich',g:'l',n:'Máximo goleador de la liga'},{k:'ast',g:'l',n:'Máximo asistente de la liga'},{k:'yng',g:'l',n:'Mejor joven de la liga'},
  {k:'toy',g:'l',n:'Equipo de la temporada de la liga'},{k:'pom',g:'l',n:'Jugador del mes'},{k:'tom',g:'l',n:'Equipo del mes'},
  /* torneos */
- {k:'tocm',g:'c',n:'Mejor jugador de un torneo'},{k:'tocg',g:'c',n:'Máximo goleador de un torneo'},{k:'toc',g:'c',n:'Equipo ideal de un torneo'}
+ {k:'tocm',g:'c',n:'Mejor jugador de un torneo'},{k:'tocg',g:'c',n:'Máximo goleador de un torneo'},{k:'toc',g:'c',n:'Equipo ideal de un torneo'},
+ /* vida */
+ {k:'cap',g:'v',n:'Capitán de tu club'},{k:'capn',g:'v',n:'Capitán de la selección'},{k:'boda',g:'v',n:'Boda'},{k:'hijo',g:'v',n:'Hijos'}
 ];
-var HGRP=[['t','Trofeos'],['w','Premios mundiales y europeos'],['l','Premios de liga'],['c','Premios en copas europeas y torneos']];
+var HGRP=[['t','Trofeos'],['w','Premios mundiales y europeos'],['l','Premios de liga'],['c','Premios en copas europeas y torneos'],['v','Capitanías y vida']];
 /* partidas anteriores: se reconstruyen desde el palmarés y la trayectoria (sin nivel de la división) */
 function hitosMig(){
  if(S.hitos)return S.hitos;

@@ -30,7 +30,7 @@ function leagueF(){return leagueFor(lgLevel(),S.age,overall());}
 /* pérdida física de los veteranos: menos en ligas fuertes */
 function declineFor(L){return clamp(1.2-(L-40)/100,0.8,1.2);}
 function growthAt(cid){return ageGrowth(S.age)*potGrowth()*leagueFor(lgLevelOf(cid),S.age,overall());}
-function growthF(){return ageGrowth(S.age)*potGrowth()*leagueF();}
+function growthF(){return ageGrowth(S.age)*potGrowth()*leagueF()*diff().gr;}
 function pcnt(x){return Math.round(x*100)+'%';}
 function rateCls(f){return f>=1?'good':f<0.75?'bad':'';}
 function leagueTxt(){var a=ageGrowth(S.age),l=leagueF(),p=potGrowth(),g=a*l*p,ov=overall(),c=leagueCeil();

@@ -115,7 +115,7 @@ function pskillNow(p,id,min,fm){return Math.round(clamp(pskill(p,id)*tiredF(p,id
 function duelP(o){
  var mine=skAvg(o.sk),p=S.pl[o.op],theirs=o.ok.reduce(function(s,id){return s+pskillNow(p,id,o.min,o.fm);},0)/o.ok.length;
  var base=[0.72,0.55,0.4][o.rk];
- return clamp(base+(mine-theirs)/50+(S.rel.coach-50)*0.001+(S.moral-50)*0.002-(S.energy<30?0.08:0)+traitDec(o)+(o.dec?tx('big'):0),0.05,0.95);
+ return clamp(base+(mine-theirs)/50+(S.rel.coach-50)*0.001+(S.moral-50)*0.002-(S.energy<30?0.08:0)+traitDec(o)+(o.dec?tx('big'):0)+diff().p+(isCaptain()?0.02:0),0.05,0.95);
 }
 function oppVals(o){var p=S.pl[o.op];return o.ok.map(function(id){return [SKNAME[id]||id,pskillNow(p,id,o.min,o.fm)];});}
 
@@ -389,7 +389,7 @@ function weekly(rep){
  moral((50-S.moral)*0.05);
  S.acts=2;S.post=0;S.wk=(S.wk||0)+1;S.weekTrain=0;
  if(!S.event&&Math.random()<0.25)newEvent();
- boardWeekly();
+ boardWeekly();newsWeekly(rep);captainWeekly(rep);lifeWeekly();
 }
 function playN(n){
  if(S.summary||S.retired||S.match)return;
@@ -414,7 +414,7 @@ function endSeason(){
  var me=S.pl[S.me],c=S.clubs[me.c],lg=lgOf(me.c),tb=table(lg),pos=tb.indexOf(c)+1;
  var sm={season:S.season,pos:pos,club:c.n,league:lg.n,champion:pos===1,prize:0,age:S.age,renew:false,retire:false,ovBefore:overall(),apps:S.ss.pj,g:S.ss.g,a:S.ss.a,rating:S.ss.rn?S.ss.rsum/S.ss.rn:0,awards:[],moves:[]};
  var w=S.contract.wage;
- boardSeason(sm);
+ boardSeason(sm);rivalSeason();
  sm.prize=pos===1?w*12:pos<=4?w*5:pos<=Math.ceil(tb.length/2)?w*2:0;
  if(pos===1)addTrophy(lg.n+' ('+country(lg.co).n+')','liga');
  S.lgs.forEach(function(L){var t=table(L);S.champs.push({s:S.season,lg:L.id,c:t[0].id});});
@@ -437,6 +437,7 @@ function endSeason(){
  ageRosters();
  sm.transfers=aiTransfers().slice(0,6);
  sm.devs=aiSeasonEvolve();
+ if(!S.freePending)captainSeason();rivalPick();
  /* contrato */
  S.contract.years--;
  /* sin renovación, te quedas libre al cerrar el resumen (vida.js · freeStart) */
@@ -453,7 +454,7 @@ function endSeason(){
 }
 
 /* ---------- nueva partida ---------- */
-function wageFor(str,ov){var m=clamp((ov||str)/str,0.75,1.35);return Math.round(4000*Math.exp((str-40)/14)*m*agentWage()*(1+(S.rel.board-50)*0.002)/100)*100;}
+function wageFor(str,ov){var m=clamp((ov||str)/str,0.75,1.35);return Math.round(4000*Math.exp((str-40)/14)*m*agentWage()*(1+(S.rel.board-50)*0.002)*diff().w/100)*100;}
 function newGame(name,pos,tp,ts,nat,co,real,look){
  real=!!real&&typeof REALDATA!=='undefined'&&!(typeof isApp==='function'&&isApp());
  S={v:VER,name:name,pos:pos,tp:tp,ts:ts,nat:nat,cat:defCat(pos),age:16,season:1,slot:0,money:60000,medals:5,energy:100,injured:0,bono:0,mult:1,moral:55,
