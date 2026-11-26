@@ -251,7 +251,8 @@ function finishMatch(M){
  if(mins>0){medals=(r>=7?1:0)+(r>=8.5?1:0)+(r>=9.5?1:0)+(gf>gc?1:0)+(r>=7?itemLvl('psico'):0)+(M.imp>=1.8&&gf>gc?1:0);
   if(nat)bonus=Math.round(Math.max(0,r-5)*2500+(gf>gc?15000:0)+g*10000);
   else bonus=Math.round(Math.max(0,r-5)*400*Math.exp((S.clubs[me.c].str-40)/30))+(gf>gc?Math.round(w*0.15):0)+g*Math.round(w*0.4)+asi*Math.round(w*0.2)+((P.df||pos==='POR')&&gc===0&&mins>=60?Math.round(w*0.3):0);
-  bonus=Math.round(bonus*M.imp*(1+(S.rel.fans-50)*0.004));}
+  bonus=Math.round(bonus*M.imp*(1+(S.rel.fans-50)*0.004));
+  if(!nat)bonus+=contractBonus(mins,g,asi);}
  S.medals+=medals;
  /* relaciones, moral y seguidores */
  if(mins>0){var res=gf>gc?1:gf<gc?-1:0;
@@ -373,7 +374,7 @@ function janStart(){for(var i=0;i<S.cal.length;i++)if(S.cal[i].m===5)return i;re
 function windowOpen(){var j=janStart();return S.slot<=4||(S.slot>=j&&S.slot<j+4);}
 function weekly(rep){
  var inc=S.contract.wage,out=0;
- INVEST.forEach(function(v){if(S.invest[v.id])inc+=v.w;});
+ inc+=bizIncome();
  inc+=sponsorIncome();inc+=socialIncome();
  out+=Math.round(S.contract.wage*agentCom());
  if(S.cm)out+=byId(CMS,S.cm).c;
@@ -388,6 +389,7 @@ function weekly(rep){
  moral((50-S.moral)*0.05);
  S.acts=2;S.post=0;S.wk=(S.wk||0)+1;S.weekTrain=0;
  if(!S.event&&Math.random()<0.25)newEvent();
+ boardWeekly();
 }
 function playN(n){
  if(S.summary||S.retired||S.match)return;
@@ -408,6 +410,7 @@ function endSeason(){
  var me=S.pl[S.me],c=S.clubs[me.c],lg=lgOf(me.c),tb=table(lg),pos=tb.indexOf(c)+1;
  var sm={season:S.season,pos:pos,club:c.n,league:lg.n,champion:pos===1,prize:0,age:S.age,renew:false,retire:false,ovBefore:overall(),apps:S.ss.pj,g:S.ss.g,a:S.ss.a,rating:S.ss.rn?S.ss.rsum/S.ss.rn:0,awards:[],moves:[]};
  var w=S.contract.wage;
+ boardSeason(sm);
  sm.prize=pos===1?w*12:pos<=4?w*5:pos<=Math.ceil(tb.length/2)?w*2:0;
  if(pos===1)addTrophy(lg.n+' ('+country(lg.co).n+')','liga');
  S.lgs.forEach(function(L){var t=table(L);S.champs.push({s:S.season,lg:L.id,c:t[0].id});});
@@ -432,7 +435,9 @@ function endSeason(){
  sm.devs=aiSeasonEvolve();
  /* contrato */
  S.contract.years--;
- if(S.contract.years<=0){S.contract.years=2;S.contract.wage=wageFor(S.clubs[me.c].str,overall());sm.renew=true;logm('Renuevas con '+S.clubs[me.c].n+' dos años. Nuevo salario: '+fmt(S.contract.wage)+'.');}
+ /* sin renovación negociada, se renueva a la baja y pierdes los bonus */
+ if(S.contract.years<=0){var k0=ctr();S.contract={wage:Math.round(wageFor(S.clubs[me.c].str,overall())*0.95/100)*100,years:2,gb:0,ab:0,apb:0,so:k0.so};sm.renew=true;logm('Renuevas con '+S.clubs[me.c].n+' dos años sin negociar. Nuevo salario: '+fmt(S.contract.wage)+'.');}
+ S.renewDue=S.contract.years<=1?1:0;S.neg=null;S.bm=null;
  sponsorSeason();
  S.season++;
  startSeason();

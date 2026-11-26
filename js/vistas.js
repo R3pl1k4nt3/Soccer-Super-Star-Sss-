@@ -281,62 +281,17 @@ function viewClub(){
  var n=nation(me.nat),cp=Math.round(ntCallP()*100);
  h+='<div class="card"><h3>Selección · '+n.n+'</h3><div class="kv"><div><b class="num">'+S.nt.calls+'</b><span>Convocatorias</span></div><div><b class="num">'+S.nt.caps+'</b><span>Partidos</span></div><div><b class="num">'+S.nt.g+' / '+S.nt.a+'</b><span>Goles / asist.</span></div></div>'+
   '<div class="small mut" style="margin-top:8px">Fuerza de la selección '+n.str+'. Probabilidad de convocatoria ahora: <b class="num">'+cp+'%</b>. Depende de tu valoración frente a los mejores '+natName(me.nat).toLowerCase()+'s de tu puesto, de tu nota media y de la prensa.</div></div>';
- h+='<div class="card"><h3>Representante</h3><div class="rowb"><b>'+esc(ag.n)+'</b><span class="mut">Nivel '+ag.lvl+' · comisión '+Math.round(ag.com*100)+'%</span></div>'+
-  '<div class="small mut">Trae '+(1+ag.lvl)+' ofertas por mercado, '+(ag.lvl>=3?'de cualquier país':ag.lvl>=2?'de tu país, el de tu cantera y el de tu selección':'solo de tu país')+'. Mejora salarios un '+Math.round((agentWage()-1)*100)+'% y abre marcas antes.</div>'+
-  '<div class="btns" style="margin-top:10px"><button class="go alt '+(windowOpen()?'':'dis')+'" data-a="agsearch">Mover mi nombre</button><button class="go alt '+(S.agent==='a1'?'dis':'')+'" data-a="agfire">Despedirlo</button></div>';
- AGENTS.forEach(function(a){if(a.id===S.agent)return;var ok=overall()>=a.req&&S.fol>=a.fol;
-  h+='<div class="item"><div><b>'+esc(a.n)+'</b> <span class="lv">Nv '+a.lvl+'</span><p>Comisión '+Math.round(a.com*100)+'% · firma '+fmt(a.fee)+' · pide valoración '+a.req+' y '+fnum(a.fol)+' seguidores</p></div><button class="go '+(ok&&S.money>=a.fee?'':'dis')+'" data-a="aghire" data-id="'+a.id+'">Fichar</button></div>';});
- h+='</div>';
- h+='<div class="card"><h3>Ofertas</h3><div class="small mut" style="margin-bottom:6px">'+(windowOpen()?'Mercado abierto.':'Mercado cerrado. Abre al inicio de temporada y en enero.')+'</div>';
+ h+='<div class="card"><div class="rowb"><h3 style="margin:0">Representante</h3><span class="mut small">'+esc(ag.n)+' · nivel '+ag.lvl+'</span></div><p class="small mut">Tu representante negocia por ti: cuanto mejor sea, más cláusulas ve y más exigencias te tolera la directiva.</p><button class="go alt block" data-a="go" data-id="life" data-k="agent">Ver representante</button></div>';
+ h+='<div class="card"><h3>Ofertas</h3><div class="small mut" style="margin-bottom:6px">'+(windowOpen()?'Mercado abierto.':'Mercado cerrado. Abre al inicio de temporada y en enero.')+(S.listed?' Estás en el mercado: llegan más ofertas.':'')+' Al pulsar Negociar se abre la mesa de negociación.</div>';
  S.offers.forEach(function(o,i){var x=S.clubs[o.club],p=Math.round(starterP(x)*100),r2=rivalFor(x),l2=lgOf(x.id);
-  h+='<div class="item"><div><b>'+esc(x.n)+'</b><p>'+l2.n+' ('+country(x.co).n+') · fuerza '+x.str+' · '+fmt(o.wage)+'/semana · '+o.years+' año(s) · prima '+fmt(o.bonus)+' · titular '+p+'%'+(function(){var g=growthAt(x.id),now=growthF();return ' · ritmo de mejora <b class="'+(g>now+0.02?'good':g<now-0.02?'bad':'')+'">'+Math.round(g*100)+'%</b> (ahora '+Math.round(now*100)+'%)';})()+(r2?' · rival: '+esc(r2.n)+' ('+r2.o+')':'')+'</p></div><div style="display:grid;gap:6px"><button class="go alt" data-a="squad" data-id="'+x.id+'">Plantilla</button><button class="go '+(windowOpen()?'':'dis')+'" data-a="accept" data-i="'+i+'">Fichar</button></div></div>';});
+  h+='<div class="item"><div><b>'+esc(x.n)+'</b><p>'+l2.n+' ('+country(x.co).n+') · fuerza '+x.str+' · '+fmt(o.wage)+'/semana · '+o.years+' año(s) · prima '+fmt(o.bonus)+' · traspaso ≈'+fmv(transferFee())+' · titular '+p+'%'+(function(){var g=growthAt(x.id),now=growthF();return ' · ritmo de mejora <b class="'+(g>now+0.02?'good':g<now-0.02?'bad':'')+'">'+Math.round(g*100)+'%</b> (ahora '+Math.round(now*100)+'%)';})()+(r2?' · rival: '+esc(r2.n)+' ('+r2.o+')':'')+'</p></div><div style="display:grid;gap:6px"><button class="go alt" data-a="squad" data-id="'+x.id+'">Plantilla</button><button class="go '+(windowOpen()?'':'dis')+'" data-a="accept" data-i="'+i+'">Negociar</button></div></div>';});
  if(!S.offers.length)h+='<p class="mut">No hay ofertas ahora.</p>';
  h+='</div>';
  if(S.age>=35)h+='<div class="card"><h3>Retirada</h3><p class="small mut">Puedes colgar las botas cuando quieras. A los 40 es obligatorio.</p><button class="go alt block" data-a="retire">Retirarme</button></div>';
  return h;
 }
 
-/* ---------- Vida ---------- */
-function viewLife(){
- var h='';
- if(S.event){var ev=EVENTS[S.event.i];h+='<div class="card" style="border-color:var(--gold)"><h3>'+ev.t+'</h3><p style="margin:0 0 10px">'+ev.d+'</p><div class="btns">'+ev.o.map(function(o,i){return '<button class="go'+(i?' alt':'')+'" data-a="ev" data-i="'+i+'">'+o.n+'</button>';}).join('')+'</div></div>';}
- h+='<div class="card"><h3>Relaciones y moral</h3>';
- Object.keys(REL_INFO).forEach(function(k){var v=Math.round(S.rel[k]);h+='<div class="item" style="grid-template-columns:1fr"><div><div class="rowb"><b class="tname">'+icoRel(k)+REL_INFO[k][0]+'</b><span class="num '+(v>=65?'good':v<35?'bad':'')+'">'+v+'</span></div><div class="bar big '+(v<35?'low':'en')+'"><i style="width:'+v+'%"></i></div><p>'+REL_INFO[k][1]+'</p></div></div>';});
- h+='<div class="item" style="grid-template-columns:1fr"><div><div class="rowb"><b>Moral</b><span class="num">'+S.moral+'</span></div><div class="bar big '+(S.moral<35?'low':'en')+'"><i style="width:'+S.moral+'%"></i></div><p>Sube con buenos partidos y ruedas de prensa con confianza. Mejora tu nota, tus duelos y la fuerza de tu equipo.</p></div></div></div>';
- h+='<div class="card"><div class="rowb"><h3 style="margin:0">Acciones</h3><span class="small mut">Te quedan <b class="num">'+S.acts+'</b> esta semana</span></div>';
- ACTS.forEach(function(a){var st=actState(a),f=actFactor(a),lim=a.season?'1 vez por temporada':a.cd>1?'cada '+a.cd+' semanas':'cada semana';
-  h+='<div class="item"><div><b class="tname">'+icoAcc(a.id)+a.n+'</b><p>'+REL_INFO[a.w][0]+' · '+a.d+'</p><p class="small">'+lim+(f<1?' · <span class="warn">ahora rinde al '+Math.round(f*100)+' %</span>':'')+(st.ok?'':' · <span class="bad">'+st.why+'</span>')+'</p></div><button class="go alt '+(st.ok?'':'dis')+'" data-a="act" data-id="'+a.id+'">'+st.lbl+'</button></div>';});
- h+='</div>';
- var cm=cmObj();
- h+='<div class="card"><h3>Redes sociales</h3><div class="kv"><div><b class="num">'+fnum(S.fol)+'</b><span>Seguidores</span></div><div><b class="num good">'+fmt(socialIncome())+'</b><span>Ingresos por semana</span></div><div><b class="num">'+fmt(postValue())+'</b><span>Colaboración</span></div></div>'+
-  '<button class="go alt block '+(S.post?'dis':'')+'" data-a="post" style="margin-top:10px">Publicar colaboración pagada</button>';
- if(S.spons.length){h+='<h3 style="margin-top:12px">Publicaciones para tus marcas</h3>';S.spons.forEach(function(s){var b=byId(BRANDS,s.id);h+='<div class="item"><div><b>'+esc(b.n)+'</b><p>Este mes: '+s.done+'/'+s.posts+' publicaciones</p></div><button class="go alt '+(s.done>=s.posts||s.wk===S.slot?'dis':'')+'" data-a="spost" data-id="'+s.id+'">Publicar</button></div>';});}
- h+='<h3 style="margin-top:12px">Community manager</h3><div class="small mut">'+(cm?'Te lleva las redes <b>'+esc(cm.n)+'</b>: +'+ds(cm.g*100)+'% de seguidores por semana, colaboraciones ×'+ds(cm.post)+'.':'Llevas tus redes tú solo.')+'</div>';
- CMS.forEach(function(c){var on=S.cm===c.id;h+='<div class="item"><div><b>'+esc(c.n)+'</b><p>'+fmt(c.c)+'/semana · +'+ds(c.g*100)+'% seguidores · prensa +'+ds(c.pr)+' · colaboraciones ×'+ds(c.post)+' · riesgo de polémica '+ds(c.risk*100)+'%</p></div>'+(on?'<button class="go alt" data-a="cmfire">Despedir</button>':'<button class="go alt" data-a="cmhire" data-id="'+c.id+'">Contratar</button>')+'</div>';});
- return h+'</div>';
-}
-
-/* ---------- Negocio ---------- */
-function viewMoney(){
- var inv=0;INVEST.forEach(function(v){if(S.invest[v.id])inv+=v.w;});
- var sp=sponsorIncome(),so=socialIncome(),com=Math.round(S.contract.wage*agentCom()),cm=cmObj(),cmc=cm?cm.c:0,net=S.contract.wage+inv+sp+so-com-cmc;
- var h='<div class="card"><div class="rowb"><b>Balance fijo por semana</b><b class="'+(net>=0?'good':'bad')+' num">'+fmt(net)+'</b></div>'+
-  '<div class="small mut" style="margin-top:6px">Salario '+fmt(S.contract.wage)+' · patrocinios '+fmt(sp)+' · negocios '+fmt(inv)+' · redes '+fmt(so)+' · comisión del representante −'+fmt(com)+(cmc?' · community manager −'+fmt(cmc):'')+'. Además cobras primas por partido y premios.</div></div>';
- h+='<div class="card"><h3>Patrocinios activos</h3>';
- if(!S.spons.length)h+='<p class="mut small">Todavía no tienes patrocinadores.</p>';
- S.spons.forEach(function(s){var b=byId(BRANDS,s.id);h+='<div class="item"><div><b>'+esc(b.n)+'</b> <span class="lv">'+BCAT[s.cat]+'</span><p>'+fmt(s.w)+'/semana · '+s.yrs+' año(s) · publicaciones este mes '+s.done+'/'+s.posts+' · satisfacción '+Math.round(s.sat)+(s.strikes?' · <span class="bad">avisos '+s.strikes+'</span>':'')+(s.cat==='botas'?' · debes jugar con sus botas':'')+'</p></div><button class="go alt" data-a="scancel" data-id="'+s.id+'">Rescindir</button></div>';});
- h+='</div><div class="card"><h3>Propuestas de marcas</h3>';
- if(!S.sofs.length)h+='<p class="mut small">Las marcas te escriben a final de cada mes si cumples sus requisitos. Un representante mejor las atrae antes.</p>';
- S.sofs.forEach(function(o,i){var b=byId(BRANDS,o.id);h+='<div class="item"><div><b>'+esc(b.n)+'</b> <span class="lv">'+BCAT[o.cat]+'</span><p>'+fmt(o.w)+'/semana · '+o.yrs+' año(s) · '+o.posts+' publicaciones al mes'+(o.cat==='botas'?' · exclusividad de botas':'')+'</p></div><div style="display:grid;gap:6px"><button class="go" data-a="ssign" data-i="'+i+'">Firmar</button><button class="go alt" data-a="sreject" data-i="'+i+'">Rechazar</button></div></div>';});
- h+='</div><div class="card"><h3>Marcas</h3><div class="small mut" style="margin-bottom:6px">Requisitos para que se fijen en ti (ya incluyen la ayuda de tu representante).</div>';
- BRANDS.slice().sort(function(a,b){return a.tier-b.tier;}).forEach(function(b){var r=brandReq(b),ok=brandOk(b),has=S.spons.some(function(s){return s.id===b.id;});
-  h+='<div class="rowb small" style="padding:5px 0;border-top:1px solid var(--line)"><span>'+esc(b.n)+' <span class="mut">'+BCAT[b.cat]+' · '+'★'.repeat(b.tier)+'</span></span><span class="'+(has?'good':ok?'good':'mut')+'">'+(has?'Patrocinador':'Valoración '+r.ov+' · '+fnum(r.fol)+' seguidores')+'</span></div>';});
- h+='</div><div class="card"><h3>Fondo de inversión</h3><div class="rowb"><span>Saldo</span><b class="num">'+fmt(S.fund)+'</b></div><div class="small mut">Rinde de media un 0,25% por semana, con altibajos. Puedes perder dinero.</div>'+
-  '<div class="btns" style="margin-top:10px"><button class="go alt" data-a="fundin" data-n="25">Aportar 25%</button><button class="go alt" data-a="fundin" data-n="100">Aportar todo</button><button class="go alt full '+(S.fund>0?'':'dis')+'" data-a="fundout">Retirar todo</button></div></div>';
- h+='<div class="card"><h3>Negocios</h3>';
- INVEST.forEach(function(v){h+='<div class="item"><div><b>'+v.n+'</b><p>Rinde '+fmt(v.w)+'/semana</p></div>'+(S.invest[v.id]?'<span class="good">Comprado</span>':'<button class="go '+(S.money>=v.c?'':'dis')+'" data-a="invest" data-id="'+v.id+'">'+fmt(v.c)+'</button>')+'</div>';});
- return h+'</div>';
-}
+/* Vida y Negocios: en vida.js */
 
 /* ---------- Tienda ---------- */
 function viewShop(){
@@ -472,9 +427,10 @@ function modalHTML(){
  return '<div class="modal" role="dialog" aria-modal="true"><div class="card"><h2>Fin de la temporada '+m.season+'</h2><p><b>'+esc(m.club)+'</b> acaba '+m.pos+'º en '+esc(m.league)+(m.champion?'. Sois campeones de liga.':'.')+(m.moved?' '+m.moved+'.':'')+(m.euNext?' La próxima temporada jugáis la '+m.euNext+'.':'')+'</p>'+
   '<div class="kv"><div><b class="num">'+m.apps+'</b><span>Partidos de liga</span></div><div><b class="num">'+(m.apps?ds(m.rating):'-')+'</b><span>Nota media</span></div><div><b class="num good">'+fmt(m.prize)+'</b><span>Premios</span></div></div>'+aw+
   (b&&b.top[0]?'<p class="small" style="margin-top:10px">Balón de Oro: <b class="star">'+esc(b.top[0].n)+'</b> ('+esc(b.top[0].c)+').'+(b.me?' Tú quedas '+b.me+'º.':'')+'</p>':'')+
+  (m.obj?'<p class="small">'+esc(m.obj)+'</p>':'')+
   (m.devs?devsHTML(m.devs):'')+
   (m.transfers&&m.transfers.length?'<p class="small mut">Mercado: '+m.transfers.map(esc).join('; ')+'.</p>':'')+
-  '<p class="small mut" style="margin-top:10px">Cumples '+S.age+' años. Valoración: '+ds(m.ovBefore)+' → '+ds(m.ovAfter)+(S.age>=31?'. Pierdes algo de nivel físico por la edad.':'.')+(m.renew?' Tu contrato se renueva automáticamente.':'')+(m.retire?' Es el momento de retirarte.':' Mira las ofertas en Club.')+'</p>'+
+  '<p class="small mut" style="margin-top:10px">Cumples '+S.age+' años. Valoración: '+ds(m.ovBefore)+' → '+ds(m.ovAfter)+(S.age>=31?'. Pierdes algo de nivel físico por la edad.':'.')+(m.renew?' Tu contrato se renueva sin negociar, a la baja y sin bonus.':S.renewDue?' Te queda un año de contrato: la directiva querrá negociar.':'')+(m.retire?' Es el momento de retirarte.':' Mira las ofertas en Club.')+'</p>'+
   '<button class="go block" data-a="closesum" style="margin-top:12px">Continuar</button></div></div>';
 }
 

@@ -40,20 +40,23 @@ function genOffers(msg){
  var hi=ov+3+3*lvl+(S.rumor?3:0),lo=Math.min(ov-8,cur.str-4);
  var c=shuffle(S.clubs.filter(function(x){return !x.guest&&x.id!==cur.id&&okCo(x.co)&&x.str<=hi&&x.str>=lo;}));
  c.sort(function(a,b){return (b.str+Math.random()*6)-(a.str+Math.random()*6);});
- c=c.slice(0,1+lvl);
+ c=c.slice(0,1+lvl+(S.listed?2:0));
  if(!c.length)c=S.clubs.filter(function(x){return x.id!==cur.id&&x.co===cur.co;}).sort(function(a,b){return Math.abs(a.str-ov)-Math.abs(b.str-ov);}).slice(0,2);
  S.offers=c.map(function(x){var w=wageFor(x.str,ov);return {club:x.id,wage:w,years:1+Math.floor(Math.random()*4),bonus:Math.round(w*4*(1+0.2*(lvl-1)))};});
  S.rumor=0;
  if(msg)logm(msg);
 }
-function accept(i){
+/* fichar por un club: terms y prima vienen de la negociación; sin ellos, se firma la oferta tal cual */
+function accept(i,terms,prima){
  var o=S.offers[i];if(!o)return;
  if(!windowOpen()){toast('El mercado está cerrado. Abre al inicio de temporada y en enero.',1);return;}
- var me=S.pl[S.me],old=S.clubs[me.c],cl=S.clubs[o.club];
+ var me=S.pl[S.me],old=S.clubs[me.c],cl=S.clubs[o.club],k=ctr(),fee=transferFee(),cut=k.so?Math.round(fee*k.so/100):0;
  old.ros.splice(old.ros.indexOf(S.me),1);cl.ros.push(S.me);me.c=cl.id;
- S.contract={wage:o.wage,years:o.years};S.money+=o.bonus;
+ S.contract=terms||{wage:o.wage,years:o.years,gb:0,ab:0,apb:0,so:0};
+ var pr=prima!=null?prima:o.bonus;S.money+=pr+cut;
  S.rel.coach=50;S.rel.team=45;S.rel.board=50;S.rel.fans=cl.id===S.cantera?75:45;
- logm('Fichas por '+cl.n+' ('+lgName(cl)+'). Salario '+fmt(o.wage)+' por semana, '+o.years+' año(s).'+(cl.id===S.cantera?' Vuelves a casa.':''));
+ S.listed=0;S.renewDue=0;S.bobj=null;S.bm=null;S.treqNo=-1;
+ logm('Fichas por '+cl.n+' ('+lgName(cl)+') por un traspaso de '+fmv(fee)+'. Salario '+fmt(S.contract.wage)+' por semana, '+S.contract.years+' año(s)'+(pr?', prima de '+fmt(pr):'')+bonusTxt(S.contract)+'.'+(cut?' Cobras tu '+k.so+'% de la venta: '+fmt(cut)+'.':'')+(cl.id===S.cantera?' Vuelves a casa.':''));
  S.offers=[];genOffers();toast('Fichas por '+cl.n);save();render();
 }
 
@@ -118,7 +121,7 @@ function sponsorMonth(){
  S.sofs=S.sofs.filter(function(o){return !cats[o.cat];}).slice(0,4);
  var have={};S.sofs.forEach(function(o){have[o.id]=1;});
  shuffle(BRANDS.slice()).forEach(function(b){if(S.sofs.length>=4||cats[b.cat]||have[b.id]||!brandOk(b))return;
-  if(Math.random()<0.18+0.06*agentLvl()){S.sofs.push(sponsorOffer(b));have[b.id]=1;logm(b.n+' quiere patrocinarte. Mira las propuestas en Negocio.');}});
+  if(Math.random()<0.18+0.06*agentLvl()){S.sofs.push(sponsorOffer(b));have[b.id]=1;logm(b.n+' quiere patrocinarte. Mira las propuestas en Negocios.');}});
 }
 function sponsorSeason(){
  S.spons=S.spons.filter(function(s){s.yrs--;if(s.yrs>0)return true;var b=byId(BRANDS,s.id);
@@ -233,6 +236,26 @@ var EVENTS=[
  {t:'Tu patrocinador organiza un acto',d:'Quieren que aparezcas en la presentación de un producto.',c:function(){return S.spons.length>0;},o:[
   {n:'Ir al acto',f:function(){var s=pick(S.spons);s.sat=clamp((s.sat||60)+15,0,100);S.energy=Math.max(0,S.energy-10);S.fol=Math.round(S.fol*1.015);return byId(BRANDS,s.id).n+' queda encantada contigo.';}},
   {n:'Excusarte',f:function(){var s=pick(S.spons);s.sat=clamp((s.sat||60)-15,0,100);return byId(BRANDS,s.id).n+' no se lo toma bien.';}}]},
+ {t:'Pique en el entrenamiento',d:'Un compañero te entra muy fuerte en un partidillo.',o:[
+  {n:'Encararte con él',f:function(){rel('team',-3);rel('coach',-2);moral(2);return 'Hay que separaros. El míster no está contento.';}},
+  {n:'Dejarlo pasar',f:function(){rel('team',1);moral(-1);return 'Te tragas el orgullo y sigues entrenando.';}},
+  {n:'Hablar con él después',f:function(){rel('team',3);return 'Aclaráis las cosas en el vestuario.';}}]},
+ {t:'El míster te prueba en otra posición',d:'Quiere ver si le das una alternativa táctica.',o:[
+  {n:'Aceptar el reto',f:function(){rel('coach',5);moral(-2);return 'Al míster le gusta tu disposición.';}},
+  {n:'Pedirle jugar en tu puesto',f:function(){if(S.rel.coach>=60){rel('coach',-1);return 'Lo entiende: te deja en tu sitio.';}rel('coach',-6);return 'No le sienta bien que le discutas.';}}]},
+ {t:'Novatada en el vestuario',d:'Los veteranos preparan una broma a los nuevos y te toca.',c:function(){return S.age<=21;},o:[
+  {n:'Seguir la broma',f:function(){rel('team',4);return 'Te ganas al vestuario.';}},
+  {n:'Negarte',f:function(){rel('team',-4);return 'Algunos veteranos te miran mal.';}}]},
+ {t:'El capitán te pide que hables en el vestuario',d:'Antes de un partido importante quiere que digas unas palabras.',o:[
+  {n:'Dar un discurso',f:function(){if(S.moral>=50){rel('team',5);moral(3);return 'Tu discurso enciende al equipo.';}rel('team',-2);return 'No te salen las palabras y el vestuario lo nota.';}},
+  {n:'Ceder la palabra a un veterano',f:function(){rel('team',1);return 'Prefieres hablar en el campo.';}}]},
+ {t:'Un compañero filtra a la prensa una discusión',d:'Sale publicado que discutiste con el míster.',o:[
+  {n:'Desmentirlo en público',f:function(){rel('coach',3);rel('press',-2);return 'El míster agradece que lo cortes.';}},
+  {n:'Buscar al chivato',f:function(){rel('team',-4);rel('coach',1);return 'El ambiente se enrarece.';}},
+  {n:'No decir nada',f:function(){rel('press',-1);return 'La noticia se apaga sola.';}}]},
+ {t:'La directiva te invita al palco',d:'Quieren que acompañes a unos inversores en un partido de la cantera.',o:[
+  {n:'Ir',f:function(){rel('board',5);S.energy=Math.max(0,S.energy-5);return 'Los inversores salen encantados contigo.';}},
+  {n:'Excusarte',f:function(){rel('board',-3);return 'En los despachos lo apuntan.';}}]},
  {t:'Una fiesta de cumpleaños de un compañero',d:'Es la víspera del partido.',o:[
   {n:'Ir un rato',f:function(){rel('team',4);if(Math.random()<0.35){S.energy=Math.max(0,S.energy-20);rel('coach',-4);return 'Se alarga la noche. El míster se entera.';}return 'Buen rato con el vestuario.';}},
   {n:'Quedarte en casa',f:function(){rel('coach',1);return 'Descansas para el partido.';}}]}
@@ -246,15 +269,27 @@ var ACTS=[
  {id:'minutos',w:'coach',n:'Pedir más minutos',d:'Solo si estás jugando poco. Sale bien si tu último partido fue bueno',cd:4,cost:0,
   cond:function(){return !S.last||S.last.mins<60?null:'Estás jugando: no tiene sentido pedir más minutos.';},
   run:function(){if(S.last&&S.last.mins>0&&S.last.r>=6.5){rel('coach',5);return 'El míster valora tu actitud.';}rel('coach',-6);return 'No le ha sentado bien.';}},
+ {id:'extra',w:'coach',n:'Quedarte a entrenar extra',d:'−12 de energía, +3 puntos de habilidad y +2 con el míster',cd:2,cost:0,
+  cond:function(){return S.energy>=30?null:'Estás demasiado cansado.';},
+  run:function(){S.energy=Math.max(0,S.energy-12);rel('coach',2);var k=pick(S.skills);addProg(k,3);return 'Te quedas después del entreno: +3 puntos en '+k.n+'.';}},
+ {id:'tactica',w:'coach',n:'Proponer una idea táctica',d:'Si le convence, +5 con el míster y moral; si no, se molesta',cd:6,cost:0,
+  run:function(){if(Math.random()<0.35+S.rel.coach/250){rel('coach',5);moral(3);return 'Al míster le gusta tu idea y la prueba en el entreno.';}rel('coach',-3);return 'El míster te recuerda quién manda.';}},
  {id:'cena',w:'team',n:'Cena de equipo',d:'Cuesta '+fmt(5000)+', +5 relación',cd:8,cost:5000,run:function(){rel('team',5);return 'Buen ambiente en el vestuario.';}},
  {id:'joven',w:'team',n:'Ayudar a un compañero joven',d:'+3 relación con el vestuario y +1 con el míster',cd:3,cost:0,run:function(){rel('team',3);rel('coach',1);return 'Te lo agradecen.';}},
+ {id:'capitan',w:'team',n:'Hablar con el capitán',d:'+3 vestuario, +1 míster. Con buena relación, más moral',cd:5,cost:0,run:function(){rel('team',3);rel('coach',1);if(S.rel.team>=60){moral(3);return 'El capitán te dice que cuenta contigo para los partidos grandes.';}return 'Charla tranquila con el capitán.';}},
+ {id:'consola',w:'team',n:'Torneo de videojuegos en la concentración',d:'+4 vestuario, −5 de energía',cd:4,cost:0,run:function(){rel('team',4);S.energy=Math.max(0,S.energy-5);return pick(['Ganas el torneo y te ríes de todos.','Pierdes en la final y no paran de picarte.','Noche divertida con el vestuario.']);}},
+ {id:'reunion',w:'board',n:'Pedir una reunión con la directiva',d:'Hablas del proyecto, tu papel o tu futuro',cd:6,cost:0,
+  cond:function(){return S.bm?'Ya tienes una reunión pendiente.':null;},
+  run:function(){newBoardMeeting(true);return 'La directiva te recibe en su despacho.';}},
  {id:'entrevista',w:'press',n:'Dar una entrevista',d:'+4 relación con la prensa y más seguidores. Rinde menos si das muchas',cd:2,dim:1,cost:0,run:function(f){rel('press',Math.round(4*f));S.fol=Math.round(S.fol*(1+0.01*f));return f<1?'Otra entrevista más: ya no despierta tanto interés.':'Buena entrevista.';}},
  {id:'polemica',w:'press',n:'Declaraciones polémicas',d:'Muchos seguidores, pero riesgo con prensa y vestuario. Repetirlas sale cada vez peor',cd:3,dim:1,cost:0,run:function(f){S.fol=Math.round(S.fol*(1+0.04*f));if(Math.random()<0.5*f){rel('press',3);return 'Los titulares te favorecen.';}rel('press',-4-(f<1?2:0));rel('team',-3-(f<1?2:0));return f<1?'Otra polémica más: la prensa y el vestuario se cansan de ti.':'Los titulares te pasan factura.';}},
+ {id:'directo',w:'press',n:'Directo en redes',d:'+1,5% de seguidores. A veces se te escapa algo',cd:2,dim:1,cost:0,run:function(f){S.fol=Math.round(S.fol*(1+0.015*f));if(Math.random()<0.15){rel('team',-3);return 'Comentas una cosa del vestuario que no debías.';}rel('press',1);return 'Buen directo: tus seguidores responden.';}},
  {id:'autografos',w:'fans',n:'Firmar autógrafos',d:'+3 relación con la afición',cd:1,cost:0,run:function(){rel('fans',3);S.fol=Math.round(S.fol*1.005);return 'La afición se va contenta.';}},
+ {id:'pena',w:'fans',n:'Visitar una peña',d:'Cuesta '+fmt(2000)+', +5 afición',cd:6,cost:2000,run:function(){rel('fans',5);return 'La peña te recibe como a un ídolo.';}},
  {id:'dona',w:'fans',n:'Donar a una causa local',d:'Cuesta '+fmt(10000)+', +5 afición y +2 prensa',cd:6,cost:10000,run:function(){rel('fans',5);rel('press',2);return 'Gran gesto con tu comunidad.';}},
- {id:'contrato',w:'board',n:'Pedir mejora de contrato',d:'Tu representante negocia una subida. Una vez por temporada y con el mercado abierto',season:1,cost:0,
-  cond:function(){return windowOpen()?null:'Solo con el mercado abierto (inicio de temporada y enero).';},
-  run:function(){var me=S.pl[S.me];var p=clamp(0.15+0.05*agentLvl()+(overall()-S.clubs[me.c].str)/100+(S.rel.board-50)/150,0.05,0.85);if(Math.random()<p){S.contract.wage=Math.round(S.contract.wage*(1.06+0.02*agentLvl())/100)*100;rel('board',2);return 'Aceptan. Tu salario sube a '+fmt(S.contract.wage)+'.';}rel('board',-4);return 'Dicen que no es el momento.';}}
+ {id:'contrato',w:'board',n:'Pedir mejora de contrato',d:'Abre una negociación con la directiva. Una vez por temporada y con el mercado abierto',season:1,cost:0,
+  cond:function(){if(!windowOpen())return 'Solo con el mercado abierto (inicio de temporada y enero).';var me=S.pl[S.me];if(overall()<S.clubs[me.c].str-4&&S.rel.board<60)return 'La directiva no ve motivos: rinde más o mejora tu relación con ella.';return null;},
+  run:function(){negOpen('ren');return 'Te sientas a negociar con la directiva.';}}
 ];
 /* estado de una acción: si se puede hacer y, si no, por qué y cuándo */
 function actState(a){
@@ -281,6 +316,6 @@ function doAct(id){
 }
 /* ---------- tienda e inversiones ---------- */
 function buy(id){var it=byId(SHOP,id),l=itemLvl(id);if(l>=3)return;var c=it.c[l];if(S.money<c){toast('Te faltan '+fmt(c-S.money)+'.',1);return;}S.money-=c;S.items[id]=l+1;logm('Contratas: '+it.n+' (nivel '+(l+1)+').');save();render();}
-function invest(id){var v=byId(INVEST,id);if(S.invest[id])return;if(S.money<v.c){toast('Te faltan '+fmt(v.c-S.money)+'.',1);return;}S.money-=v.c;S.invest[id]=1;logm('Inviertes en: '+v.n+'.');save();render();}
+function invest(id){bizBuy(id);}
 function fundIn(f){var m=Math.round(S.money*f);if(m<1000){toast('No tienes dinero para aportar.',1);return;}S.money-=m;S.fund+=m;save();render();}
 function fundOut(){if(S.fund<=0)return;S.money+=S.fund;S.fund=0;save();render();}

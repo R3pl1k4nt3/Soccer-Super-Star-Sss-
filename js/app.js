@@ -1,7 +1,7 @@
 /* Estrella del Balón · arranque, pintado y eventos. */
-var TABS=[['home','Inicio'],['match','Partido'],['player','Jugador'],['career','Carrera'],['life','Vida']];
+var TABS=[['home','Inicio'],['match','Partido'],['player','Jugador'],['career','Carrera'],['life','Vida'],['biz','Negocios']];
 var TABSHORT={};
-var VIEWS={home:viewHome,match:viewMatch,player:viewPlayer,career:viewCareerHub,life:viewLifeHub};
+var VIEWS={home:viewHome,match:viewMatch,player:viewPlayer,career:viewCareerHub,life:viewLifeHub,biz:viewBiz};
 var ICONS={
  home:'<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
  player:'<path d="M6 7v10M18 7v10M3 10v4M21 10v4M6 12h12"/>',
@@ -11,6 +11,7 @@ var ICONS={
  club:'<path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6z"/>',
  life:'<path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/>',
  money:'<path d="M4 19h16M7 16V10M12 16V5M17 16v-4"/>',
+ biz:'<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2M3 13h18"/>',
  shop:'<path d="M5 8h14l-1 12H6zM9 8V6a3 3 0 0 1 6 0v2"/>',
  career:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/>'
 };
@@ -19,11 +20,11 @@ function ico(k){if(typeof icoPlus==='function'){var ip=icoPlus(k);if(ip)return i
 function pageHead(){
  var sl=S.cal[Math.min(S.slot,S.cal.length-1)],c=myClub();
  var sub={home:MONTHS[sl.m]+' · temporada '+S.season+' · '+slotLabel(sl),match:slotLabel(sl)+' · semana '+(S.slot+1)+' de '+S.cal.length,player:'Valoración '+ds(overall())+' · '+POS[S.pos]+' · valor '+fmv(mv(S.pl[S.me])),
-  career:esc(c.n)+' · '+esc(lgName(c)),life:'Relaciones, redes, patrocinios y dinero'}[S.tab];
+  career:esc(c.n)+' · '+esc(lgName(c)),life:'Equipo, redes y publicidad, representante',biz:'Dinero '+fmt(S.money)+' · patrocinios y empresas'}[S.tab];
  var t=TABS.filter(function(x){return x[0]===S.tab;})[0];
  return '<header class="pagehead"><div><h1>'+t[1]+'</h1><p>'+sub+'</p></div></header>';
 }
-function dots(){return {home:homeBadge(),life:!!S.event||S.sofs.length>0,match:!!(S.match||S.press)};}
+function dots(){return {home:homeBadge(),life:!!S.event||!!S.bm||!!S.neg||(S.ads||[]).length>0,biz:S.sofs.length>0,match:!!(S.match||S.press)};}
 function sideHTML(){
  var c=myClub(),kit=clubColors(c),d=dots();
  return '<aside id="side" aria-label="Menú principal"><div class="brand">'+(logoPlus(26)||'<svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.9L22 9.3l-5.5 4.8L18.2 21 12 17.3 5.8 21l1.7-6.9L2 9.3l7.1-.4z" fill="currentColor"/></svg>')+'Estrella del Balón</div>'+
@@ -57,7 +58,7 @@ function render(){
  if(S.pre){app.innerHTML=preHTML()+toastsHTML();var stp=$('.setup');if(stp)stp.scrollTop=UI.preScroll||0;return;}
  normTab();
  var v=(VIEWS[S.tab]||viewHome)();
- app.innerHTML=sideHTML()+topHTML()+'<main id="view"><div class="page">'+pageHead()+v+'</div></main>'+navHTML()+(UI.sq?squadHTML():'')+modalHTML()+popHTML()+
+ app.innerHTML=sideHTML()+topHTML()+'<main id="view"><div class="page">'+pageHead()+v+'</div></main>'+navHTML()+(UI.sq?squadHTML():'')+modalHTML()+(S.neg&&!S.summary?negHTML():'')+popHTML()+
   toastsHTML();
  if(UI.lastTab===S.tab&&$('#view'))$('#view').scrollTop=sc;else if($('#view'))$('#view').scrollTop=0;
  UI.lastTab=S.tab;
@@ -106,7 +107,10 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&UI.pop){var
   mult:function(){S.mult=n;save();render();},
   train:function(){train(id);},promo:function(){promo(id);},bono:bono,
   play:function(){playN(n);},
-  accept:function(){accept(i);},buy:function(){buy(id);},invest:function(){invest(id);},
+  accept:function(){negOpen('fich',i);},buy:function(){buy(id);},invest:function(){bizBuy(id);},
+  negadj:function(){negAdj(id,n);},negprop:negPropose,negacc:negAcceptCur,negquit:negQuit,
+  bm:function(){boardAns(i);},treq:function(){transferReq();},treqno:transferWithdraw,tforce:transferForce,
+  ad:function(){adDo(i,!!n);},bizbuy:function(){bizBuy(id);},bizup:function(){bizUp(id);},bizmg:function(){bizMg(id);},bizsell:function(){bizSell(id);},
   choose:function(){choose(i);},auto:function(){S.auto=!!n;save();render();},
   press:function(){pressAnswer(i);},pressskip:pressSkip,
   ev:function(){doEvent(i);},act:function(){doAct(id);},post:postPaid,
@@ -143,7 +147,7 @@ document.addEventListener('change',function(e){var t=e.target;if(!t)return;
  if(S)return;
  if(t.id==='ps')setupState.pos=t.value;else if(t.id==='tp')setupState.tp=t.value;else if(t.id==='ts')setupState.ts=t.value;else if(t.id==='na')setupState.nat=t.value;else if(t.id==='co')setupState.co=t.value;else return;render();});
 window.__dbg={get S(){return S;},set S(v){S=v;},newGame:newGame,playN:playN,playSlot:playSlot,choose:choose,liveEnd:function(){return liveEnd(true);},pressAnswer:pressAnswer,doEvent:doEvent,doAct:doAct,train:train,promo:promo,render:render,UI:UI,
- overall:overall,leaders:leaders,genOffers:genOffers,accept:accept,signSponsor:signSponsor,buyGear:buyGear,gearCatalog:gearCatalog,hireAgent:hireAgent,hireCM:hireCM,sponsorPost:sponsorPost,squad:function(c,p){UI.sq={club:c,p:p};var h=squadHTML();UI.sq=null;return h;},views:VIEWS,viewComp:viewComp,preAutoSign:function(){preAutoSign();},doActCheck:actState,save:save,saveNow:saveNow,metaAll:metaAll,toMenu:toMenu,openSlot:openSlot};
+ overall:overall,leaders:leaders,genOffers:genOffers,accept:accept,signSponsor:signSponsor,buyGear:buyGear,gearCatalog:gearCatalog,hireAgent:hireAgent,hireCM:hireCM,sponsorPost:sponsorPost,squad:function(c,p){UI.sq={club:c,p:p};var h=squadHTML();UI.sq=null;return h;},views:VIEWS,viewComp:viewComp,preAutoSign:function(){preAutoSign();},negOpen:negOpen,negAdj:negAdj,negPropose:negPropose,negAcceptCur:negAcceptCur,negQuit:negQuit,boardAns:boardAns,newBoardMeeting:newBoardMeeting,transferReq:transferReq,transferForce:transferForce,adDo:adDo,bizBuy:bizBuy,bizUp:bizUp,bizMg:bizMg,bizSell:bizSell,doActCheck:actState,save:save,saveNow:saveNow,metaAll:metaAll,toMenu:toMenu,openSlot:openSlot};
 if(gfxMode()==='mejorados')loadGfx();
 applyGfxBackground();
 bootSaves();

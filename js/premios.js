@@ -49,6 +49,7 @@ function monthEnd(m){
  S.pl.forEach(function(p){if(p)p.ms=[0,0,0,0];});
  S.aw=S.aw.filter(function(a){return a.k==='TOM'?a.s===S.season:a.s>=S.season-1;});
  sponsorMonth();
+ bizMonth();
 }
 function myAward(t,medals,cash){S.medals+=medals||0;S.money+=cash||0;S.trophies.push({s:S.season,n:t,k:'ind'});logm('Premio: '+t+'.');toast('Premio: '+t);}
 function addTrophy(n,k){S.trophies.push({s:S.season,n:n,k:k||'copa'});S.stats.titles=(S.stats.titles||0)+1;logm('¡Título! '+n+'.');if(typeof titleMoment==='function')titleMoment(n);}

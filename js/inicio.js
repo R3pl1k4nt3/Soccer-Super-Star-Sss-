@@ -4,15 +4,19 @@
 var SUBS={
  player:[['train','Entreno'],['shop','Material'],['look','Aspecto']],
  career:[['club','Club'],['comp','Competiciones'],['hist','Trayectoria']],
- life:[['rel','Relaciones'],['money','Negocio']]
+ life:[['team','Equipo'],['red','Redes y publicidad'],['agent','Representante']],
+ biz:[['res','Resumen'],['spon','Patrocinios'],['emp','Empresas']]
 };
 /* pestañas antiguas (partidas guardadas) → pestaña y sección nuevas */
-var OLDTAB={train:['player','train'],shop:['player','shop'],comp:['career','comp'],club:['career','club'],money:['life','money']};
+var OLDTAB={train:['player','train'],shop:['player','shop'],comp:['career','comp'],club:['career','club'],money:['biz','res']};
 function normTab(){
  if(S.pot==null||S.val==null||(S.skills[0]&&S.skills[0].gr==null))initProgress();
+ ctr();bizMig();
  if(OLDTAB[S.tab]){var o=OLDTAB[S.tab];S.tab=o[0];subSet(o[0],o[1]);}
+ if(S.sub&&S.sub.life==='money'){S.sub.life='team';if(S.tab==='life'){S.tab='biz';subSet('biz','res');}}
+ if(S.sub&&S.sub.life==='rel')S.sub.life='team';
  if(S.tab==='career'&&!S.sub)subSet('career','hist');
- if(['home','match','player','career','life'].indexOf(S.tab)<0)S.tab='home';
+ if(['home','match','player','career','life','biz'].indexOf(S.tab)<0)S.tab='home';
 }
 function subOf(tab){S.sub=S.sub||{};return S.sub[tab]||SUBS[tab][0][0];}
 function subSet(tab,s){S.sub=S.sub||{};S.sub[tab]=s;}
@@ -24,7 +28,7 @@ function lookCard(){
 }
 function viewPlayer(){var s=subOf('player');return subTabs('player')+(s==='shop'?viewShop():s==='look'?lookCard():viewTrain());}
 function viewCareerHub(){var s=subOf('career');return subTabs('career')+(s==='club'?viewClub():s==='comp'?viewComp():viewCareer());}
-function viewLifeHub(){var s=subOf('life');return subTabs('life')+(s==='money'?viewMoney():viewLife());}
+function viewLifeHub(){return subTabs('life')+viewLife();}
 
 /* ---------- bandeja: lo que está pendiente ---------- */
 function pendingItems(){
@@ -32,12 +36,15 @@ function pendingItems(){
  if(S.match)p.push({k:'hl',t:'Tienes un partido en juego.',go:'match',btn:'Ir al partido'});
  if(S.press)p.push({k:'hl',t:'Te espera una rueda de prensa.',go:'match',btn:'Responder'});
  if(newTraitSlot())p.push({k:'hl',t:'Puedes elegir un rasgo nuevo.',go:'player',sub:'train',btn:'Elegir rasgo'});
- if(S.event)p.push({t:EVENTS[S.event.i].t+'.',go:'life',sub:'rel',btn:'Decidir'});
+ if(S.neg)p.push({k:'hl',t:'Tienes una negociación de contrato abierta.',go:'life',sub:'team',btn:'Negociar'});
+ if(S.bm)p.push({k:'hl',t:'La directiva quiere reunirse contigo: '+BM[S.bm.k].t.toLowerCase()+'.',go:'life',sub:'team',btn:'Ir a la reunión'});
+ if(S.event)p.push({t:EVENTS[S.event.i].t+'.',go:'life',sub:'team',btn:'Decidir'});
  if(windowOpen()&&S.offers.length)p.push({t:S.offers.length+(S.offers.length>1?' clubes quieren ficharte':' club quiere ficharte')+' y el mercado está abierto.',go:'career',sub:'club',btn:'Ver ofertas'});
- if(S.sofs.length)p.push({t:S.sofs.length+(S.sofs.length>1?' marcas quieren':' marca quiere')+' patrocinarte.',go:'life',sub:'money',btn:'Ver propuestas'});
- S.spons.forEach(function(s){if(s.done<s.posts)p.push({t:byId(BRANDS,s.id).n+': te faltan '+(s.posts-s.done)+' publicación(es) este mes.',go:'life',sub:'rel',btn:'Publicar'});});
+ if(S.sofs.length)p.push({t:S.sofs.length+(S.sofs.length>1?' marcas quieren':' marca quiere')+' patrocinarte.',go:'biz',sub:'spon',btn:'Ver propuestas'});
+ if((S.ads||[]).length)p.push({t:S.ads.length+(S.ads.length>1?' campañas de publicidad esperan':' campaña de publicidad espera')+' tu respuesta.',go:'life',sub:'red',btn:'Ver campañas'});
+ S.spons.forEach(function(s){if(s.done<s.posts)p.push({t:byId(BRANDS,s.id).n+': te faltan '+(s.posts-s.done)+' publicación(es) este mes.',go:'life',sub:'red',btn:'Publicar'});});
  var free=ACTS.filter(function(a){return actState(a).ok;}).length;
- if(S.acts>0&&free)p.push({t:'Te quedan '+S.acts+' acciones esta semana ('+free+' disponibles).',go:'life',sub:'rel',btn:'Ver acciones'});
+ if(S.acts>0&&free)p.push({t:'Te quedan '+S.acts+' acciones esta semana ('+free+' disponibles).',go:'life',sub:'team',btn:'Ver acciones'});
  if(S.injured>0)p.push({k:'bad',t:'Estás lesionado: '+S.injured+' semana(s) de baja.'});
  else if(S.energy<35)p.push({k:'bad',t:'Energía baja ('+Math.round(S.energy)+' %): rindes menos y te puedes lesionar.'});
  if(S.moral<35)p.push({k:'bad',t:'Moral baja ('+S.moral+'). Un buen partido o una rueda de prensa positiva ayudan.'});
