@@ -110,12 +110,12 @@ function oppFor(xi,group){
  return pick(c);
 }
 /* habilidad del rival en este momento: su forma del día y el cansancio según el minuto */
-function tiredF(p,id,min){if(!min||min<=55)return 1;var cat=(SKO.concat(SKG).filter(function(s){return s[0]===id;})[0]||[])[2],k=Math.min(1,(min-55)/35)*0.1*(1-pskill(p,'res')/200);return 1-(cat==='fis'?k:k/2);}
+function tiredF(p,id,min){var dt=typeof downTired==='function'?downTired(min):0;if(!min||(min<=55&&!dt))return 1;var cat=(SKO.concat(SKG).filter(function(s){return s[0]===id;})[0]||[])[2],k=(Math.max(0,Math.min(1,(min-55)/35))*0.1+dt)*(1-pskill(p,'res')/200);return 1-(cat==='fis'?k:k/2);}
 function pskillNow(p,id,min,fm){return Math.round(clamp(pskill(p,id)*tiredF(p,id,min)+(fm||0),1,99));}
 function duelP(o){
  var mine=skAvg(o.sk),p=S.pl[o.op],theirs=o.ok.reduce(function(s,id){return s+pskillNow(p,id,o.min,o.fm);},0)/o.ok.length;
  var base=[0.72,0.55,0.4][o.rk];
- return clamp(base+(mine-theirs)/50+(S.rel.coach-50)*0.001+(S.moral-50)*0.002-(S.energy<30?0.08:0)+traitDec(o)+(o.dec?tx('big'):0)+diff().p+(isCaptain()?0.02:0),0.05,0.95);
+ return clamp(base+(mine-theirs)/50+(S.rel.coach-50)*0.001+(S.moral-50)*0.002-(S.energy<30?0.08:0)+traitDec(o)+(o.dec?tx('big'):0)+diff().p+(isCaptain()?0.02:0)-(typeof downDuel==='function'?downDuel(o.min):0),0.05,0.95);
 }
 function oppVals(o){var p=S.pl[o.op];return o.ok.map(function(id){return [SKNAME[id]||id,pskillNow(p,id,o.min,o.fm)];});}
 
@@ -271,7 +271,7 @@ function finishMatch(M){
  else{S.fol=Math.round(S.fol*1.001);if(M.role==='banquillo')moral(-2);}
  /* energía, lesiones y desgaste del material */
  var inj=0;
- S.energy=Math.max(0,S.energy-mins/90*22*(1+tx('drain'))*(1-gearFx('drain')));
+ S.energy=Math.max(0,S.energy-(mins+(typeof downMins==='function'?downMins(M)*0.6:0))/90*22*(1+tx('drain'))*(1-gearFx('drain')));
  if(mins>0){var pi=(S.energy<35?0.07:0.02)*(mins/90)*(1-0.3*itemLvl('physio'))*(1+tx('inj'))*(1-gearFx('inj'));
   if(Math.random()<pi){inj=2+Math.floor(Math.random()*4);if(itemLvl('physio'))inj=Math.max(2,inj-itemLvl('physio'));if(itemLvl('crio')>=2)inj=Math.max(2,inj-1);S.injured=inj;logm('Te lesionas. Baja de '+(inj-1)+' semana(s).');}
   wearGear();}

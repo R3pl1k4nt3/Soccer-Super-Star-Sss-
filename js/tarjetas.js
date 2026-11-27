@@ -4,7 +4,7 @@
    - Roja directa: de 1 a 3 partidos de sanción; doble amarilla: 1 partido. Cada 5 amarillas de liga: 1 partido (ciclo).
    - Las sanciones se cumplen en partidos de club. Expulsado, dejas de jugar: tus goles y minutos cuentan hasta la roja.
    - Los rivales y compañeros también ven tarjetas, y para ellos dos amarillas también son roja.
-   - Un equipo con uno menos sufre: marca menos y encaja más en los minutos que quedan. */
+   - Un equipo con uno menos pierde fuerza para el resto del partido y se cansa antes. */
 function cardP(base){return clamp(base*(1-(skv('con')-50)/250),0.01,0.6);}
 /* al preparar el partido: tarjetas sueltas tuyas y de los demás */
 function cardsPrep(M){
@@ -28,25 +28,33 @@ function cardsPrep(M){
   if(Math.random()<cardP(0.1*f*(M.mins/90)))M.cards.push({min:st+3+Math.floor(Math.random()*Math.max(1,M.mins-6)),id:S.me,t:'y',me:1,pend:1});}
  M.cards.sort(function(a,b){return a.min-b.min;});
 }
-/* un equipo se queda con uno menos en el minuto min: el expulsado no marca ni asiste después,
-   el equipo pierde algún gol de los que tenía y el rival suele marcar alguno más.
-   Solo se tocan los goles que aún no se han visto en el directo. */
+/* un equipo se queda con uno menos en el minuto min: pierde fuerza (MANSTR por expulsado) y, con esa fuerza,
+   se vuelve a jugar lo que queda de partido. El marcador sale de la nueva fuerza: no se quitan ni se ponen goles a mano.
+   Solo cambia lo que aún no se ha visto en el directo; tus goles ya decididos se respetan (salvo si el expulsado eres tú). */
+var MANSTR=7;
 function manDown(M,sd,min,id){
- M.down=M.down||{h:0,a:0};M.down[sd]++;
- var from=Math.max(min,M.clock||0),rem=(90-from)/90,os=sd==='h'?'a':'h',mine=mySide(M);
+ M.down=M.down||{h:0,a:0};M.down[sd]++;M.downAt=M.downAt||{};if(M.downAt[sd]==null)M.downAt[sd]=min;
+ M.sv=M.sv||{h:M.hs,a:M.as};M.sv[sd]-=MANSTR;
+ var from=Math.max(min,M.clock||0),rem=(90-from)/90,mine=mySide(M);
  if(rem<=0)return;
- var xiOf=function(s){return s===mine?M.txi:M.oxi;};
- M.ev.forEach(function(e){if(e.x||e.shown||e.min<=from)return;
-  if(e.sc===id){e.sc=pickSc(xiOf(e.side),id);if(id===S.me)e.mine=e.as===S.me?1:0;}
-  if(e.as===id)e.as=-1;
-  /* con uno menos, casi uno de cada tres goles que iba a llegar ya no llega (los tuyos se respetan) */
-  if(e.side===sd&&!(e.sc===S.me||e.as===S.me)&&Math.random()<0.3)e.x=1;});
- /* el rival aprovecha la superioridad */
- var extra=poisson(0.7*rem*(M.down[sd]>1?1.6:1));
- for(var i=0;i<extra;i++){var mn=Math.min(90,from+1+Math.floor(Math.random()*Math.max(1,90-from)));
-  M.ev.push({min:mn,side:os,sc:pickSc(xiOf(os),-1),as:-1,man:1});}
+ var xiOf=function(s){return (s===mine?M.txi:M.oxi).filter(function(x){return !(M.off||{})[x];});};
+ M.off=M.off||{};M.off[id]=1;
+ /* lo que queda por jugar se descarta, menos tus goles y asistencias ya decididos */
+ var kept={h:0,a:0};
+ M.ev=M.ev.filter(function(e){if(e.x||e.shown||e.min<=from)return true;
+  var me=(e.sc===S.me||e.as===S.me)&&id!==S.me;if(me){kept[e.side]++;if(e.as!=null&&M.off[e.as])e.as=-1;}return me;});
+ /* y se juega de nuevo con las fuerzas actuales */
+ var d=M.sv.h+(M.desc&&M.desc.neutral?0:3)-M.sv.a,lam={h:1.35*Math.exp(d/30)*rem,a:1.1*Math.exp(-d/30)*rem};
+ ['h','a'].forEach(function(s){var n=Math.max(0,poisson(lam[s])-kept[s]),xi=xiOf(s);
+  for(var i=0;i<n;i++){var sc=pickSc(xi,-1),as=Math.random()<0.7?pickSc(xi,sc):-1;
+   M.ev.push({min:Math.min(90,from+1+Math.floor(Math.random()*Math.max(1,90-from))),side:s,sc:sc,as:as===sc?-1:as});}});
  M.ev.sort(function(x,y){return x.min-y.min;});
 }
+/* minutos que tu equipo juega con uno menos mientras tú estás en el campo (para el cansancio) */
+function downMins(M){var s=mySide(M),a=M.downAt&&M.downAt[s];if(a==null)return 0;var end=M.red||90,st=90-(M.mins0||M.mins);return Math.max(0,end-Math.max(a,st))*(M.down[s]||1);}
+/* el rival con uno menos se cansa antes (sus duelos contra ti) y tu equipo con uno menos también lo nota */
+function downTired(min){var M=S.match;if(!M||!M.downAt)return 0;var s=mySide(M),os=s==='h'?'a':'h',a=M.downAt[os];return a!=null&&min>a?Math.min(1,(min-a)/45)*0.06*(M.down[os]||1):0;}
+function downDuel(min){var M=S.match;if(!M||!M.downAt)return 0;var s=mySide(M),a=M.downAt[s];return a!=null&&min>a?0.03*(M.down[s]||1):0;}
 /* goleador al azar que no seas tú ni el expulsado (los goles tuyos se deciden en tus jugadas) */
 function pickSc(xi,id){var ok=xi.filter(function(x){return x!==id&&x!==S.me;});return wpickXI(ok.length?ok:xi,-1,'sg');}
 /* las amarillas sueltas tuyas se reciben cuando el reloj llega a su minuto */
@@ -79,7 +87,7 @@ function cardOnDuel(M,d,o,ok){
 function cardsFinish(M){
  if(!M.cards)return;
  cardsTick(M,90);
- if(M.red&&M.mins>0){var st=90-M.mins,played=Math.max(1,M.red-st);
+ if(M.red&&M.mins>0){M.mins0=M.mins;var st=90-M.mins,played=Math.max(1,M.red-st);
   M.ev.forEach(function(e){if(e.min<=M.red)return;if(e.sc===S.me){e.sc=wpickXI(M.txi,S.me,'sg');e.mine=e.as===S.me?1:0;}if(e.as===S.me)e.as=-1;});
   M.mins=played;}
  M.cards=M.cards.filter(function(c){return !c.void&&!c.pend;}).sort(function(a,b){return a.min-b.min;});
