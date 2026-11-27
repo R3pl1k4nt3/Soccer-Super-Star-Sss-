@@ -52,6 +52,6 @@ function cardsAfter(M,rep){
 }
 function cardsHTML(r){
  if(!r.cards||!r.cards.length)return '';
- return '<h3 style="margin-top:12px">Tarjetas</h3>'+r.cards.map(function(c){return '<div class="ev"><b class="num">'+c.min+"'</b><span><span class='tcard "+(c.t==='r'?'tr':'ty')+"' aria-label='"+(c.t==='r'?'Roja':'Amarilla')+"'></span> "+'<span class="'+(c.me?'me':'')+'">'+esc(c.n)+(c.me?' (tú)':'')+'</span></span></div>';}).join('');
+ return '<h3 style="margin-top:12px">Tarjetas</h3>'+r.cards.map(function(c){return '<div class="ev"><b class="num">'+c.min+"'</b><span><span class='tarjeta-ico "+(c.t==='r'?'tr':'ty')+"' aria-label='"+(c.t==='r'?'Roja':'Amarilla')+"'></span> "+'<span class="'+(c.me?'me':'')+'">'+esc(c.n)+(c.me?' (tú)':'')+'</span></span></div>';}).join('');
 }
 function banTxt(){var p=[];if(S.ban>0)p.push('Sancionado: te pierdes '+S.ban+' partido(s) de club.');var y=(S.ss&&S.ss.yc)||0;if(y%5===4)p.push('Apercibido: llevas '+y+' amarillas en liga; una más y te pierdes un partido.');return p;}
