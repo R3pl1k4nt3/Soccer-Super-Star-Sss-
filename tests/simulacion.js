@@ -4,14 +4,18 @@ const fs=require('fs'),path=require('path'),vm=require('vm');
 const root=path.join(__dirname,'..');
 const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
 const srcs=[...html.matchAll(/<script src="([^"]+)"><\/script>/g)].map(m=>m[1].split('?')[0]);
-const el={innerHTML:'',scrollTop:0,value:''};
+/* un navegador mínimo: lo justo para que el juego pinte y guarde sin pantalla */
+const noop=()=>{},cls={add:noop,remove:noop,contains:()=>false};
+const el={innerHTML:'',scrollTop:0,value:'',style:{},classList:cls,setAttribute:noop,getAttribute:()=>null,focus:noop,contains:()=>true,appendChild:noop,remove:noop,querySelector:()=>null,querySelectorAll:()=>[]};
 const store={};
-const ctx={console,Math,JSON,Date,performance:{now:()=>Date.now()},
- document:{querySelector:()=>el,addEventListener(){}},
- localStorage:{getItem:k=>store[k]||null,setItem:(k,v)=>{store[k]=v;},removeItem:k=>{delete store[k];}},
- setTimeout:()=>0,clearTimeout:()=>0};
+const ctx={console,Math,JSON,Date,URL,performance:{now:()=>Date.now()},
+ document:{querySelector:()=>el,querySelectorAll:()=>[],addEventListener:noop,createElement:()=>Object.assign({},el,{getContext:()=>null}),
+  body:el,documentElement:{classList:cls},hidden:false,baseURI:'http://localhost/'},
+ localStorage:{getItem:k=>store[k]===undefined?null:store[k],setItem:(k,v)=>{store[k]=String(v);},removeItem:k=>{delete store[k];}},
+ setTimeout:()=>0,clearTimeout:()=>0,matchMedia:()=>({matches:false})};
 ctx.window=ctx;ctx.global=ctx;vm.createContext(ctx);
-for(const s of srcs)vm.runInContext(fs.readFileSync(path.join(root,s),'utf8'),ctx,{filename:s});
+/* datos-reales.js solo existe en local (no está en el repositorio): se salta si falta */
+for(const s of srcs){const f=path.join(root,s);if(!fs.existsSync(f)){console.log('(se omite '+s+': no está en esta copia)');continue;}vm.runInContext(fs.readFileSync(f,'utf8'),ctx,{filename:s});}
 vm.runInContext(fs.readFileSync(path.join(__dirname,'bot.js'),'utf8'),ctx,{filename:'bot.js'});
 const G=ctx.__dbg,years=+process.argv[2]||5;
 let fail=0;
