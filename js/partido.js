@@ -189,6 +189,7 @@ function nextDec(M){return M.decs.filter(function(x){return x.done<0;})[0];}
 function markDec(M){var d=nextDec(M);if(d&&d.dec==null){d.dec=isDecisive(M,d)?1:0;d.opts.forEach(function(o){o.dec=d.dec;});}return d;}
 function mySide(M){return M.home?'h':'a';}
 function resolveDec(M,d,oi){
+ if(typeof cardsTick==='function'){cardsTick(M,d.min-1);if(d.done>=0)return;}
  if(d.spec==='pen'){penResolve(M,d,oi,d.aim);return;}
  var o=d.opts[oi],ok=Math.random()<duelP(o),mult=d.dec?1.5:1,side=mySide(M),os=side==='h'?'a':'h',opp=S.pl[o.op];
  d.done=oi;d.ok=ok;
@@ -353,7 +354,7 @@ function liveGoalAt(M,min){return M.ev.filter(function(e){return e.min===min&&!e
 function liveStep(){
  var M=S.match;if(!M)return 'end';
  if(M.clock>=liveTarget(M))return nextDec(M)?'dec':liveEnd();
- M.clock++;
+ M.clock++;if(typeof cardsTick==='function')cardsTick(M,M.clock);
  var g=liveGoalAt(M,M.clock);
  if(g){g.shown=1;if(typeof UI!=='undefined'){var mine=g.sc===S.me,o=g.sc===S.me?g.as:g.sc;
   UI.pop={k:'goal',gk:mine?'g':'a',min:g.min,fk:g.fk,z:g.fk?[76,50]:[80+Math.round(Math.random()*8),30+Math.round(Math.random()*40)],ef:'att',shot:1,n:'g'+g.min,s3d:typeof s3dGoal==='function'?s3dGoal(mine):null,with:o>=0&&S.pl[o]?S.pl[o].n:null,scNow:scoreAt(M,g.min),hn:M.hn,an:M.an};}return 'goal';}

@@ -38,6 +38,7 @@ function goalLine(M,e){var side=mySide(M),tn=e.side==='h'?M.hn:M.an,nm=function(
 function liveInner(){
  var M=S.match,c=M.clock||0,sc=scoreAt(M,c),st=90-M.mins,d=nextDec(M),atDec=d&&c>=d.min,feed=[];
  M.ev.forEach(function(e){if(e.x||e.min>c)return;var mine=e.sc===S.me||e.as===S.me;feed.push({min:e.min,cls:mine?'me':e.side===mySide(M)?'':'mut',t:goalLine(M,e)});});
+ if(typeof cardsFeed==='function')feed=feed.concat(cardsFeed(M,c));
  M.decs.forEach(function(x){if(x.done>=0)feed.push({min:x.min,cls:x.ok?'good':'bad',t:(x.dec?'<span class="star">◆</span> ':'')+esc(x.opts[x.done].n)+': '+esc(x.res)});});
  if(st>0&&c>=st)feed.push({min:st,cls:'mut',t:'Entras al campo'});
  feed.sort(function(a,b){return b.min-a.min;});
