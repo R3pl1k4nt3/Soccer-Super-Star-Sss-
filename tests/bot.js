@@ -3,7 +3,7 @@
 (function(root){
 function carrera(G,pos,tp,ts,nat,co,years,opts){
  opts=opts||{};
- var errs=[],rows=[],libres=0;
+ var errs=[],rows=[],libres=0;try{localStorage.setItem('estrella_3d','0');}catch(e){}
  G.newGame('Bot',pos,tp,ts,nat,co,!!opts.real);
  var S=G.S;if(S.pre&&G.preAutoSign)G.preAutoSign();S.auto=!opts.manual;
  for(var y=0;y<years&&!S.retired;y++){

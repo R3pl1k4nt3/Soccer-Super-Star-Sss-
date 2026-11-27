@@ -52,7 +52,7 @@ function liveCard(){
  var M=S.match,d=nextDec(M),atDec=d&&(M.clock||0)>=d.min,v=liveSpeed();
  return '<div class="card wide live"><div class="rowb"><h3 style="margin:0">'+esc(compName(M.desc.ck))+(M.desc.rn?' · '+esc(M.desc.rn):'')+'</h3>'+
   '<span class="mults">Velocidad: '+[1,2,4].map(function(n){return chip(v===n,'livespeed',null,'x'+n,n);}).join('')+
-  (atDec?'':' <button class="chip" data-a="livejump">Saltar a la siguiente parada</button>')+'</span></div>'+
+  (atDec?'':' <button class="chip" data-a="livejump">Saltar a la siguiente parada</button>')+' <span class="small mut">Escenas 3D:</span> '+chip(s3dOn(),'s3d',null,'Sí',1)+chip(!s3dOn(),'s3d',null,'No',0)+'</span></div>'+
   '<div id="livein" aria-live="off">'+liveInner()+'</div></div>';
 }
 /* ficha del rival en ese momento: forma del día y cansancio según el minuto */

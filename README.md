@@ -89,6 +89,7 @@ Al abrir el juego aparece el **menú de partidas**: tres huecos para tener varia
 - **Web instalable:** desde el móvil se puede «Añadir a pantalla de inicio» (icono propio, pantalla completa y funciona sin conexión). El enlace se ve con imagen y descripción al compartirlo.
 - **Partidas a salvo:** el juego pide al navegador almacenamiento persistente y, cada 3 temporadas sin copia, recuerda en Inicio guardar la partida en un archivo.
 - **Fin de carrera y compartir:** al retirarte aparece tu carrera completa (partidos, goles, asistencias, nota, títulos, Balón de Oro, veces mejor jugador de la liga, equipos de la temporada, horas sobre el césped, tiempo jugando, valoración y valor máximos, clubes y mejor temporada). Con «Compartir mi carrera» se crea una imagen vertical: en el móvil se comparte con el menú del sistema (Instagram, WhatsApp, X, Facebook…); en el ordenador, con X, Facebook, WhatsApp, descarga y copiar texto. También desde Carrera → Hitos.
+- **Escenas 3D:** penaltis (carrerilla, golpeo, estirada del portero y gol, parada o fuera), tus goles (a veces con regate antes del disparo), tus asistencias (pase decisivo y remate del compañero), goles de córner (centro y cabezazo) y, a veces, entradas en plancha. Tras los goles hay celebraciones variadas (baile, salto, puño, rodillazo deslizando, brazos cruzados) y tras un penalti fallado, lamento. Hechas con Three.js y los maniquíes animados de Quaternius (CC0); el golpeo y la estirada se animan moviendo los huesos. Solo se descargan (unos 4 MB) la primera vez que salen; se pueden saltar y desactivar en el partido («Escenas 3D: Sí/No»).
 - **Penaltis:** a veces hay un penalti a favor mientras juegas (más si eres delantero). Decides si lo tiras tú o se lo dejas al lanzador. Si lo tiras, eliges lado (izquierda, centro, derecha), altura (abajo, media, arriba) y potencia (suave, media, fuerte). Influyen tus Penaltis, Tiro, Potencia, Confianza y Concentración, si te lo han hecho a ti, la presión del partido y los reflejos del portero, que se lanza a un lado o se queda. Quitarle el penalti al lanzador sin ser capitán ni líder molesta al vestuario; si marcas varios, te nombran lanzador. Animación vista desde detrás del lanzador: carrerilla, golpeo, estirada del portero y gol, parada o fuera.
 - **Córners, faltas y centros:** si eres de los que botan (medios, mediapuntas, extremos, laterales) sacas córners y faltas laterales y tiras faltas directas; si eres de área (delanteros, centrales, mediocentros) atacas los córners y los centros. Con animación vista desde arriba.
 - **Nuevas habilidades:** Potencia de tiro, Efecto y Penaltis. En las partidas guardadas empiezan con el valor de tu Tiro.
@@ -141,6 +142,9 @@ Al abrir el juego aparece el **menú de partidas**: tres huecos para tener varia
 | `js/jugadas.js` | Jugadas nuevas por puesto, jugadas de la otra fase, zonas del campo y animación de la jugada |
 | `js/balonparado.js` | Penaltis (decisión, disparo y animación), córners, faltas y centros |
 | `js/gala.js` | Equipo del mes por puestos y gala de premios de fin de temporada |
+| `js3d/escena.js` | Escenas 3D (módulo que se carga solo al usarlo) |
+| `3d/` | Maniquíes animados de Quaternius recortados a las animaciones que se usan (CC0) |
+| `vendor/three/` | Three.js 0.187 (licencia MIT) |
 | `js/inicio.js` | Pestaña Inicio, bandeja y secciones agrupadas |
 | `js/progresion.js` | Potencial, curva de edad, forma, valor mensual, momentos y gráfico |
 | `diseno/` | Encargos (prompts, guía de estilo e inventario) para pedir gráficos a herramientas de diseño |

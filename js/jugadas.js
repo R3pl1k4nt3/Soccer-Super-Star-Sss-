@@ -168,3 +168,23 @@ function playAnimSVG(P){
   '<g><circle cx="'+stillRv[0]+'" cy="'+stillRv[1]+'" r="10" fill="#e53935" stroke="#fff" stroke-width="2"/>'+rvMove+'</g>'+
   '<g><circle cx="'+stillMe[0]+'" cy="'+stillMe[1]+'" r="11" fill="'+kit.a+'" stroke="#f5c542" stroke-width="3"/>'+meMove+'</g>'+balls+'</svg>';
 }
+/* ---------- escenas 3D (js3d/escena.js, se cargan solo al usarlas) ---------- */
+function s3dOn(){try{return localStorage.getItem('estrella_3d')!=='0';}catch(e){return true;}}
+function s3dKit(){try{return clubColors(myClub()).a;}catch(e){return '#1565c0';}}
+/* qué escena toca tras una jugada: penaltis, goles, asistencias y córners siempre; entradas y regates, a veces */
+function s3dFor(d,o,gk){
+ if(!s3dOn())return null;var kit=s3dKit();
+ if(d.anim==='pen')return {k:'pen',o:{aim:d.aim,out:d.pout,gkDir:d.gkDir,kit:kit}};
+ if(d.anim==='corner'&&(gk==='g'||gk==='a'))return {k:'corner',o:{kit:kit,out:'gol'}};
+ if(gk==='g')return {k:'gol',o:{kit:kit,dribble:/reg|encar|gir|bicicleta|conduc/i.test(o.n)||Math.random()<0.3}};
+ if(gk==='a')return {k:'asis',o:{kit:kit}};
+ if(d.ok&&o.ef==='def'&&o.sk.indexOf('ent')>=0&&Math.random()<0.5)return {k:'entrada',o:{kit:kit}};
+ return null;
+}
+function s3dGoal(mine){if(!s3dOn())return null;var kit=s3dKit();return mine?{k:'gol',o:{kit:kit,dribble:Math.random()<0.35}}:{k:'asis',o:{kit:kit}};}
+var S3DMOD=null;
+function play3D(k,o){
+ if(typeof document==='undefined')return Promise.resolve(false);
+ var url=new URL('js3d/escena.js',document.baseURI).href;
+ return (S3DMOD?Promise.resolve(S3DMOD):import(url).then(function(m){S3DMOD=m;return m;})).then(function(m){return m.play(k,o);}).catch(function(){return false;});
+}

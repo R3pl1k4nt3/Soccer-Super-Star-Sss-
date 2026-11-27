@@ -70,6 +70,7 @@ function render(){
  Array.prototype.forEach.call(document.querySelectorAll('.bar'),function(el){el.setAttribute('aria-hidden','true');});
  var m=document.querySelector('.modal .card');if(m&&!m.contains(document.activeElement)){m.setAttribute('tabindex','-1');m.focus({preventScroll:true});}
  liveTick();
+ if(UI.pop&&UI.pop.s3d&&!UI.pop.s3dRun&&typeof play3D==='function'){var P3=UI.pop;P3.s3dRun=1;play3D(P3.s3d.k,P3.s3d.o).then(function(){if(S)render();});}
 }
 /* reloj del partido en directo: corre solo en la pestaña Partido y sin ventanas abiertas */
 var liveT=null;
@@ -140,7 +141,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&UI.pop){var
   addtrait:function(){addTrait(id);},
   popclose:function(){if(UI.pop&&UI.pop.k==='dec'&&UI.pendRep){UI.pop={k:'match',rep:UI.pendRep};UI.pendRep=null;}else UI.pop=null;save();render();},
   livespeed:function(){localStorage.setItem('estrella_vel',String(n));render();},
-  livejump:function(){liveJump();},
+  livejump:function(){liveJump();},s3d:function(){localStorage.setItem('estrella_3d',n?'1':'0');render();},
   diff:function(){S.diff=id;save();render();},home:function(){moveHome(id);},car:function(){buyCar(id);},
   penset:function(){penSet(b.getAttribute('data-k'),id);},penshoot:penShoot,pencancel:penCancel,
   galanext:galaNext,galaskip:galaSkip,

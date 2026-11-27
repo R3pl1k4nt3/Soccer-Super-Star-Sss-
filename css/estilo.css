@@ -439,3 +439,10 @@ tr:hover td{background:rgba(148,163,184,.07)}
 .noanim .gin,.noanim .xp.gin{animation:none!important;opacity:1!important}
 .playanim{display:block;width:100%;max-width:420px;margin:8px auto;border-radius:10px}
 .playanim.pen{max-width:440px}
+.s3d-wrap{position:fixed;inset:0;z-index:120;display:grid;place-items:center;background:rgba(5,9,18,.88)}
+.s3d-box{position:relative;border-radius:14px;overflow:hidden;box-shadow:0 10px 40px rgba(0,0,0,.6)}
+.s3d-box canvas{display:block}
+.s3d-skip{position:absolute;right:12px;top:12px}
+.s3d-cap{position:absolute;left:0;right:0;top:18%;text-align:center;font-size:clamp(34px,8vw,72px);font-weight:900;color:#f5c542;text-shadow:0 4px 18px rgba(0,0,0,.7);opacity:0;transform:scale(.6);transition:opacity .3s,transform .4s cubic-bezier(.2,1.6,.4,1);pointer-events:none}
+.s3d-cap.on{opacity:1;transform:none}
+.s3d-wrap.load .s3d-cap{opacity:1;transform:none;font-size:20px;color:#fff;top:45%}

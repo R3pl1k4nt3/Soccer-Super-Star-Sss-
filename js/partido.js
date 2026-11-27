@@ -337,6 +337,7 @@ function choose(oi){
  var o=d.opts[oi],gk=/^¡Gol!/.test(d.res)?'g':/^Asistencia/.test(d.res)?'a':null;
  M.clock=Math.max(M.clock||0,d.min);
  if(typeof UI!=='undefined')UI.pop={k:'dec',min:d.min,n:o.n,ok:d.ok,res:d.res,dec:d.dec,gk:gk,z:d.z,ef:o.ef,shot:o.shot,anim:d.anim,spr:d.spr,aim:d.aim,pout:d.pout,gkDir:d.gkDir,scNow:scoreAt(M,d.min),hn:M.hn,an:M.an,opp:S.pl[o.op].n};
+ if(typeof s3dFor==='function'&&UI.pop)UI.pop.s3d=s3dFor(d,o,gk);
  markDec(M);
  save();render();
 }
@@ -351,7 +352,7 @@ function liveStep(){
  M.clock++;
  var g=liveGoalAt(M,M.clock);
  if(g){g.shown=1;if(typeof UI!=='undefined'){var mine=g.sc===S.me,o=g.sc===S.me?g.as:g.sc;
-  UI.pop={k:'goal',gk:mine?'g':'a',min:g.min,fk:g.fk,z:g.fk?[76,50]:[80+Math.round(Math.random()*8),30+Math.round(Math.random()*40)],ef:'att',shot:1,n:'g'+g.min,with:o>=0&&S.pl[o]?S.pl[o].n:null,scNow:scoreAt(M,g.min),hn:M.hn,an:M.an};}return 'goal';}
+  UI.pop={k:'goal',gk:mine?'g':'a',min:g.min,fk:g.fk,z:g.fk?[76,50]:[80+Math.round(Math.random()*8),30+Math.round(Math.random()*40)],ef:'att',shot:1,n:'g'+g.min,s3d:typeof s3dGoal==='function'?s3dGoal(mine):null,with:o>=0&&S.pl[o]?S.pl[o].n:null,scNow:scoreAt(M,g.min),hn:M.hn,an:M.an};}return 'goal';}
  if(M.clock>=liveTarget(M))return nextDec(M)?'dec':liveEnd();
  return 'min';
 }
