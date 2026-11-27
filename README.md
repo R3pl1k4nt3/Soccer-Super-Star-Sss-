@@ -89,6 +89,13 @@ Al abrir el juego aparece el **menú de partidas**: tres huecos para tener varia
 - **Web instalable:** desde el móvil se puede «Añadir a pantalla de inicio» (icono propio, pantalla completa y funciona sin conexión). El enlace se ve con imagen y descripción al compartirlo.
 - **Partidas a salvo:** el juego pide al navegador almacenamiento persistente y, cada 3 temporadas sin copia, recuerda en Inicio guardar la partida en un archivo.
 - **Fin de carrera y compartir:** al retirarte aparece tu carrera completa (partidos, goles, asistencias, nota, títulos, Balón de Oro, veces mejor jugador de la liga, equipos de la temporada, horas sobre el césped, tiempo jugando, valoración y valor máximos, clubes y mejor temporada). Con «Compartir mi carrera» se crea una imagen vertical: en el móvil se comparte con el menú del sistema (Instagram, WhatsApp, X, Facebook…); en el ordenador, con X, Facebook, WhatsApp, descarga y copiar texto. También desde Carrera → Hitos.
+- **Premios más realistas:** para optar al Balón de Oro hay que ser titular en tu club (al menos el 55 % de los partidos de liga) e ir con tu selección esa temporada; lo mismo vale para la IA. Tus notas ya no se inflan con las jugadas (pesan como mucho ±0,9) y tus goles valen lo mismo que los de la IA. El jugador del mes pide 3 partidos y cuenta la nota, los goles y asistencias por partido y cómo va el equipo.
+- **Nivel de las ligas:** LaLiga y Premier con la misma media (79), Bundesliga y Serie A un poco por debajo (77), Ligue 1 (75,5) y el resto más abajo; cada temporada vuelven poco a poco a ese nivel. La Bota de Oro usa coeficientes por liga (LaLiga y Premier ×2, Bundesliga y Serie A ×1,9, Ligue 1 ×1,8, Portugal y Países Bajos ×1,5, segundas divisiones menos) y el Balón de Oro pondera igual.
+- **Rasgos más lentos:** Plata a 250 puntos, Oro a 1.000 y Platino a 2.400 (para un jugador normal, Plata en 2-3 temporadas, Oro en 6-7 y Platino en 12-13); en ligas de menos nivel maduran más despacio.
+- **Más jugadas:** situaciones nuevas en cada puesto y jugadas de la otra fase: los delanteros, extremos y mediapuntas también presionan, repliegan y defienden córners; los defensas y medios también salen a la contra, rematan rechaces y van al remate en las faltas. Cada jugada sale en una zona distinta del campo.
+- **Animaciones:** el resultado de cada jugada y tus goles se ven en un minicampo animado (gol, asistencia, avance, robo o duelo perdido).
+- **Equipo del mes:** al acabar cada mes aparece una ventana con el once de tu liga dibujado por puestos y el jugador del mes.
+- **Gala de fin de temporada:** antes del resumen, una gala va desvelando los premios: tu liga (goleador, asistente, mejor jugador, mejor joven y equipo de la temporada), las grandes ligas, Europa, el equipo europeo, los torneos de selecciones, el equipo mundial, la Bota de Oro y el Balón de Oro del 10º al 1º.
 - **Diario Balón:** titulares cada semana sobre tus partidos, la liga, rumores de fichaje, tu rival y tus premios, con hemeroteca en Inicio.
 - **Capitanía:** tras dos temporadas en un club, con buena relación con el vestuario y entre los mejores de la plantilla, te eligen capitán (sube el salario, ganas algo más de duelos y tienes la «Charla de capitán»). También puedes ser capitán de la selección.
 - **Vida personal (Vida → Vida personal):** cinco casas (más moral y descanso cada semana, con su alquiler), garaje con cinco coches y familia con eventos: conocer a alguien, boda, hijos y crisis.
@@ -128,6 +135,8 @@ Al abrir el juego aparece el **menú de partidas**: tres huecos para tener varia
 | `js/contenido.js` | Dificultad, Diario Balón, capitanía, vida personal y rival generacional |
 | `js/compartir.js` | Resumen de carrera, pantalla de retirada e imagen para compartir |
 | `sw.js`, `manifest.webmanifest`, `iconos-app/` | Web instalable y sin conexión |
+| `js/jugadas.js` | Jugadas nuevas por puesto, jugadas de la otra fase, zonas del campo y animación de la jugada |
+| `js/gala.js` | Equipo del mes por puestos y gala de premios de fin de temporada |
 | `js/inicio.js` | Pestaña Inicio, bandeja y secciones agrupadas |
 | `js/progresion.js` | Potencial, curva de edad, forma, valor mensual, momentos y gráfico |
 | `diseno/` | Encargos (prompts, guía de estilo e inventario) para pedir gráficos a herramientas de diseño |

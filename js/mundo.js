@@ -4,6 +4,16 @@ var LSLOTS=46;          /* semanas de liga en el calendario (las ligas con menos
 var FXC={};             /* caché de calendarios de liga (no se guarda) */
 
 /* ---------- creación del mundo ---------- */
+/* nivel medio de cada primera división: LaLiga y Premier iguales, Bundesliga y Serie A un poco por debajo,
+   Ligue 1 un poco por debajo de estas y el resto más abajo. Se conserva a los grandes y se sube o baja al resto. */
+var LGTARGET={ESP:79,ENG:79,GER:77,ITA:77,FRA:75.5};
+function leagueBalance(clubs,lgs){
+ lgs.forEach(function(lg){var tg=LGTARGET[lg.co];if(lg.t!==1||tg==null)return;
+  var cs=lg.clubs.map(function(id){return clubs[id];}).sort(function(a,b){return b.str-a.str;}),n=cs.length,avg=0;
+  cs.forEach(function(c){avg+=c.str;});avg/=n;var D=tg-avg;if(Math.abs(D)<0.3)return;
+  /* reparto: el primero no cambia y el último cambia el doble de la media */
+  cs.forEach(function(c,i){var w=n>1?2*i/(n-1):1;c.str=clamp(Math.round(c.str+D*w),40,92);});});
+}
 function buildWorld(real){
  var clubs=[],lgs=[];
  COUNTRIES.forEach(function(co){
@@ -27,6 +37,7 @@ function buildWorld(real){
  if(real&&REALDATA.guests)REALDATA.guests.forEach(function(g,i){gl.push({n:g.n,gco:g.co,str:65,rd:i,cul:'en'});have[g.co]=1;});
  GUESTS.forEach(function(g){if(gl.length<64&&!have[g[1]])gl.push({n:g[0],gco:g[1],str:g[2],cul:g[3]});});
  gl.forEach(function(g){var cl={id:clubs.length,n:g.n,co:'G',gco:g.gco,cul:g.cul,t:0,str:g.str,ros:[],guest:1,pts:0,pj:0,gf:0,gc:0,w:0,d:0,l:0};if(g.rd!=null){cl.rd=g.rd;cl.rg=1;}clubs.push(cl);});
+ leagueBalance(clubs,lgs);
  return {clubs:clubs,lgs:lgs};
 }
 function natFor(co){
@@ -302,7 +313,7 @@ function startSeason(){
   S.tours.push(newTour('NC','Copa de Naciones','nat',ot,1));
  }
  S.cal=buildCal();S.slot=0;S.ntCalled=false;S.wres=[];
- S.ss={pj:0,g:0,a:0,rsum:0,rn:0,cs:0};
+ S.ss={pj:0,g:0,a:0,rsum:0,rn:0,cs:0,min:0,st:0};if(S.nt)S.ntCaps0=S.nt.caps;
 }
 
 /* ---------- ascensos y descensos (según los play-offs de formatos.js) ---------- */
@@ -321,6 +332,9 @@ function driftClubs(){
   var strs=lg.clubs.map(function(id){return S.clubs[id].str;});
   if(L[2]!=null){lo=L[2];hi=L[3];}else{lo=Math.min.apply(null,strs);hi=Math.max.apply(null,strs);}
   lg.clubs.forEach(function(id){var c=S.clubs[id],mid=(lo+hi)/2;c.str=clamp(Math.round(c.str+norm()*1.4+(c.str<lo?(lo-c.str)*0.3:c.str>hi?(hi-c.str)*0.3:0)+(mid-c.str)*0.02),20,92);});
+  /* las grandes ligas vuelven poco a poco a su nivel medio */
+  var tg=LGTARGET[lg.co];if(lg.t===1&&tg!=null){var avg=0;lg.clubs.forEach(function(id){avg+=S.clubs[id].str;});avg/=lg.clubs.length;var D=(tg-avg)*0.4;
+   if(Math.abs(D)>=0.3)lg.clubs.forEach(function(id){var c=S.clubs[id];c.str=clamp(Math.round(c.str+D+(D>0&&c.str>=88?-D:0)),20,92);});}
  });
 }
 /* envejecimiento, retiradas según edad y nivel, canteranos y plantillas de 22 a 26 */

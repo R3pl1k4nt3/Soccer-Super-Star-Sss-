@@ -422,6 +422,7 @@ function devsHTML(d){var h='';
 function modalHTML(){
  if(S.retired&&!S.summary){if(UI.retHide)return '';return retireHTML();}
  var m=S.summary;if(!m)return '';
+ if(!m.galaDone){var gh=galaHTML(m);if(gh)return gh;}
  var aw=m.awards.length?'<h3 style="margin-top:10px">Tus premios</h3>'+m.awards.map(function(a){return '<div class="ev"><span><span class="star">◆</span> '+esc(a.t)+'</span></div>';}).join(''):'';
  var b=S.bdo[S.bdo.length-1];
  return '<div class="modal" role="dialog" aria-modal="true"><div class="card"><h2>Fin de la temporada '+m.season+'</h2><p><b>'+esc(m.club)+'</b> acaba '+m.pos+'º en '+esc(m.league)+(m.champion?'. Sois campeones de liga.':'.')+(m.moved?' '+m.moved+'.':'')+(m.euNext?' La próxima temporada jugáis la '+m.euNext+'.':'')+'</p>'+
@@ -555,7 +556,8 @@ function pitchSVG(M,d){
  var W=320,H=200,me=S.pl[S.me],P=POSD[S.pos],line=P.line,att=d.opts.filter(function(o){return o.ef==='att';}).length>=d.opts.length/2;
  var side=/I$/.test(S.pos)?-1:/D$/.test(S.pos)&&S.pos!=='MCD'?1:0;
  var x=att?{POR:20,DEF:62,MED:72,DEL:84}[line]:{POR:8,DEF:18,MED:32,DEL:45}[line],y=50+side*30+((hashStr(d.sit)%9)-4);
- var mx=W*x/100,my=H*y/100,ox=mx+(att?28:-28),oy=my+(att?-8:8),main=S.pl[d.main],kit=clubColors(myClub());
+ if(d.z){x=clamp(d.z[0],6,94);y=clamp(d.z[1],10,90);}
+ var mx=W*x/100,my=H*y/100,ox=clamp(mx+(att?28:-28),16,W-16),oy=clamp(my+(att?-8:8),16,H-16),main=S.pl[d.main],kit=clubColors(myClub());
  var tx=att?W-6:6,ty=H/2;
  var h='<svg class="pitch" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Jugada: tú contra '+esc(main.n)+(att?', atacando':', defendiendo')+'">'+
   '<defs><pattern id="grass" width="40" height="'+H+'" patternUnits="userSpaceOnUse"><rect width="20" height="'+H+'" fill="#1f7a46"/><rect x="20" width="20" height="'+H+'" fill="#23884e"/></pattern><marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10z" fill="#fff"/></marker></defs>'+
@@ -594,11 +596,12 @@ function limitChart(pos,tp,ts){
 function popHTML(){
  var P=UI.pop;if(!P)return '';
  if(P.k==='gate'||P.k==='ad'||P.k==='buy')return monetPop(P);
+ if(P.k==='month')return monthPopHTML(P)||(UI.pop=null,'');
  var score=function(){return '<div class="popscore"><span>'+esc(P.hn)+'</span><b class="num">'+P.scNow[0]+' - '+P.scNow[1]+'</b><span>'+esc(P.an)+'</span></div>';};
  var shout=function(gk){return '<div class="gooool '+(gk==='g'?'gg':'ga')+'" aria-hidden="true">'+(gk==='g'?'¡GOOOL!':'¡ASISTENCIA!')+'</div>';};
  if(P.k==='goal'){
   return '<div class="modal" role="dialog" aria-modal="true" aria-label="'+(P.gk==='g'?'Gol tuyo':'Asistencia tuya')+'"><div class="card pop pgood pgoal">'+
-   '<div class="pophead"><span class="small mut">Minuto '+P.min+"'</span></div>"+shout(P.gk)+
+   '<div class="pophead"><span class="small mut">Minuto '+P.min+"'</span></div>"+shout(P.gk)+playAnimSVG(P)+
    '<h2>'+(P.gk==='g'?'Marcas'+(P.fk?' de falta directa':'')+(P.with?'. Te la pone '+esc(P.with):''):'Das el pase de gol'+(P.with?' a '+esc(P.with):''))+'</h2>'+score()+
    '<button class="go block" data-a="popclose" style="margin-top:14px">Seguir</button></div></div>';
  }
@@ -606,7 +609,7 @@ function popHTML(){
   var good=P.ok;
   return '<div class="modal" role="dialog" aria-modal="true" aria-label="Resultado de la jugada"><div class="card pop '+(good?'pgood':'pbad')+(P.gk?' pgoal':'')+'">'+
    '<div class="pophead">'+(P.dec?'<span class="badge">JUGADA DECISIVA</span>':'<span class="small mut">Jugada · minuto '+P.min+"'</span>")+'</div>'+
-   (P.gk?shout(P.gk):'<div class="popicon" aria-hidden="true">'+(good?POPI.ok:POPI.ko)+'</div>')+
+   (P.gk?shout(P.gk):'<div class="popicon" aria-hidden="true">'+(good?POPI.ok:POPI.ko)+'</div>')+playAnimSVG(P)+
    '<h2>'+esc(P.res)+'</h2><p class="mut">Elegiste: <b>'+esc(P.n)+'</b> contra '+esc(P.opp)+'.</p>'+score()+
    '<button class="go block" data-a="popclose" style="margin-top:14px">Seguir el partido</button></div></div>';
  }

@@ -58,6 +58,7 @@ function render(){
  if(S.freePending&&!S.summary)freeStart();
  if(S.pre){app.innerHTML=preHTML()+(S.neg?negHTML():'')+toastsHTML();var stp=$('.setup');if(stp)stp.scrollTop=UI.preScroll||0;return;}
  normTab();
+ if(!UI.pop&&S.popQ&&S.popQ.length&&!S.match&&!S.summary&&!S.neg&&!UI.busy&&!S.press)UI.pop=S.popQ.shift();
  var v=(VIEWS[S.tab]||viewHome)();
  app.innerHTML=sideHTML()+topHTML()+'<main id="view"><div class="page">'+pageHead()+v+'</div></main>'+navHTML()+(UI.sq?squadHTML():'')+modalHTML()+(S.neg&&!S.summary?negHTML():'')+popHTML()+(UI.share?shareHTML():'')+(UI.busy?'<div class="busy" role="status"><div class="spin" aria-hidden="true"></div><b>'+UI.busy+'</b></div>':'')+
   toastsHTML();
@@ -141,6 +142,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&UI.pop){var
   livespeed:function(){localStorage.setItem('estrella_vel',String(n));render();},
   livejump:function(){liveJump();},
   diff:function(){S.diff=id;save();render();},home:function(){moveHome(id);},car:function(){buyCar(id);},
+  galanext:galaNext,galaskip:galaSkip,
   share:shareCareer,sharecopy:shareCopy,shareclose:shareClose,
   retview:function(){UI.retHide=1;S.tab='career';subSet('career','hitos');render();},retshow:function(){UI.retHide=0;render();},
   adwatch:adWatch,adclaim:adReward,buygame:buyGame,buyok:buyConfirm,tutok:function(){S.tutDone=1;save();render();},

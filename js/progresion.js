@@ -135,12 +135,14 @@ function traitXP(M,rep){
  var out=[];if(!S.tl||rep.mins<=0)return out;
  myTraits().forEach(function(z){
   var r=z.r,t=traitById(z.id),st=S.tl[r]||(S.tl[r]={t:0,x:0});if(!t||st.t>=TIERMAX[r])return;
-  var f=r==='p'?1:r==='s'?0.7:0.5,x=(1.5+Math.max(0,rep.r-5.5)*2)*f;
+  var f=r==='p'?1:r==='s'?0.7:0.5,x=(3+Math.max(0,rep.r-5.5)*3)*f;
   if(t.fx.gs||t.fx.fk)x+=rep.g*4;
   if(t.fx.as)x+=rep.a*4;
   if((t.fx.cancel||t.gk)&&rep.gc===0)x+=4;
   if(t.fx.big&&M.imp>=1.5)x+=4;
   if(t.fx.team||t.fx.rate||t.fx.drain)x+=rep.win?2:0;
+  /* en ligas de menos nivel el rasgo madura algo más despacio */
+  x*=clamp(lgLevel()/72,0.6,1.1);
   st.x=r1(st.x+x*(rep.mins/90));
   var nx=TIERS[st.t+1];
   if(st.x>=nx.xp){st.t++;var msg='Tu rasgo '+t.n+' sube a '+TIERS[st.t].n+'.';out.push(moment('star',msg,{ic:'titulo'}));toast(msg);}

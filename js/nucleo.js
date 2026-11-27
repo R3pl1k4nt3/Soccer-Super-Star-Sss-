@@ -90,7 +90,7 @@ var TRAITS=[
  {id:'gral',n:'General de la defensa',d:'Ordenas a tu defensa y mejora tu equipo.',gk:1,sk:['com','pos','aer'],fx:{cancel:.08,team:1.2},lim:{agi:8,ref:9}}
 ];function traitById(id){return byId(TRAITS,id);}
 /* niveles de rasgo: se suben jugando. m multiplica bonificaciones y efectos; cap es el nivel máximo de sus habilidades */
-var TIERS=[{n:'Bronce',m:.6,cap:12,xp:0,c:'#cd7f32'},{n:'Plata',m:.8,cap:13,xp:120,c:'#c0c7d1'},{n:'Oro',m:1,cap:14,xp:450,c:'#f5c542'},{n:'Platino',m:1.25,cap:15,xp:1100,c:'#9fe3ff'}];
+var TIERS=[{n:'Bronce',m:.6,cap:12,xp:0,c:'#cd7f32'},{n:'Plata',m:.8,cap:13,xp:250,c:'#c0c7d1'},{n:'Oro',m:1,cap:14,xp:1000,c:'#f5c542'},{n:'Platino',m:1.25,cap:15,xp:2400,c:'#9fe3ff'}];
 function tierOf(r){return S&&S.tl&&S.tl[r]?S.tl[r].t:2;}
 /* rango máximo de cada rasgo: principal Platino, secundario Oro, tercero Plata, cuarto Bronce */
 var TIERMAX={p:3,s:2,x0:1,x1:0},XW=0.35;
