@@ -107,7 +107,7 @@ function viewMatch(){
  var r=S.last;
  if(r){
   h+='<div class="card"><h3>Último partido · '+esc(r.comp)+'</h3>'+(r.moments&&r.moments.length?r.moments.map(function(x){return '<div class="moment '+(x.k==='star'?'mstar':'mblack')+'"'+momBg(x.k)+'>'+icoMom(x)+'<b>'+(x.k==='star'?'★ Momento estrella':'✖ Momento negro')+'</b> '+esc(x.t)+'</div>';}).join(''):'')+'<div class="vs"><b>'+esc(r.home)+'</b><span class="score num">'+r.gh+' - '+r.ga+'</span><b>'+esc(r.away)+'</b></div>'+(r.pw?'<div class="small mut" style="text-align:center">Gana en los penaltis '+esc(r.pw==='h'?r.home:r.away)+'</div>':'');
-  h+='<div class="small mut" style="text-align:center">'+(r.role==='titular'?'Titular, 90 minutos':r.role==='suplente'?'Entras de suplente, '+r.mins+' minutos':r.role==='lesionado'?'Lesionado, no juegas':'No juegas, estás en el banquillo')+'</div>';
+  h+='<div class="small mut" style="text-align:center">'+(r.role==='titular'?'Titular, 90 minutos':r.role==='suplente'?'Entras de suplente, '+r.mins+' minutos':r.role==='lesionado'?'Lesionado, no juegas':r.role==='sancionado'?'Sancionado, no juegas':'No juegas, estás en el banquillo')+'</div>';
   r.evs.forEach(function(e){h+='<div class="ev"><b class="num">'+e.min+"'</b><span class='"+(e.me?'me':'')+"'>"+e.txt+'</span></div>';});
   if(r.decs&&r.decs.length){h+='<h3 style="margin-top:10px">Tus duelos</h3>';r.decs.forEach(function(d){h+='<div class="ev"><b class="num">'+d.min+"'</b><span>"+(d.dec?'<span class="star">◆</span> ':'')+d.n+': <b class="'+(d.ok?'good':'bad')+'">'+esc(d.res)+'</b></span></div>';});}
   h+='<div class="kv"><div><b class="num">'+(r.mins>0?ds(r.r):'-')+'</b><span>Nota</span></div>'+(S.pos==='POR'?'<div><b class="num">'+r.saves+'</b><span>Paradas</span></div>':'<div><b class="num">'+r.g+' / '+r.a+'</b><span>Goles / asist.</span></div>')+
@@ -296,9 +296,9 @@ function viewClub(){
 
 /* ---------- Tienda ---------- */
 function viewShop(){
- var gk=S.pos==='POR',slots=gk?[['botas','Botas'],['guantes','Guantes'],['ropa','Ropa']]:[['botas','Botas'],['ropa','Ropa']];
+ var gk=S.pos==='POR',slots=(gk?[['botas','Botas'],['guantes','Guantes'],['ropa','Ropa']]:[['botas','Botas'],['ropa','Ropa']]).concat(typeof PROTSLOTS!=='undefined'?PROTSLOTS:[]);
  var h='<div class="card"><h3>Tu material</h3>';
- slots.forEach(function(s){var g=S.gear[s[0]];h+='<div class="item"><div><b>'+s[1]+'</b><p>'+(g?esc(g.n)+' ('+g.gama+') · '+g.sk.map(function(id){return (SKNAME[id]||id)+' +'+g.b;}).join(', '):'Nada equipado')+'</p>'+(g?'<div class="bar big"><i style="width:'+(g.dur/g.max*100)+'%"></i></div><p>Le quedan '+g.dur+' partidos</p>':'')+'</div></div>';});
+ slots.forEach(function(s){var g=S.gear[s[0]];h+='<div class="item"><div><b>'+s[1]+'</b><p>'+(g?esc(g.n)+' ('+g.gama+') · '+gearTxt(g):'Nada equipado')+'</p>'+(g?'<div class="bar big"><i style="width:'+(g.dur/g.max*100)+'%"></i></div><p>Le quedan '+g.dur+' partidos</p>':'')+'</div></div>';});
  var bs=bootSponsor();if(bs)h+='<div class="small" style="color:var(--gold)">Contrato con '+byId(BRANDS,bs).n+': solo puedes comprar botas de esa marca.</div>';
  h+='</div><div class="card wide"><h3>Material</h3><div class="cats" role="group" aria-label="Tipo de material">'+slots.map(function(s){return chip(UI.shop===s[0],'shop',s[0],s[1]);}).join('')+'</div>';
  var cat=gearCatalog().filter(function(g){return g.slot===UI.shop;});
@@ -307,7 +307,7 @@ function viewShop(){
  cat.sort(function(a,b){return a.c-b.c;});
  h+='<div>';
  cat.forEach(function(g){var b=byId(BRANDS,g.brand),lock=g.slot==='botas'&&bs&&g.brand!==bs;
-  h+='<div class="item">'+gearImg(g)+'<div><b>'+esc(g.n)+'</b> <span class="lv">'+g.gama+' · '+'★'.repeat(b.tier)+'</span><p>'+g.sk.map(function(id){return (SKNAME[id]||id)+' +'+g.b;}).join(' · ')+' · dura '+g.dur+' partidos</p></div><button class="go '+(S.money>=g.c&&!lock?'':'dis')+'" data-a="gear" data-id="'+g.id+'">'+fmt(g.c)+'</button></div>';});
+  h+='<div class="item">'+gearImg(g)+'<div><b>'+esc(g.n)+'</b> <span class="lv">'+g.gama+' · '+'★'.repeat(b.tier)+'</span><p>'+gearTxt(g)+' · dura '+g.dur+' partidos</p></div><button class="go '+(S.money>=g.c&&!lock?'':'dis')+'" data-a="gear" data-id="'+g.id+'">'+fmt(g.c)+'</button></div>';});
  h+='</div><div class="card"><h3>Servicios</h3>';
  SHOP.forEach(function(s){var l=itemLvl(s.id);h+='<div class="item"><div><b>'+s.n+' <span class="lv">Nv '+l+'/3</span></b><p>'+s.d+'</p></div>'+(l>=3?'<span class="good">Máximo</span>':'<button class="go '+(S.money>=s.c[l]?'':'dis')+'" data-a="buy" data-id="'+s.id+'">'+fmt(s.c[l])+'</button>')+'</div>';});
  return h+'</div>';
@@ -597,6 +597,7 @@ function popHTML(){
  var P=UI.pop;if(!P)return '';
  if(P.k==='gate'||P.k==='ad'||P.k==='buy')return monetPop(P);
  if(P.k==='month')return monthPopHTML(P)||(UI.pop=null,'');
+ if(P.k==='s3donly')return '<div class="modal" role="dialog" aria-modal="true"><div class="card pop"><h2>'+esc(P.t||'')+'</h2><button class="go block" data-a="popclose" style="margin-top:12px">Seguir</button></div></div>';
  var score=function(){return '<div class="popscore"><span>'+esc(P.hn)+'</span><b class="num">'+P.scNow[0]+' - '+P.scNow[1]+'</b><span>'+esc(P.an)+'</span></div>';};
  var shout=function(gk){return '<div class="gooool '+(gk==='g'?'gg':'ga')+'" aria-hidden="true">'+(gk==='g'?'¡GOOOL!':'¡ASISTENCIA!')+'</div>';};
  if(P.k==='goal'){
@@ -617,12 +618,13 @@ function popHTML(){
 }
 function reportHTML(r){
  var h='<div class="small mut" style="text-align:center">'+esc(r.comp||'')+'</div><div class="vs"><b>'+esc(r.home)+'</b><span class="score num">'+r.gh+' - '+r.ga+'</span><b>'+esc(r.away)+'</b></div>'+(r.pw?'<div class="small mut" style="text-align:center">Gana en los penaltis '+esc(r.pw==='h'?r.home:r.away)+'</div>':'');
- h+='<div class="small mut" style="text-align:center">'+(r.role==='titular'?'Titular, 90 minutos':r.role==='suplente'?'Entras de suplente, '+r.mins+' minutos':r.role==='lesionado'?'Lesionado, no juegas':'No juegas, estás en el banquillo')+'</div>';
+ h+='<div class="small mut" style="text-align:center">'+(r.role==='titular'?'Titular, 90 minutos':r.role==='suplente'?'Entras de suplente, '+r.mins+' minutos':r.role==='lesionado'?'Lesionado, no juegas':r.role==='sancionado'?'Sancionado, no juegas':'No juegas, estás en el banquillo')+'</div>';
  if(r.moments&&r.moments.length)h+=r.moments.map(function(x){return '<div class="moment '+(x.k==='star'?'mstar':'mblack')+'"'+momBg(x.k)+'>'+icoMom(x)+'<b>'+(x.k==='star'?'★ Momento estrella':'✖ Momento negro')+'</b> '+esc(x.t)+'</div>';}).join('');
  h+='<div class="kv"><div><b class="num">'+(r.mins>0?ds(r.r):'-')+'</b><span>Nota</span></div>'+(S.pos==='POR'?'<div><b class="num">'+r.saves+'</b><span>Paradas</span></div>':'<div><b class="num">'+r.g+' / '+r.a+'</b><span>Goles / asist.</span></div>')+
   '<div><b class="num">'+r.pts+'</b><span>Puntos habilidad</span></div><div><b class="num good">'+fmt(r.income||0)+'</b><span>Ingresos</span></div><div><b class="num">'+r.medals+'</b><span>Medallas</span></div></div>';
  if(r.decs&&r.decs.length)h+='<h3 style="margin-top:12px">Tus jugadas</h3>'+r.decs.map(function(d){return '<div class="ev"><b class="num">'+d.min+"'</b><span>"+(d.dec?'<span class="star">◆</span> ':'')+esc(d.n)+': <b class="'+(d.ok?'good':'bad')+'">'+esc(d.res)+'</b></span></div>';}).join('');
  if(r.evs&&r.evs.length)h+='<h3 style="margin-top:12px">Goles</h3>'+r.evs.map(function(e){return '<div class="ev"><b class="num">'+e.min+"'</b><span class='"+(e.me?'me':'')+"'>"+e.txt+'</span></div>';}).join('');
+ h+=cardsHTML(r);
  return h;
 }
 function reportsCard(){

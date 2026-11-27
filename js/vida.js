@@ -157,7 +157,7 @@ function freeSign(i,terms,prima){
  S.rel.coach=back?S.rel.coach:50;S.rel.team=back?S.rel.team:45;S.rel.board=back?Math.max(45,S.rel.board):50;S.rel.fans=c.id===S.cantera?75:back?S.rel.fans:45;
  S.pre=null;S.neg=null;
  logm((back?'Vuelves a firmar con ':'Fichas como jugador libre por ')+c.n+' ('+lgName(c)+'): '+fmt(S.contract.wage)+' por semana, '+S.contract.years+' año(s), prima de '+fmt(pr)+bonusTxt(S.contract)+'.');
- toast('Firmas con '+c.n);genOffers();S.tab='home';save();render();
+ toast('Firmas con '+c.n);if(typeof s3dQueue==='function'){var kc=clubColors(c);s3dQueue('fichaje',{kit:kc.a,kit2:kc.b,num:S.look&&S.look.num,n:c.n},'Presentación con el '+c.n);}genOffers();S.tab='home';save();render();
 }
 
 /* ---------- directiva: reuniones cada pocas semanas ---------- */

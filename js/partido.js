@@ -142,6 +142,7 @@ function prepMatch(desc){
   if(Math.random()<p){role='titular';mins=90;}
   else if(S.pos!=='POR'&&Math.random()<0.6){role='suplente';mins=Math.round(15+Math.random()*30);}
   else role='banquillo';}
+ if(!nat&&(S.ban||0)>0&&role!=='lesionado'){role='sancionado';mins=0;}
  S.uxi=nat?{nid:me.nat,on:mins>0}:{cid:me.c,on:mins>0};
  var H=teamOf(desc,'h'),A=teamOf(desc,'a'),T=home?H:A,O=home?A:H,ov=overall();
  var inf=mins>0?((ov-T.str)*0.12+(nat?0:(S.rel.team-50)*0.03)+tx('team')+(S.moral-50)*0.02)*(mins/90):0;
@@ -162,7 +163,7 @@ function prepMatch(desc){
   M.decs.forEach(function(d,i){if(i&&d.min<=M.decs[i-1].min)d.min=Math.min(89,M.decs[i-1].min+2);});
   preAssign(M,T);
  }
- M.clock=0;
+ M.clock=0;cardsPrep(M);
  return M;
 }
 /* antes de empezar se decide tu participación en los goles del equipo (solo en los minutos que juegas),
@@ -201,10 +202,11 @@ function resolveDec(M,d,oi){
    else if(Math.random()<[0.2,0.35,0.5][o.rk]){d.res='Frenas a '+opp.n+' y evitas una ocasión clara';M.dgc=(M.dgc||0)+1;}
    else d.res='Ganas el duelo a '+opp.n;}}
  else{M.dr-=LOSS[o.rk]*mult;d.res=opp.n+' te gana el duelo';
-  if(o.ef==='def'&&o.rk===2&&!M.red&&Math.random()<0.07){M.red=d.min;d.res='Entrada a destiempo: tarjeta roja';}
+  if(o.ef==='def'&&o.rk===2&&!M.red&&S.pos!=='POR'&&Math.random()<0.035){M.red=d.min;d.res='Entrada a destiempo: tarjeta roja';}
   else if(o.ef==='def'&&o.rk===2&&Math.random()<0.3){M.ev.push({min:d.min,side:os,sc:o.op,as:-1,pen:1});d.res='Penalti en contra: lo marca '+opp.n;}
   else if(o.ef==='def'&&Math.random()<[0.1,0.2,0.3][o.rk]){M.ev.push({min:Math.min(90,d.min+1),side:os,sc:o.op,as:-1});d.res=opp.n+' te supera y marca';}
   else if(o.ef==='att'&&o.rk===2&&Math.random()<0.12){var cs=wpickXI(M.oxi,-1,'sg');M.ev.push({min:Math.min(90,d.min+2),side:os,sc:cs,as:o.op});d.res='Pierdes el balón y el rival marca a la contra';}}
+ cardOnDuel(M,d,o,ok);
  M.ev.sort(function(x,y){return x.min-y.min;});
 }
 function autoDec(M,d){var best=0,bv=-9;d.opts.forEach(function(o,i){var p=duelP(o),v=p*PAY[o.rk]-(1-p)*LOSS[o.rk];if(v>bv){bv=v;best=i;}});resolveDec(M,d,best);}
@@ -214,6 +216,7 @@ function finishMatch(M){
  var H=teamOf(desc,'h'),A=teamOf(desc,'a'),T=home?H:A;
  /* partidas guardadas a mitad de partido con la versión anterior */
  if(mins>0&&!M.pre)preAssign(M,T);
+ cardsFinish(M);mins=M.mins;
  M.ev.sort(function(x,y){return x.min-y.min;});
  var ev=M.ev.filter(function(e){return !e.x;});
  var gh=ev.filter(function(e){return e.side==='h';}).length,ga=ev.length-gh;
@@ -242,7 +245,7 @@ function finishMatch(M){
   return {min:e.min,me:e.sc===S.me?'g':e.as===S.me?'a':'',txt:'Gol de '+sc+(e.fk?', de falta directa':e.pen?', de penalti':'')+(as?' (asist. '+as+')':'')+(s===side?'':' · '+esc(tn))};});
  /* puntos de habilidad */
  var vis=nat?1.3:Math.exp((S.clubs[me.c].str-50)/40),pts;
- if(mins>0)pts=Math.round((1+Math.max(0,r-5)*0.9+(gf>gc?1:0))*(0.45+0.55*mins/90)*(S.skills.length/8)*(0.8+0.2*M.imp)*growthF())+itemLvl('coach');
+ if(mins>0)pts=Math.round((1+Math.max(0,r-5)*0.9+(gf>gc?1:0))*(0.45+0.55*mins/90)*(S.skills.length/8)*(0.8+0.2*M.imp)*growthF())+itemLvl('coach')+Math.round(gearFx('pts'));
  else pts=Math.round(S.skills.length/8)+itemLvl('coach');
  var gains={},ups=[],tw=0,gw=function(k){return k.w*(k.gr||1);};S.skills.forEach(function(k){tw+=gw(k);});
  for(var j=0;j<pts;j++){var x=Math.random()*tw,k=null,acc=0;for(var q=0;q<S.skills.length;q++){acc+=gw(S.skills[q]);if(x<acc){k=S.skills[q];break;}}
@@ -267,9 +270,9 @@ function finishMatch(M){
  else{S.fol=Math.round(S.fol*1.001);if(M.role==='banquillo')moral(-2);}
  /* energía, lesiones y desgaste del material */
  var inj=0;
- S.energy=Math.max(0,S.energy-mins/90*22*(1+tx('drain')));
- if(mins>0){var pi=(S.energy<35?0.07:0.02)*(mins/90)*(1-0.3*itemLvl('physio'))*(1+tx('inj'));
-  if(Math.random()<pi){inj=2+Math.floor(Math.random()*4);if(itemLvl('physio'))inj=Math.max(2,inj-itemLvl('physio'));S.injured=inj;logm('Te lesionas. Baja de '+(inj-1)+' semana(s).');}
+ S.energy=Math.max(0,S.energy-mins/90*22*(1+tx('drain'))*(1-gearFx('drain')));
+ if(mins>0){var pi=(S.energy<35?0.07:0.02)*(mins/90)*(1-0.3*itemLvl('physio'))*(1+tx('inj'))*(1-gearFx('inj'));
+  if(Math.random()<pi){inj=2+Math.floor(Math.random()*4);if(itemLvl('physio'))inj=Math.max(2,inj-itemLvl('physio'));if(itemLvl('crio')>=2)inj=Math.max(2,inj-1);S.injured=inj;logm('Te lesionas. Baja de '+(inj-1)+' semana(s).');}
   wearGear();}
  /* estadísticas propias */
  var st=S.stats,ss=S.ss;
@@ -281,6 +284,7 @@ function finishMatch(M){
  var decs=M.decs.map(function(d){return {min:d.min,n:d.opts[d.done].n,ok:d.ok,res:d.res,dec:d.dec};});
  var comp=compName(desc.ck)+(desc.rn?' · '+desc.rn:'');
  var rep={home:H.n,away:A.n,gh:gh,ga:ga,pw:pw,role:M.role,mins:mins,r:r,g:g,a:asi,saves:saves,gains:gains,pts:pts,bonus:bonus,medals:medals,evs:evs,inj:inj,comp:comp,decs:decs,imp:M.imp,nat:nat,win:gf>gc||(pw===side),lose:gf<gc||(pw&&pw!==side),gf:gf,gc:gc,red:M.red||0};
+ cardsAfter(M,rep);
  rep.moments=checkMoments(M,rep);
  return rep;
 }
@@ -363,7 +367,7 @@ function liveEnd(quick){
  var M=S.match;if(!M)return 'end';
  if(quick)M.decs.forEach(function(d){if(d.done<0){markDec(M);autoDec(M,d);}});
  S.match=null;if(typeof UI!=='undefined')UI.pen=null;var rep=finishMatch(M);endSlot(rep);
- if(rep){pressAfter(rep,true);if(!quick&&typeof UI!=='undefined')UI.pop={k:'match',rep:rep};}
+ if(rep){pressAfter(rep,true);if(!quick&&typeof UI!=='undefined'){UI.pop={k:'match',rep:rep};if(typeof s3dMatch==='function')UI.pop.s3d=s3dMatch(rep);}}
  save();if(!quick)render();return 'end';
 }
 function endSlot(rep){
@@ -388,7 +392,7 @@ function weekly(rep){
  if(rep){rep.income=inc+rep.bonus;rep.costs=out;}
  if(batch)batch.money+=inc-out+(rep?rep.bonus:0);
  if(S.fund>0){var ret=S.fund*(0.0025+norm()*0.012);S.fund=Math.max(0,Math.round(S.fund+ret));}
- S.energy=Math.min(100,S.energy+14+4*itemLvl('nutri'));
+ S.energy=Math.min(100,S.energy+14+4*itemLvl('nutri')+3*itemLvl('crio')+2*itemLvl('chef'));if(itemLvl('chef'))moral(itemLvl('chef')*0.4);
  if(S.injured>0)S.injured--;
  if(!rep){var k=pick(S.skills);if(addProg(k,1))logm(k.n+' sube a nivel '+k.lvl+'.');}
  cmWeekly();
@@ -409,7 +413,7 @@ function playN(n){
  var c=0,guard=0;
  while(c<n&&!S.summary&&!S.retired&&guard++<200){var r=playSlot(n===1);if(!r)break;if(r.paused)break;if(!r.none){c++;if(n===1)pressAfter(r,true);else pressAfter(r,false);}if(S.press)break;}
  var b=batch;batch=null;
- if(n===1&&b&&b.n===1&&S.last&&!S.match&&typeof UI!=='undefined')UI.pop={k:'match',rep:S.last};
+ if(n===1&&b&&b.n===1&&S.last&&!S.match&&typeof UI!=='undefined'){UI.pop={k:'match',rep:S.last};if(typeof s3dMatch==='function')UI.pop.s3d=s3dMatch(S.last);}
  if(S.match)S.tab='match';
  save();render();
  if(b&&b.n>1)toast(b.n+' partidos: +'+b.pts+' puntos, '+fmt(b.money)+', '+b.medals+' medallas');

@@ -109,7 +109,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&UI.pop){var
   go:function(){if(S.tab==='home')S.logSeen=S.logN;S.tab=id;var k=b.getAttribute('data-k');if(k)subSet(id,k);save();render();},
   seen:function(){S.logSeen=S.logN;save();render();},
   mult:function(){S.mult=n;save();render();},
-  train:function(){train(id);},promo:function(){promo(id);},bono:bono,
+  train:function(){train(id);},promo:function(){var k=mySk(id),l0=k?k.lvl:0;promo(id);if(k&&k.lvl>l0&&typeof s3dNow==='function'&&Math.random()<0.45)s3dNow('entreno',{kit:s3dKit(),n:k.n+' sube a nivel '+k.lvl});},bono:bono,
   play:function(){
    /* varias semanas o el cierre de temporada tardan algo en móviles: primero se pinta el aviso y luego se calcula */
    var heavy=n>1||S.slot>=S.cal.length-1;if(!heavy){playN(n);return;}
@@ -133,8 +133,8 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&UI.pop){var
   squad:function(){UI.sq={club:+id,p:null};render();},
   sqp:function(){UI.sq.p=+id;render();},sqback:function(){UI.sq.p=null;render();},sqclose:function(){UI.sq=null;render();},
   tatnew:function(){newTattoo(id);},lookedit:function(){UI.lookEdit=!UI.lookEdit;render();},
-  closesum:function(){S.summary=null;save();render();},
-  retire:function(){S.retired=true;save();render();},
+  closesum:function(){var r0=S.retired;S.summary=null;save();render();if(r0&&typeof s3dNow==='function')s3dNow('retiro',{n:S.name,kit:s3dKit()});},
+  retire:function(){S.retired=true;save();render();if(typeof s3dNow==='function')s3dNow('retiro',{n:S.name,kit:s3dKit()});},
   reset1:function(){UI.reset=true;render();},reset0:function(){UI.reset=false;render();},
   reset2:function(){UI.reset=false;var id=CUR;S=null;CUR=null;UI.sq=null;if(id)deleteSlot(id);UI.screen='menu';render();},
   pretrial:function(){UI.preScroll=$('.setup')?$('.setup').scrollTop:0;preTrial(i,id);},presign:function(){preSign(i);},preneg:function(){negOpen('libre',i);},prenext:function(){UI.preScroll=0;preNext();},

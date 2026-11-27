@@ -64,7 +64,7 @@ function moveHome(id){var h=byId(HOUSES,id);if(!h||h.id===home().id)return;var f
  if(S.money<fee){toast('Para mudarte necesitas '+fmt(fee)+' (fianza de 4 semanas).',1);return;}
  S.money-=fee;S.home=id;logm('Te mudas: '+h.n+'.');toast('Nueva casa: '+h.n);save();render();}
 function buyCar(id){var c=byId(CARS,id);S.cars=S.cars||[];if(!c||S.cars.indexOf(id)>=0)return;if(S.money<c.c){toast('Te faltan '+fmt(c.c-S.money)+'.',1);return;}
- S.money-=c.c;S.cars.push(id);if(c.f)S.fol=Math.round(S.fol*(1+c.f));moral(2);logm('Te compras un '+c.n.toLowerCase()+'.');toast('Nuevo coche: '+c.n);save();render();}
+ S.money-=c.c;S.cars.push(id);if(typeof s3dNow==='function')s3dNow('coche',{n:c.n.toLowerCase(),color:pick(['#c62828','#1565c0','#f5c542','#111111','#eeeeee']),kit:s3dKit()});if(c.f)S.fol=Math.round(S.fol*(1+c.f));moral(2);logm('Te compras un '+c.n.toLowerCase()+'.');toast('Nuevo coche: '+c.n);save();render();}
 function lifeWeekly(){var h=home();if(h.w)S.money-=h.w;if(h.m)moral(h.m);if(h.en)S.energy=Math.min(100,S.energy+h.en);
  var F=S.fam;if(F&&F.p)moral(0.4);}
 function famTxt(){var F=S.fam||{};if(!F.p)return 'Sin pareja.';return (F.mar?'Casado/a':'Con pareja')+' desde la temporada '+F.p+(F.kids?' · '+F.kids+' hijo'+(F.kids>1?'s':''):'')+'.';}

@@ -174,8 +174,17 @@ function s3dKit(){try{return clubColors(myClub()).a;}catch(e){return '#1565c0';}
 /* qué escena toca tras una jugada: penaltis, goles, asistencias y córners siempre; entradas y regates, a veces */
 function s3dFor(d,o,gk){
  if(!s3dOn())return null;var kit=s3dKit();
+ if(/expulsado|roja/i.test(d.res||''))return {k:'tarjeta',o:{c:'r',kit:kit}};
+ if(/amarilla/i.test(d.res||'')&&Math.random()<0.35)return {k:'tarjeta',o:{c:'y',kit:kit}};
  if(d.anim==='pen')return {k:'pen',o:{aim:d.aim,out:d.pout,gkDir:d.gkDir,kit:kit}};
  if(d.anim==='corner'&&(gk==='g'||gk==='a'))return {k:'corner',o:{kit:kit,out:'gol'}};
+ if(S.pos==='POR'&&d.ok&&o.ef==='def'&&Math.random()<0.6)return {k:'parada',o:{kit:kit}};
+ if(d.anim==='fk'&&(gk==='g'||Math.random()<0.5))return {k:'falta',o:{kit:kit,out:gk==='g'?'gol':'fallo'}};
+ if(gk==='g'&&/volea/i.test(o.n))return {k:'remate',o:{kit:kit,tipo:'volea'}};
+ if(gk==='g'&&/cabez|remat/i.test(o.n)&&o.sk.indexOf('cab')>=0)return {k:'remate',o:{kit:kit,tipo:'cabeza'}};
+ if(gk==='g'&&Math.random()<0.05)return {k:'remate',o:{kit:kit,tipo:'chilena'}};
+ if(!d.ok&&o.shot&&Math.random()<0.4)return {k:'fallo',o:{kit:kit}};
+ if(/^(LI|LD)$/.test(S.pos)&&d.ok&&o.ef==='att'&&gk!=='a'&&Math.random()<0.12)return {k:'banda',o:{kit:kit}};
  if(gk==='g')return {k:'gol',o:{kit:kit,dribble:/reg|encar|gir|bicicleta|conduc/i.test(o.n)||Math.random()<0.3}};
  if(gk==='a')return {k:'asis',o:{kit:kit}};
  if(d.ok&&o.ef==='def'&&o.sk.indexOf('ent')>=0&&Math.random()<0.5)return {k:'entrada',o:{kit:kit}};
@@ -188,3 +197,12 @@ function play3D(k,o){
  var url=new URL('js3d/escena.js',document.baseURI).href;
  return (S3DMOD?Promise.resolve(S3DMOD):import(url).then(function(m){S3DMOD=m;return m;})).then(function(m){return m.play(k,o);}).catch(function(){return false;});
 }
+/* escenas al acabar el partido: tanda de penaltis o lesión */
+function penSeq(win){for(var tries=0;tries<60;tries++){var s=[],a=0,b=0;for(var r=0;r<12;r++){var x=Math.random()<0.76,y=Math.random()<0.76;s.push({mine:1,ok:x?1:0});a+=x;s.push({mine:0,ok:y?1:0});b+=y;
+ if(r>=4&&a!==b)break;}if((a>b)===!!win)return s;}return [{mine:1,ok:win?1:0},{mine:0,ok:win?0:1}];}
+function s3dMatch(rep){if(!s3dOn()||!rep)return null;var kit=s3dKit();
+ if(rep.pw&&rep.mins>0)return {k:'tanda',o:{kit:kit,seq:penSeq(rep.win),win:rep.win?1:0}};
+ if(rep.inj)return {k:'lesion',o:{kit:kit,grave:rep.inj>=4}};return null;}
+/* escenas fuera del partido: se ponen en cola y salen en cuanto no hay otra ventana */
+function s3dQueue(k,o,t){if(!s3dOn()||typeof S==='undefined'||!S)return;S.popQ=(S.popQ||[]);S.popQ.push({k:'s3donly',t:t,s3d:{k:k,o:o||{}}});}
+function s3dNow(k,o){if(s3dOn()&&typeof UI!=='undefined')play3D(k,o||{});}

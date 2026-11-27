@@ -57,7 +57,7 @@ function accept(i,terms,prima){
  S.rel.coach=50;S.rel.team=45;S.rel.board=50;S.rel.fans=cl.id===S.cantera?75:45;
  S.listed=0;S.renewDue=0;S.bobj=null;S.bm=null;S.treqNo=-1;
  logm('Fichas por '+cl.n+' ('+lgName(cl)+') por un traspaso de '+fmv(fee)+'. Salario '+fmt(S.contract.wage)+' por semana, '+S.contract.years+' año(s)'+(pr?', prima de '+fmt(pr):'')+bonusTxt(S.contract)+'.'+(cut?' Cobras tu '+k.so+'% de la venta: '+fmt(cut)+'.':'')+(cl.id===S.cantera?' Vuelves a casa.':''));
- S.offers=[];genOffers();toast('Fichas por '+cl.n);save();render();
+ S.offers=[];genOffers();toast('Fichas por '+cl.n);if(typeof s3dQueue==='function'){var kc=clubColors(cl);s3dQueue('fichaje',{kit:kc.a,kit2:kc.b,num:S.look&&S.look.num,n:cl.n},'Presentación con el '+cl.n);}save();render();
 }
 
 /* ---------- community manager y redes ---------- */
@@ -86,6 +86,7 @@ function gearCatalog(){
  });
  var kb={b:'leo',m:'kai',p:'fel',e:'tri'};
  GAMAS.forEach(function(G){KIT_TYPES.forEach(function(t){var b=byId(BRANDS,kb[G.id]);list.push({id:'kit_'+G.id+'_'+t.id,slot:'ropa',n:t.n+' '+b.n,brand:b.id,gama:G.n,type:t.id,sk:t.sk,b:Math.max(1,G.b-1),c:Math.round(G.c*0.6/100)*100,dur:G.dur});});});
+ if(typeof extraGear==='function')list=list.concat(extraGear(gk));
  GEAR_CACHE={gk:gk,list:list};return list;
 }
 function bootSponsor(){var s=S.spons.filter(function(x){return x.cat==='botas';})[0];return s?s.id:null;}
@@ -96,7 +97,7 @@ function buyGear(id){
  if(S.money<it.c){toast('Te faltan '+fmt(it.c-S.money)+'.',1);return;}
  S.money-=it.c;equip(it);logm('Compras '+it.n+' ('+it.gama+').');toast('Equipas '+it.n);save();render();
 }
-function equip(it){S.gear[it.slot]={id:it.id,n:it.n,brand:it.brand,gama:it.gama,sk:it.sk,b:it.b,dur:it.dur,max:it.dur};}
+function equip(it){S.gear[it.slot]={id:it.id,n:it.n,brand:it.brand,gama:it.gama,sk:it.sk||[],b:it.b,fx:it.fx||null,dur:it.dur,max:it.dur};}
 function wearGear(){Object.keys(S.gear).forEach(function(sl){var g=S.gear[sl];if(!g)return;g.dur--;if(g.dur<=0){logm('Tu material se ha gastado: '+g.n+'.');toast('Se gasta: '+g.n,1);delete S.gear[sl];}});}
 
 /* ---------- patrocinios ---------- */
@@ -189,7 +190,7 @@ function pressAfter(rep,interactive){
  if(!big&&Math.random()>0.22)return;
  var qs=[];PRESS.forEach(function(p,i){if(p.w(rep))qs.push(i);});
  var gen=qs.pop();qs=shuffle(qs).slice(0,big?2:1);if(!qs.length)qs=[gen];
- S.press={qs:qs,i:0,ctx:rep.comp,ans:[]};
+ S.press={qs:qs,i:0,ctx:rep.comp,ans:[]};if(typeof s3dNow==='function'&&Math.random()<0.4)setTimeout(function(){s3dNow('prensa',{kit:s3dKit()});},1500);
 }
 function pressAnswer(ai){
  var P=S.press;if(!P)return;var q=PRESS[P.qs[P.i]],a=q.a[ai],fx=a.fx,parts=[];

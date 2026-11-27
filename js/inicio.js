@@ -48,6 +48,7 @@ function pendingItems(){
  var free=ACTS.filter(function(a){return actState(a).ok;}).length;
  if(S.acts>0&&free)p.push({t:'Te quedan '+S.acts+' acciones esta semana ('+free+' disponibles).',go:'life',sub:'team',btn:'Ver acciones'});
  var bk=backupDue();if(bk)p.push({t:'Hace '+bk+' temporadas que no haces una copia de tu partida. El navegador podría borrarla: guárdala en un archivo.',a:'export',btn:'Hacer copia'});
+ banTxt().forEach(function(t){p.push({k:'bad',t:t});});
  if(S.injured>0)p.push({k:'bad',t:'Estás lesionado: '+S.injured+' semana(s) de baja.'});
  else if(S.energy<35)p.push({k:'bad',t:'Energía baja ('+Math.round(S.energy)+' %): rindes menos y te puedes lesionar.'});
  if(S.moral<35)p.push({k:'bad',t:'Moral baja ('+S.moral+'). Un buen partido o una rueda de prensa positiva ayudan.'});
