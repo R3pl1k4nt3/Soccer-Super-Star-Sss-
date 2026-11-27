@@ -447,3 +447,16 @@ tr:hover td{background:rgba(148,163,184,.07)}
 .s3d-cap.on{opacity:1;transform:none}
 .s3d-wrap.load .s3d-cap{opacity:1;transform:none;font-size:20px;color:#fff;top:45%}
 .tcard{display:inline-block;width:10px;height:14px;border-radius:2px;vertical-align:-2px}.tcard.ty{background:#f5c542}.tcard.tr{background:#e53935}
+.negrows{display:grid;gap:6px;margin-top:8px}
+.negrow{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.03)}
+.negrow.neghead{border:0;background:none;padding:0 10px;font-size:12px;color:var(--dim)}
+.negl{display:grid;gap:2px;min-width:0;flex:1 1 140px}
+.negrow .negadj{flex:0 0 auto;margin-left:auto}
+.negadj b{min-width:72px}
+.card.neg{width:min(620px,100%)}
+@media (max-width:420px){.negadj b{min-width:60px;font-size:14px}.negadj .chip{min-width:32px;min-height:32px}}
+.negl{flex:1 1 100px}
+.negadj .chip{display:inline-grid;place-items:center}
+.negrow{flex-wrap:nowrap}
+.negrow.mut{flex-wrap:wrap}
+@media (max-width:420px){.negadj{gap:4px}.negadj b{min-width:56px}.negrow{padding:8px}}

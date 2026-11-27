@@ -98,12 +98,12 @@ function negHTML(){
  var h='<div class="modal" role="dialog" aria-modal="true" aria-label="Negociación de contrato"><div class="card neg"><div class="rowb"><h2 style="margin:0;display:flex;align-items:center;gap:10px">'+crestSVG(c,32)+(N.k==='fich'?'Fichaje · ':N.k==='libre'?'Jugador libre · ':'Renovación · ')+esc(c.n)+'</h2></div>'+
   '<p class="small mut">Negocia '+esc(agent().n)+' (nivel '+agl+'). '+(agl<5?'Un representante mejor ve más cláusulas y la directiva le tolera más exigencias.':'Ves todas las cláusulas y el límite exacto de la directiva.')+'</p>'+
   '<p class="negmsg">'+esc(N.msg)+'</p>';
- h+='<div class="tw"><table class="negt"><tr><th>Cláusula</th><th>Oferta del club</th><th>Tu petición</th></tr>';
+ h+='<div class="negrows"><div class="negrow neghead"><span>Cláusula · oferta del club</span><span>Tu petición</span></div>';
  NEGF.forEach(function(f){var sh=negShow(f),fm=function(v){return f.money?fmt(v):f.k==='so'?v+'%':v+(v===1?' año':' años');};
-  if(!sh){h+='<tr class="mut"><td>'+f.n+'</td><td colspan="2" class="small">Tu representante no llega a negociar esto (nivel '+f.lvl+')</td></tr>';return;}
+  if(!sh){h+='<div class="negrow mut"><div class="negl"><b>'+f.n+'</b><span class="small">Tu representante no llega a negociar esto (nivel '+f.lvl+')</span></div></div>';return;}
   var ch=N.ask[f.k]!==N.cur[f.k];
-  h+='<tr><td>'+f.n+'</td><td class="num">'+fm(N.cur[f.k])+'</td><td><div class="negadj"><button class="chip" data-a="negadj" data-id="'+f.k+'" data-n="-1" aria-label="Bajar '+f.n+'">−</button><b class="num'+(ch?' star':'')+'">'+fm(N.ask[f.k])+'</b><button class="chip" data-a="negadj" data-id="'+f.k+'" data-n="1" aria-label="Subir '+f.n+'">+</button></div></td></tr>';});
- h+='</table></div>';
+  h+='<div class="negrow"><div class="negl"><b>'+f.n+'</b><span class="small mut">Club: <span class="num">'+fm(N.cur[f.k])+'</span></span></div><div class="negadj"><button class="chip" data-a="negadj" data-id="'+f.k+'" data-n="-1" aria-label="Bajar '+f.n+'">−</button><b class="num'+(ch?' star':'')+'">'+fm(N.ask[f.k])+'</b><button class="chip" data-a="negadj" data-id="'+f.k+'" data-n="1" aria-label="Subir '+f.n+'">+</button></div></div>';});
+ h+='</div>';
  /* lo que ve tu representante */
  var pct=Math.round((r-1)*100),pl=N.pat/N.pat0;
  h+='<div class="kv" style="margin-top:8px"><div><b class="num '+(r<=lim?'good':'bad')+'">'+(pct>=0?'+':'')+pct+'%</b><span>Coste de tu petición frente a su oferta</span></div>';
