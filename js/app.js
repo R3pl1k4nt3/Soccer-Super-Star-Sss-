@@ -60,7 +60,7 @@ function render(){
  normTab();
  if(!UI.pop&&S.popQ&&S.popQ.length&&!S.match&&!S.summary&&!S.neg&&!UI.busy&&!S.press)UI.pop=S.popQ.shift();
  var v=(VIEWS[S.tab]||viewHome)();
- app.innerHTML=sideHTML()+topHTML()+'<main id="view"><div class="page">'+pageHead()+v+'</div></main>'+navHTML()+(UI.sq?squadHTML():'')+modalHTML()+(S.neg&&!S.summary?negHTML():'')+popHTML()+(UI.share?shareHTML():'')+(UI.busy?'<div class="busy" role="status"><div class="spin" aria-hidden="true"></div><b>'+UI.busy+'</b></div>':'')+
+ app.innerHTML=sideHTML()+topHTML()+'<main id="view"><div class="page">'+pageHead()+v+'</div></main>'+navHTML()+(UI.sq?squadHTML():'')+modalHTML()+(S.neg&&!S.summary?negHTML():'')+popHTML()+(UI.share?shareHTML():'')+(UI.pen&&S.match?penAimHTML():'')+(UI.busy?'<div class="busy" role="status"><div class="spin" aria-hidden="true"></div><b>'+UI.busy+'</b></div>':'')+
   toastsHTML();
  if(UI.lastTab===S.tab&&$('#view'))$('#view').scrollTop=sc;else if($('#view'))$('#view').scrollTop=0;
  UI.lastTab=S.tab;
@@ -73,7 +73,7 @@ function render(){
 }
 /* reloj del partido en directo: corre solo en la pestaña Partido y sin ventanas abiertas */
 var liveT=null;
-function liveRuns(){return S&&S.match&&!S.pre&&S.tab==='match'&&!UI.pop&&!(document.hidden);}
+function liveRuns(){return S&&S.match&&!S.pre&&S.tab==='match'&&!UI.pop&&!UI.pen&&!(document.hidden);}
 function liveTick(){
  if(liveT&&typeof clearTimeout==='function')clearTimeout(liveT);liveT=null;
  if(!liveRuns())return;var M=S.match;if((M.clock||0)>=liveTarget(M)&&nextDec(M))return;
@@ -142,6 +142,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&UI.pop){var
   livespeed:function(){localStorage.setItem('estrella_vel',String(n));render();},
   livejump:function(){liveJump();},
   diff:function(){S.diff=id;save();render();},home:function(){moveHome(id);},car:function(){buyCar(id);},
+  penset:function(){penSet(b.getAttribute('data-k'),id);},penshoot:penShoot,pencancel:penCancel,
   galanext:galaNext,galaskip:galaSkip,
   share:shareCareer,sharecopy:shareCopy,shareclose:shareClose,
   retview:function(){UI.retHide=1;S.tab='career';subSet('career','hitos');render();},retshow:function(){UI.retHide=0;render();},

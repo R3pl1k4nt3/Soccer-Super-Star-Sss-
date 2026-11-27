@@ -50,7 +50,7 @@ var SITS={
  MC:[
   {t:'Recibes de cara en el medio campo.',v:'MCD',o:[
    {n:'Pase filtrado entre líneas',sk:['pas','vis'],ok:['ant','pos'],rk:1,ef:'att'},
-   {n:'Disparo desde fuera del área',sk:['tir','fin'],ok:['ref','pos'],vs:'POR',rk:2,ef:'att',shot:1},
+   {n:'Disparo desde fuera del área',sk:['tir','pot'],ok:['ref','pos'],vs:'POR',rk:2,ef:'att',shot:1},
    {n:'Mantener la posesión',sk:['pas','ctl'],ok:['ent','mar'],rk:0,ef:'att'}]},
   {t:'El rival intenta salir jugando.',v:'MC',o:[
    {n:'Presionar la salida',sk:['res','ent'],ok:['ctl','pas'],rk:1,ef:'def'},
@@ -71,7 +71,7 @@ var SITS={
    {n:'Regate en el pasillo interior',sk:['reg','agi'],ok:['ent','agi'],rk:2,ef:'att',shot:1},
    {n:'Pausa y apoyo',sk:['ctl','con'],ok:['mar','res'],rk:0,ef:'att'}]},
   {t:'Balón suelto en la frontal.',v:'POR',o:[
-   {n:'Disparo de primeras',sk:['tir','fin'],ok:['ref','pos'],rk:2,ef:'att',shot:1},
+   {n:'Disparo de primeras',sk:['tir','pot'],ok:['ref','pos'],rk:2,ef:'att',shot:1},
    {n:'Controlar y filtrar',sk:['ctl','vis'],ok:['ant','mar'],vs:'DFC',rk:1,ef:'att'},
    {n:'Abrir a la banda',sk:['pas','con'],ok:['ant','pos'],vs:'MCD',rk:0,ef:'att'}]}],
  DC:[
@@ -156,7 +156,8 @@ function prepMatch(desc){
   var used={};
   for(var i=0;i<nd;i++){var sit=sitDraw(deck),mn,tries=0;do{mn=st+3+Math.floor(Math.random()*(mins-6));}while((used[mn]||used[mn-1]||used[mn+1])&&tries++<20);used[mn]=1;
    var opts=shuffle(sit.o.slice()).map(function(o){var x={n:o.n,sk:o.sk,ok:o.ok,rk:o.rk,ef:o.ef,shot:o.shot||0};x.op=oppFor(O.xi,o.vs||sit.v);x.min=mn;if(M.fm[x.op]==null)M.fm[x.op]=Math.round(norm()*2);x.fm=M.fm[x.op];return x;});
-   M.decs.push({min:mn,sit:sit.t,main:opts[0].op,opts:opts,done:-1,z:sitZone(sit)});}
+   M.decs.push({min:mn,sit:sit.t,main:opts[0].op,opts:opts,done:-1,z:sitZone(sit),anim:sit.anim,spr:sit.role});}
+  addPenDec(M,O,T);
   M.decs.sort(function(x,y){return x.min-y.min;});
   M.decs.forEach(function(d,i){if(i&&d.min<=M.decs[i-1].min)d.min=Math.min(89,M.decs[i-1].min+2);});
   preAssign(M,T);
@@ -168,7 +169,7 @@ function prepMatch(desc){
    la falta directa y los efectos de tus rasgos. Así el partido en directo puede cantar tus goles al momento. */
 function preAssign(M,T){
  var mins=M.mins,st=90-mins,side=mySide(M),ov=overall(),P=POSD[S.pos];
- if(tx('fk')&&Math.random()<0.06*(1+skv('bpa')/60)*tx('fk')*(mins/90)){M.ev.push({min:Math.min(89,st+2+Math.floor(Math.random()*Math.max(1,mins-3))),side:side,sc:S.me,as:-1,fk:1,mine:1});M.mg++;}
+ if(tx('fk')&&Math.random()<0.06*(1+(skv('bpa')+skv('efe'))/120)*tx('fk')*(mins/90)){M.ev.push({min:Math.min(89,st+2+Math.floor(Math.random()*Math.max(1,mins-3))),side:side,sc:S.me,as:-1,fk:1,mine:1});M.mg++;}
  var opg=M.ev.filter(function(e){return e.side!==side&&!e.x&&!e.pen&&e.min>=st;});
  if(opg.length&&Math.random()<tx('cancel'))opg[0].x=1;
  M.ev.forEach(function(e){if(e.side!==side||e.x||e.mine||e.min<st)return;
@@ -187,6 +188,7 @@ function nextDec(M){return M.decs.filter(function(x){return x.done<0;})[0];}
 function markDec(M){var d=nextDec(M);if(d&&d.dec==null){d.dec=isDecisive(M,d)?1:0;d.opts.forEach(function(o){o.dec=d.dec;});}return d;}
 function mySide(M){return M.home?'h':'a';}
 function resolveDec(M,d,oi){
+ if(d.spec==='pen'){penResolve(M,d,oi,d.aim);return;}
  var o=d.opts[oi],ok=Math.random()<duelP(o),mult=d.dec?1.5:1,side=mySide(M),os=side==='h'?'a':'h',opp=S.pl[o.op];
  d.done=oi;d.ok=ok;
  if(ok){M.dr+=PAY[o.rk]*mult;
@@ -327,11 +329,14 @@ function playSlot(pause){
 function choose(oi){
  var M=S.match;if(!M)return;
  var d=markDec(M);if(!d)return;
+ oi=Math.max(0,Math.min(oi,d.opts.length-1));
+ /* penalti: si lo tiras tú, antes eliges el disparo */
+ if(d.spec==='pen'&&d.opts[oi]&&d.opts[oi].pk==='me'&&!d.aim&&typeof UI!=='undefined'&&!S.auto){UI.pen={oi:oi};render();return;}
  resolveDec(M,d,oi);
  /* resultado de la jugada en una ventana emergente */
  var o=d.opts[oi],gk=/^¡Gol!/.test(d.res)?'g':/^Asistencia/.test(d.res)?'a':null;
  M.clock=Math.max(M.clock||0,d.min);
- if(typeof UI!=='undefined')UI.pop={k:'dec',min:d.min,n:o.n,ok:d.ok,res:d.res,dec:d.dec,gk:gk,z:d.z,ef:o.ef,shot:o.shot,scNow:scoreAt(M,d.min),hn:M.hn,an:M.an,opp:S.pl[o.op].n};
+ if(typeof UI!=='undefined')UI.pop={k:'dec',min:d.min,n:o.n,ok:d.ok,res:d.res,dec:d.dec,gk:gk,z:d.z,ef:o.ef,shot:o.shot,anim:d.anim,spr:d.spr,aim:d.aim,pout:d.pout,gkDir:d.gkDir,scNow:scoreAt(M,d.min),hn:M.hn,an:M.an,opp:S.pl[o.op].n};
  markDec(M);
  save();render();
 }
@@ -356,7 +361,7 @@ function liveJump(){var r,g=0;do{r=liveStep();}while(r==='min'&&g++<100);if(r!==
 function liveEnd(quick){
  var M=S.match;if(!M)return 'end';
  if(quick)M.decs.forEach(function(d){if(d.done<0){markDec(M);autoDec(M,d);}});
- S.match=null;var rep=finishMatch(M);endSlot(rep);
+ S.match=null;if(typeof UI!=='undefined')UI.pen=null;var rep=finishMatch(M);endSlot(rep);
  if(rep){pressAfter(rep,true);if(!quick&&typeof UI!=='undefined')UI.pop={k:'match',rep:rep};}
  save();if(!quick)render();return 'end';
 }

@@ -438,3 +438,4 @@ tr:hover td{background:rgba(148,163,184,.07)}
 @media (prefers-reduced-motion:reduce){.gin,.xp.gin{animation:none;opacity:1}}.xpitch{width:auto;height:min(58vh,640px);max-width:100%}
 .noanim .gin,.noanim .xp.gin{animation:none!important;opacity:1!important}
 .playanim{display:block;width:100%;max-width:420px;margin:8px auto;border-radius:10px}
+.playanim.pen{max-width:440px}

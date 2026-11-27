@@ -46,7 +46,7 @@ var SKO=[['con','Concentración','men'],['cfz','Confianza','men'],['cst','Consis
  ['ace','Aceleración','fis'],['vel','Velocidad','fis'],['agi','Agilidad','fis'],['res','Resistencia','fis'],['fue','Fuerza','fis'],['sal','Salto','fis'],
  ['mar','Marcaje','def'],['ent','Robo de balón','def'],['ant','Anticipación','def'],['pos','Posicionamiento','def'],
  ['pas','Pase corto','med'],['pal','Pase largo','med'],['vis','Visión','med'],['ctl','Control del balón','med'],['bpa','Balón parado','med'],
- ['tir','Tiro','ata'],['fin','Finalización','ata'],['reg','Regate','ata'],['cab','Remate de cabeza','ata'],['cen','Centros','ata'],['des','Desmarque','ata']];
+ ['tir','Tiro','ata'],['fin','Finalización','ata'],['reg','Regate','ata'],['cab','Remate de cabeza','ata'],['cen','Centros','ata'],['des','Desmarque','ata'],['pot','Potencia de tiro','ata'],['efe','Efecto','ata'],['pnl','Penaltis','ata']];
 var SKG=[['con','Concentración','men'],['cfz','Confianza','men'],['cst','Consistencia','men'],['com','Comunicación','men'],
  ['ace','Aceleración','fis'],['agi','Agilidad','fis'],['fue','Fuerza','fis'],['sal','Salto','fis'],
  ['arr','Arrojo','def'],['cap','Captura','def'],['ref','Reflejos','def'],['pos','Posicionamiento','def'],['aer','Juego aéreo','def'],['uno','Mano a mano','def'],
@@ -56,7 +56,7 @@ var CATW={POR:[2,2,3,1,0],DFC:[3,3,3,2,1],LI:[2,3,3,2,2],LD:[2,3,3,2,2],MCD:[3,3
 var EMP={POR:{arr:4,cap:4,ref:4,pos:3,uno:3,sac:2,con:3},DFC:{mar:4,ent:4,ant:4,pos:4,sal:3,cab:3,fue:3},
  LI:{cen:4,res:4,ace:4,vel:3,mar:3,ent:3},LD:{cen:4,res:4,ace:4,vel:3,mar:3,ent:3},MCD:{ent:4,mar:3,ant:4,pas:3,res:4,fue:3},
  MC:{pas:4,vis:4,ctl:4,res:3},VI:{res:4,pas:3,cen:3,reg:3,vis:3,ace:3},VD:{res:4,pas:3,cen:3,reg:3,vis:3,ace:3},
- MP:{vis:4,ctl:4,reg:4,pas:4,fin:3,tir:3,des:3},SD:{fin:4,des:4,tir:4,reg:3,ace:3,vel:3},DC:{fin:4,cab:4,tir:4,fue:3,des:3,sal:3},
+ MP:{vis:4,ctl:4,reg:4,pas:4,fin:3,tir:3,des:3,efe:3},SD:{fin:4,des:4,tir:4,reg:3,ace:3,vel:3,pot:3},DC:{fin:4,cab:4,tir:4,fue:3,des:3,sal:3,pot:3},
  EI:{reg:4,ace:4,vel:4,cen:4,fin:3,agi:3},ED:{reg:4,ace:4,vel:4,cen:4,fin:3,agi:3}};
 function skW(pos,id,cat){var e=EMP[pos];if(e&&e[id])return e[id];return Math.max(1,CATW[pos][['men','fis','def','med','ata'].indexOf(cat)]);}
 function catName(c){if(S&&S.pos==='POR'){if(c==='def')return 'Portería';if(c==='med')return 'Distribución';}for(var i=0;i<CATS.length;i++)if(CATS[i][0]===c)return CATS[i][1];return c;}

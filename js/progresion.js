@@ -181,3 +181,9 @@ function traitsCard(){
  }else if(n<2)h+='<p class="small mut" style="margin-top:10px">'+(n===0?'Cuando tu rasgo principal llegue a Oro podrás elegir un tercer rasgo (hasta Plata).':'Cuando tu rasgo secundario llegue a Oro podrás elegir un cuarto rasgo (hasta Bronce).')+'</p>';
  return h+'</div>';
 }
+/* habilidades añadidas después (potencia de tiro, efecto, penaltis): en partidas guardadas se copian del Tiro
+   para que tu valoración no cambie de golpe */
+function addNewSkills(){
+ if(S.pos==='POR'||!S.skills)return;var base=mySk('tir');if(!base)return;
+ SKO.forEach(function(s){if(mySk(s[0]))return;var k=JSON.parse(JSON.stringify(base));k.id=s[0];k.n=s[1];k.cat=s[2];k.w=skW(S.pos,s[0],s[2]);var t=skTalent();k.gr=t.gr;k.cj=t.cj;S.skills.push(k);});
+}

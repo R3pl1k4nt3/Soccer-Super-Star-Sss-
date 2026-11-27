@@ -53,8 +53,8 @@ var SITX={
    {n:'Aguantar y buscar la falta',sk:['fue','ctl'],ok:['ent','fue'],rk:1,ef:'att'}]}],
  MP:[
   {t:'Falta directa en la frontal.',v:'POR',z:[78,50],o:[
-   {n:'Al palo del portero',sk:['bpa','tir'],ok:['ref','pos'],rk:1,ef:'att',shot:1},
-   {n:'Por encima de la barrera',sk:['bpa','fin'],ok:['ref','sal'],rk:2,ef:'att',shot:1},
+   {n:'Al palo del portero',sk:['efe','bpa'],ok:['ref','pos'],rk:1,ef:'att',shot:1},
+   {n:'Por encima de la barrera',sk:['efe','tir'],ok:['ref','sal'],rk:2,ef:'att',shot:1},
    {n:'Jugada ensayada en corto',sk:['pas','vis'],ok:['ant','pos'],vs:'MCD',rk:0,ef:'att'}]},
   {t:'Ves el desmarque del delantero.',v:'MCD',z:[66,50],o:[
    {n:'Pase al hueco de primeras',sk:['vis','pas'],ok:['ant','pos'],rk:1,ef:'att'},
@@ -75,7 +75,7 @@ var SITX={
    {n:'Pared con el interior',sk:['pas','des'],ok:['ant','mar'],vs:'MC',rk:1,ef:'att'},
    {n:'Aguantar y ganar la falta',sk:['fue','ctl'],ok:['ent','fue'],rk:0,ef:'att'}]},
   {t:'Centro desde la otra banda al segundo palo.',v:'LAT',z:[88,72],o:[
-   {n:'Volea al primer toque',sk:['tir','agi'],ok:['sal','pos'],rk:2,ef:'att',shot:1},
+   {n:'Volea al primer toque',sk:['tir','pot'],ok:['sal','pos'],rk:2,ef:'att',shot:1},
    {n:'Cabecear hacia el centro',sk:['cab','vis'],ok:['sal','mar'],rk:1,ef:'att'},
    {n:'Controlar y asegurar',sk:['ctl','con'],ok:['ent','ant'],rk:0,ef:'att'}]}]
 };
@@ -86,7 +86,7 @@ var SITC_ATT=[
   {n:'Pase largo al espacio',sk:['pal','vis'],ok:['vel','ant'],vs:'DFC',rk:2,ef:'att'},
   {n:'Asegurar y esperar al equipo',sk:['pas','dec'],ok:['mar','res'],rk:0,ef:'att'}]},
  {t:'Te llega un rechace en la frontal del área.',v:'MCD',z:[80,44],o:[
-  {n:'Golpear de primeras',sk:['tir','cfz'],ok:['pos','ref'],vs:'POR',rk:2,ef:'att',shot:1},
+  {n:'Golpear de primeras',sk:['pot','tir'],ok:['pos','ref'],vs:'POR',rk:2,ef:'att',shot:1},
   {n:'Controlar y buscar el pase',sk:['ctl','pas'],ok:['ent','ant'],rk:1,ef:'att'},
   {n:'Devolverla atrás',sk:['pas','con'],ok:['ant','mar'],rk:0,ef:'att'}]},
  {t:'Falta lateral en tres cuartos de campo.',v:'DFC',z:[74,22],o:[
@@ -115,7 +115,7 @@ var SITC_DEF=[
 ];
 /* jugadas propias y de la otra fase según el puesto, sin repetir en el mismo partido */
 function sitDeck(key){
- var own=(SITS[key]||[]).concat(SITX[key]||[]),cross=[],p=0;
+ var own=(SITS[key]||[]).concat(SITX[key]||[]).concat(typeof spPools==='function'?spPools(key):[]),cross=[],p=0;
  if(['DC','EXT','MP'].indexOf(key)>=0){cross=SITC_DEF;p=0.3;}
  else if(['DFC','LAT','MCD'].indexOf(key)>=0){cross=SITC_ATT;p=0.3;}
  else if(key==='MC'||key==='INT'){cross=SITC_ATT.concat(SITC_DEF);p=0.3;}
@@ -136,6 +136,8 @@ function sitZone(sit){
 /* ---------- animación de la jugada (ventana del resultado y de tus goles) ----------
    Minicampo con tu jugador, el rival y el balón. SVG animado sin librerías; solo se anima la primera vez que se pinta. */
 function playAnimSVG(P){
+ if(P.anim==='pen')return penAnimSVG(P);
+ if(P.anim==='corner'||P.anim==='cross'||P.anim==='fk')return setPieceSVG(P);
  var W=320,H=170,z=P.z||[84,50],x=W*clamp(z[0],8,92)/100,y=H*clamp(z[1],12,88)/100,kit=clubColors(myClub());
  var att=P.ef!=='def',gx=att?W-10:10,gy=H/2,key='p'+P.min+'_'+P.n,still=UI.animSeen===key||(typeof matchMedia!=='undefined'&&matchMedia('(prefers-reduced-motion: reduce)').matches);
  if(!still)setTimeout(function(){UI.animSeen=key;},3000);

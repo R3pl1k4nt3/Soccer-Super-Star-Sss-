@@ -11,7 +11,7 @@ var SUBS={
 var OLDTAB={train:['player','train'],shop:['player','shop'],comp:['career','comp'],club:['career','club'],money:['biz','res']};
 function normTab(){
  if(S.pot==null||S.val==null||(S.skills[0]&&S.skills[0].gr==null))initProgress();
- ctr();bizMig();hitosMig();
+ ctr();bizMig();hitosMig();addNewSkills();
  if(!S.lgBal){leagueBalance(S.clubs,S.lgs);S.lgBal=1;}
  if(OLDTAB[S.tab]){var o=OLDTAB[S.tab];S.tab=o[0];subSet(o[0],o[1]);}
  if(S.sub&&S.sub.life==='money'){S.sub.life='team';if(S.tab==='life'){S.tab='biz';subSet('biz','res');}}
