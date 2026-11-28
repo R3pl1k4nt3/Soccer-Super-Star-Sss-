@@ -99,6 +99,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&UI.pop){var
   slotopen:function(){openSlot(+id);},slotexp:function(){exportSlot(+id);},slotdel1:function(){UI.delSlot=+id;render();},slotdel0:function(){UI.delSlot=null;render();},
   slotdel2:function(){deleteSlot(+id);UI.delSlot=null;toast('Partida borrada.');render();}};
   if(M[a]){M[a]();return;}}
+ if(a==='lang'){if(typeof setLang==='function')setLang(id);return;}
  if(a==='look'){var L=S?S.look:setupState.look;setLook(L,b.getAttribute('data-k'),id);if(S)save();render();return;}
  if(a==='tat'&&!S){toggleTat(setupState.look,id);render();return;}
  if(a==='lookrnd'&&!S){setupState.look=randomLook(setupState.pos);render();return;}
