@@ -351,6 +351,7 @@ function adsCard(){
 function lifeSocial(){
  var cm=cmObj();
  var h='<div class="card"><h3>Redes sociales</h3><div class="kv"><div><b class="num">'+fnum(S.fol)+'</b><span>Seguidores</span></div><div><b class="num good">'+fmt(socialIncome())+'</b><span>Ingresos por semana</span></div><div><b class="num">'+fmt(postValue())+'</b><span>Colaboración</span></div></div>'+
+  (S.post?'<div class="small good" style="margin-top:10px">Colaboración pagada de esta semana hecha.</div>':'<div class="small star" style="margin-top:10px;padding:8px 10px;border-left:3px solid var(--gold);background:rgba(245,197,66,.08);border-radius:6px">Aún no has hecho la colaboración pagada de esta semana ('+fmt(postValue())+'). Si juegas el partido sin publicar, la pierdes.</div>')+
   '<button class="go alt block '+(S.post?'dis':'')+'" data-a="post" style="margin-top:10px">Publicar colaboración pagada</button>';
  if(S.spons.length){h+='<h3 style="margin-top:12px">Publicaciones para tus marcas</h3>';S.spons.forEach(function(s){var b=byId(BRANDS,s.id);h+='<div class="item"><div><b>'+esc(b.n)+'</b><p>Este mes: '+s.done+'/'+s.posts+' publicaciones</p></div><button class="go alt '+(s.done>=s.posts||s.wk===S.slot?'dis':'')+'" data-a="spost" data-id="'+s.id+'">Publicar</button></div>';});}
  h+='<h3 style="margin-top:12px">Community manager</h3><div class="small mut">'+(cm?'Te lleva las redes <b>'+esc(cm.n)+'</b>: +'+ds(cm.g*100)+'% de seguidores por semana, colaboraciones ×'+ds(cm.post)+'.':'Llevas tus redes tú solo.')+'</div>';

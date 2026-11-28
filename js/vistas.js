@@ -523,6 +523,11 @@ function setupHTML(){
   (st.step<5?'<button class="go" data-a="step" data-n="'+(st.step+1)+'">Siguiente: '+SETUP_STEPS[st.step]+'</button>':'<button class="go big" data-a="start">Empezar carrera</button>')+'</div></div></div>';
  return h;
 }/* ---------- menú de partidas ---------- */
+/* iPhone/iPad en Safari: si no se abre la web en 7 días, Safari borra lo guardado. Desde la pantalla de inicio no pasa. */
+function isIOS(){try{var u=navigator.userAgent||'';return /iPhone|iPad|iPod/.test(u)||(/Macintosh/.test(u)&&navigator.maxTouchPoints>1);}catch(e){return false;}}
+function isStandalone(){try{return (window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;}catch(e){return false;}}
+function iosHint(){if(!isIOS()||isStandalone())return '';
+ return '<div class="small" style="flex-basis:100%;margin:10px 0 0;padding:8px 10px;border-left:3px solid var(--gold);background:rgba(245,197,66,.08);border-radius:6px"><b class="star">En iPhone:</b> Safari borra los datos de las webs que no abres en 7 días, y con ellos tu partida. Para que no pase, añade el juego a la pantalla de inicio (botón Compartir → «Añadir a pantalla de inicio») y juega desde ese icono. Y exporta una copia de vez en cuando.</div>';}
 function menuHTML(){
  if(!UI.booted)return '<div class="setup"><div class="setup-in"><p class="mut">Cargando partidas…</p></div></div>';
  var m=metaAll(),h='<div class="setup"><div class="setup-in">'+
@@ -535,7 +540,7 @@ function menuHTML(){
    '<div class="slotbtns">'+(del?'<span class="small bad">¿Borrar para siempre?</span><button class="go" data-a="slotdel2" data-id="'+i+'">Sí, borrar</button><button class="go alt" data-a="slotdel0">No</button>':
    '<button class="go" data-a="slotopen" data-id="'+i+'">Continuar</button><button class="go alt" data-a="slotexp" data-id="'+i+'">Exportar</button><button class="go alt" data-a="slotdel1" data-id="'+i+'">Borrar</button>')+'</div></div>';}
  h+='</div><div class="rowb" style="margin-top:12px;flex-wrap:wrap"><p class="small mut" style="margin:0;max-width:560px">Las partidas se guardan solas en este navegador. Exporta una copia a un archivo para no perderla o para seguir en otro dispositivo.</p>'+
-  '<div style="flex-basis:100%">'+gfxSwitch()+'</div><label class="go alt filebtn" style="margin:0">Importar partida<input id="imp" type="file" accept=".json,application/json" class="sr"></label></div></section>'+
+  iosHint()+'<div style="flex-basis:100%">'+gfxSwitch()+'</div><label class="go alt filebtn" style="margin:0">Importar partida<input id="imp" type="file" accept=".json,application/json" class="sr"></label></div></section>'+
   '<p class="small mut">Versión ficticia con clubes inspirados en los reales. La versión real es solo para pruebas y uso particular, no comercial.</p></div></div>';
  return h;
 }

@@ -103,7 +103,7 @@ function cardsAfter(M,rep){
   logm((M.red2?'Expulsado por doble amarilla':'Roja directa')+': '+ban+' partido(s) de sanción.');}
  if(lg&&y&&!M.red2){var before=S.ss.yc||0;S.ss.yc=before+y;if(Math.floor(S.ss.yc/5)>Math.floor(before/5)){S.ban=(S.ban||0)+1;logm('Ciclo de amarillas: '+S.ss.yc+' en liga. Te pierdes el próximo partido.');}}
 }
-function cardIco(t){return "<span class='tarjeta-ico "+(t==='r'?'tr':'ty')+"' aria-label='"+(t==='r'?'Roja':'Amarilla')+"'></span>";}
+function cardIco(t){return "<span class='tarjeta-ico "+(t==='r'?'tj-roja':'tj-amarilla')+"' aria-label='"+(t==='r'?'Roja':'Amarilla')+"'></span>";}
 function cardsHTML(r){
  if(!r.cards||!r.cards.length)return '';
  return '<h3 style="margin-top:12px">Tarjetas</h3>'+r.cards.map(function(c){return '<div class="ev"><b class="num">'+c.min+"'</b><span>"+cardIco(c.t)+' <span class="'+(c.me?'me':'')+'">'+esc(c.n)+(c.me?' (tú)':'')+'</span>'+(c.t==='r'?' <span class="small mut">'+(c.r2?'doble amarilla, ':'')+'expulsado</span>':'')+'</span></div>';}).join('');

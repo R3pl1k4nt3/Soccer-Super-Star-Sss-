@@ -24,7 +24,7 @@ function pageHead(){
  var t=TABS.filter(function(x){return x[0]===S.tab;})[0];
  return '<header class="pagehead"><div><h1>'+t[1]+'</h1><p>'+sub+'</p></div></header>';
 }
-function dots(){return {home:homeBadge(),life:!!S.event||!!S.bm||!!S.neg||(S.ads||[]).length>0,biz:S.sofs.length>0,match:!!(S.match||S.press)};}
+function dots(){return {home:homeBadge(),life:!!S.event||!!S.bm||!!S.neg||(S.ads||[]).length>0||!S.post||S.spons.some(function(s){return s.done<s.posts&&s.wk!==S.slot;}),biz:S.sofs.length>0,match:!!(S.match||S.press)};}
 function sideHTML(){
  var c=myClub(),kit=clubColors(c),d=dots();
  return '<aside id="side" aria-label="Menú principal"><div class="brand">'+(logoPlus(26)||'<svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.9L22 9.3l-5.5 4.8L18.2 21 12 17.3 5.8 21l1.7-6.9L2 9.3l7.1-.4z" fill="currentColor"/></svg>')+'Estrella del Balón</div>'+

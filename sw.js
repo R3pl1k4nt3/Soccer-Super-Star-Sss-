@@ -2,7 +2,7 @@
    - Páginas: primero la red (para recibir versiones nuevas) y, sin conexión, la copia guardada.
    - Scripts, estilos, gráficos y tipografías: primero la copia guardada (llevan ?v= y cambian de nombre en cada versión).
    Al cambiar VERSION se borran las copias de versiones anteriores. */
-var VERSION='20261127i',CACHE='estrella-'+VERSION;
+var VERSION='20261128a',CACHE='estrella-'+VERSION;
 self.addEventListener('install',function(e){
  e.waitUntil(caches.open(CACHE).then(function(c){return c.addAll(['./','./index.html','./manifest.webmanifest','./iconos-app/icono-192.png']).catch(function(){});}));
  self.skipWaiting();
