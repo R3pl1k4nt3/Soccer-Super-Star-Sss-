@@ -151,6 +151,8 @@ Al abrir el juego aparece el **menú de partidas**: tres huecos para tener varia
 | `js/tarjetas.js` | Tarjetas, expulsiones, ciclo de amarillas y sanciones |
 | `js/objetos.js` | Protecciones (espinilleras, tobilleras, medias, plantillas, GPS) y servicios nuevos |
 | `js/inicio.js` | Pestaña Inicio, bandeja y secciones agrupadas |
+| `js/lang-en.js` | Versión en inglés: traduce lo que se ve en pantalla con un diccionario de frases y palabras; selector de idioma en el menú y en Carrera |
+| `tools/extraer-textos.ps1` | Saca los textos en español de los scripts para revisar qué falta traducir |
 | `js/progresion.js` | Potencial, curva de edad, forma, valor mensual, momentos y gráfico |
 | `diseno/` | Encargos (prompts, guía de estilo e inventario) para pedir gráficos a herramientas de diseño |
 | `TECNOLOGIA.md` | Arquitectura, modelo de datos y fórmulas |

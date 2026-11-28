@@ -119,6 +119,7 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&UI.pop){var
   negadj:function(){negAdj(id,n);},negprop:negPropose,negacc:negAcceptCur,negquit:negQuit,
   bm:function(){boardAns(i);},treq:function(){transferReq();},treqno:transferWithdraw,tforce:transferForce,
   ad:function(){adDo(i,!!n);},bizbuy:function(){bizBuy(id);},bizup:function(){bizUp(id);},bizmg:function(){bizMg(id);},bizsell:function(){bizSell(id);},
+  lang:function(){setLang(id);},
   choose:function(){choose(i);},tenpick:function(){tenChoose(i);},auto:function(){S.auto=!!n;save();render();},
   press:function(){pressAnswer(i);},pressskip:pressSkip,
   ev:function(){doEvent(i);},injdec:function(){injSet(id);},polem:function(){polemDo(i);},act:function(){doAct(id);},post:postPaid,

@@ -284,7 +284,7 @@ function viewClub(){
   '<button class="go alt block" data-a="squad" data-id="'+c.id+'" style="margin-top:10px">Ver plantilla</button></div>';
  var n=nation(me.nat),cp=Math.round(ntCallP()*100);
  h+='<div class="card"><h3>Selección · '+n.n+'</h3><div class="kv"><div><b class="num">'+S.nt.calls+'</b><span>Convocatorias</span></div><div><b class="num">'+S.nt.caps+'</b><span>Partidos</span></div><div><b class="num">'+S.nt.g+' / '+S.nt.a+'</b><span>Goles / asist.</span></div></div>'+
-  '<div class="small mut" style="margin-top:8px">Fuerza de la selección '+n.str+'. Probabilidad de convocatoria ahora: <b class="num">'+cp+'%</b>. Depende de tu valoración frente a los mejores '+natName(me.nat).toLowerCase()+'s de tu puesto, de tu nota media y de la prensa.</div></div>';
+  '<div class="small mut" style="margin-top:8px">Fuerza de la selección '+n.str+'. Probabilidad de convocatoria ahora: <b class="num">'+cp+'%</b>. Depende de tu valoración frente a los mejores de tu país en tu puesto, de tu nota media y de la prensa.</div></div>';
  h+='<div class="card"><div class="rowb"><h3 style="margin:0">Representante</h3><span class="mut small">'+esc(ag.n)+' · nivel '+ag.lvl+'</span></div><p class="small mut">Tu representante negocia por ti: cuanto mejor sea, más cláusulas ve y más exigencias te tolera la directiva.</p><button class="go alt block" data-a="go" data-id="life" data-k="agent">Ver representante</button></div>';
  h+='<div class="card"><h3>Ofertas</h3><div class="small mut" style="margin-bottom:6px">'+(windowOpen()?'Mercado abierto.':'Mercado cerrado. Abre al inicio de temporada y en enero.')+(S.listed?' Estás en el mercado: llegan más ofertas.':'')+' Al pulsar Negociar se abre la mesa de negociación.</div>';
  S.offers.forEach(function(o,i){var x=S.clubs[o.club],p=Math.round(starterP(x)*100),r2=rivalFor(x),l2=lgOf(x.id);
@@ -333,7 +333,7 @@ function viewCareer(){
  S.log.slice(0,20).forEach(function(l){h+='<div class="ev"><b style="width:74px;font-size:13px">'+l.t+'</b><span>'+esc(l.m)+'</span></div>';});
  if(S.real)h+='</div><div class="card small mut">'+REAL_NOTE+(S.realSeason?' Datos de la temporada '+S.realSeason+'.':'');
  h+='</div><div class="card"><h3>Gráficos</h3>'+gfxSwitch()+'</div>';
- h+='<div class="card"><h3>Partida</h3><p class="small mut" style="margin-top:0">Se guarda sola en este navegador'+(CUR?' (hueco '+CUR+')':'')+'. Exporta una copia para no perderla o para seguir en otro dispositivo.</p><div class="btns"><button class="go alt" data-a="export">Exportar a archivo</button><button class="go alt" data-a="menu">Menú de partidas</button>'+(UI.reset?'<p class="small bad full" style="margin:6px 0 0">Se borrará esta carrera para siempre. ¿Seguro?</p><button class="go" data-a="reset2">Sí, borrar</button><button class="go alt" data-a="reset0">Cancelar</button>':'<button class="go alt full" data-a="reset1">Borrar esta carrera</button>')+'</div></div>';
+ h+='<div class="card"><h3>Partida</h3>'+(typeof langSwitch==='function'?langSwitch():'')+'<p class="small mut" style="margin-top:0">Se guarda sola en este navegador'+(CUR?' (hueco '+CUR+')':'')+'. Exporta una copia para no perderla o para seguir en otro dispositivo.</p><div class="btns"><button class="go alt" data-a="export">Exportar a archivo</button><button class="go alt" data-a="menu">Menú de partidas</button>'+(UI.reset?'<p class="small bad full" style="margin:6px 0 0">Se borrará esta carrera para siempre. ¿Seguro?</p><button class="go" data-a="reset2">Sí, borrar</button><button class="go alt" data-a="reset0">Cancelar</button>':'<button class="go alt full" data-a="reset1">Borrar esta carrera</button>')+'</div></div>';
  return h;
 }
 
@@ -542,7 +542,7 @@ function menuHTML(){
    '<div class="slotbtns">'+(del?'<span class="small bad">¿Borrar para siempre?</span><button class="go" data-a="slotdel2" data-id="'+i+'">Sí, borrar</button><button class="go alt" data-a="slotdel0">No</button>':
    '<button class="go" data-a="slotopen" data-id="'+i+'">Continuar</button><button class="go alt" data-a="slotexp" data-id="'+i+'">Exportar</button><button class="go alt" data-a="slotdel1" data-id="'+i+'">Borrar</button>')+'</div></div>';}
  h+='</div><div class="rowb" style="margin-top:12px;flex-wrap:wrap"><p class="small mut" style="margin:0;max-width:560px">Las partidas se guardan solas en este navegador. Exporta una copia a un archivo para no perderla o para seguir en otro dispositivo.</p>'+
-  iosHint()+'<div style="flex-basis:100%">'+gfxSwitch()+'</div><label class="go alt filebtn" style="margin:0">Importar partida<input id="imp" type="file" accept=".json,application/json" class="sr"></label></div></section>'+
+  iosHint()+'<div style="flex-basis:100%">'+gfxSwitch()+(typeof langSwitch==='function'?langSwitch():'')+'</div><label class="go alt filebtn" style="margin:0">Importar partida<input id="imp" type="file" accept=".json,application/json" class="sr"></label></div></section>'+
   '<p class="small mut">Versión ficticia con clubes inspirados en los reales. La versión real es solo para pruebas y uso particular, no comercial.</p></div></div>';
  return h;
 }
