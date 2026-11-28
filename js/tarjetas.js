@@ -34,15 +34,17 @@ function cardsPrep(M){
 var MANSTR=7;
 function manDown(M,sd,min,id){
  M.down=M.down||{h:0,a:0};M.down[sd]++;M.downAt=M.downAt||{};if(M.downAt[sd]==null)M.downAt[sd]=min;
- M.sv=M.sv||{h:M.hs,a:M.as};M.sv[sd]-=MANSTR;
- var from=Math.max(min,M.clock||0),rem=(90-from)/90,mine=mySide(M);
- if(rem<=0)return;
- var xiOf=function(s){return (s===mine?M.txi:M.oxi).filter(function(x){return !(M.off||{})[x];});};
- M.off=M.off||{};M.off[id]=1;
+ M.sv=M.sv||{h:M.hs,a:M.as};M.sv[sd]-=MANSTR;M.off=M.off||{};M.off[id]=1;
+ resimFrom(M,Math.max(min,M.clock||0),id===S.me);
+}
+/* vuelve a jugar desde el minuto from con las fuerzas actuales (M.sv). dropMine: tus goles ya decididos también se descartan */
+function resimFrom(M,from,dropMine){
+ var rem=(90-from)/90,mine=mySide(M);if(rem<=0)return;
+ var off=M.off||{},xiOf=function(s){return (s===mine?M.txi:M.oxi).filter(function(x){return !off[x];});};
  /* lo que queda por jugar se descarta, menos tus goles y asistencias ya decididos */
  var kept={h:0,a:0};
  M.ev=M.ev.filter(function(e){if(e.x||e.shown||e.min<=from)return true;
-  var me=(e.sc===S.me||e.as===S.me)&&id!==S.me;if(me){kept[e.side]++;if(e.as!=null&&M.off[e.as])e.as=-1;}return me;});
+  var me=(e.sc===S.me||e.as===S.me)&&!dropMine;if(me){kept[e.side]++;if(e.as!=null&&off[e.as])e.as=-1;}return me;});
  /* y se juega de nuevo con las fuerzas actuales */
  var d=M.sv.h+(M.desc&&M.desc.neutral?0:3)-M.sv.a,lam={h:1.35*Math.exp(d/30)*rem,a:1.1*Math.exp(-d/30)*rem};
  ['h','a'].forEach(function(s){var n=Math.max(0,poisson(lam[s])-kept[s]),xi=xiOf(s);
@@ -50,8 +52,31 @@ function manDown(M,sd,min,id){
    M.ev.push({min:Math.min(90,from+1+Math.floor(Math.random()*Math.max(1,90-from))),side:s,sc:sc,as:as===sc?-1:as});}});
  M.ev.sort(function(x,y){return x.min-y.min;});
 }
+/* ---------- tu equipo se queda con uno menos y tú sigues en el campo: decides tú ---------- */
+var TENO=[
+ {k:'sac',n:'Sacrificarte: bajar a ayudar en defensa',d:'El equipo sufre menos (+3 de fuerza), pero te cansas más y tendrás menos ocasiones de gol. Al entrenador le gusta.'},
+ {k:'pos',n:'Mantener tu puesto',d:'Sigues igual: el equipo juega con la fuerza que le queda.'},
+ {k:'cam',n:'Pedir el cambio para que entre un jugador de refresco',d:'Entra alguien que ayuda más atrás (+2 de fuerza). Tú dejas de jugar y ahorras energía.'}];
+/* al pasar el reloj por la roja de un compañero */
+function tenCheck(M,min){
+ if(M.tenDone||M.red||M.subOff||!M.mins||min<90-M.mins)return null;
+ var c=(M.cards||[]).filter(function(x){return x.t==='r'&&!x.me&&x.side===0&&x.min===min;})[0];
+ if(!c)return null;M.tenDone=1;M.tenAsk={min:min,n:(S.pl[c.id]||{}).n||''};return M.tenAsk;
+}
+function tenChoose(i){
+ var M=S.match;if(!M||!M.tenAsk)return;var o=TENO[i]||TENO[1],min=M.tenAsk.min,sd=mySide(M);M.tenAsk=null;M.tenPick=o.k;
+ if(o.k==='sac'){M.sv[sd]+=3;M.sac=1;M.dr+=0.4;rel('coach',1);resimFrom(M,Math.max(min,M.clock||0),false);logm('Con uno menos, te sacrificas en defensa.');}
+ else if(o.k==='cam'){M.sv[sd]+=2;M.subOff=min;M.off[S.me]=1;
+  M.decs.forEach(function(d){if(d.done<0&&d.min>min){d.done=0;d.ok=false;d.res='Ya te han cambiado';d.skip=1;}});
+  resimFrom(M,Math.max(min,M.clock||0),true);logm('Con uno menos, pides el cambio en el minuto '+min+'.');}
+ if(typeof UI!=='undefined')UI.pop=null;save();render();
+}
+function tenPopHTML(a){
+ return '<h2>¡Os quedáis con diez!</h2><p class="small mut">Minuto '+a.min+"'. Expulsan a "+esc(a.n)+'. ¿Qué haces?</p>'+
+  TENO.map(function(o,i){return '<button class="opt" data-a="tenpick" data-i="'+i+'"><b>'+esc(o.n)+'</b><div class="small mut" style="margin-top:3px">'+esc(o.d)+'</div></button>';}).join('');
+}
 /* minutos que tu equipo juega con uno menos mientras tú estás en el campo (para el cansancio) */
-function downMins(M){var s=mySide(M),a=M.downAt&&M.downAt[s];if(a==null)return 0;var end=M.red||90,st=90-(M.mins0||M.mins);return Math.max(0,end-Math.max(a,st))*(M.down[s]||1);}
+function downMins(M){var s=mySide(M),a=M.downAt&&M.downAt[s];if(a==null)return 0;var end=M.red||M.subOff||90,st=90-(M.mins0||M.mins);return Math.max(0,end-Math.max(a,st))*(M.down[s]||1)*(M.sac?1.6:1);}
 /* el rival con uno menos se cansa antes (sus duelos contra ti) y tu equipo con uno menos también lo nota */
 function downTired(min){var M=S.match;if(!M||!M.downAt)return 0;var s=mySide(M),os=s==='h'?'a':'h',a=M.downAt[os];return a!=null&&min>a?Math.min(1,(min-a)/45)*0.06*(M.down[os]||1):0;}
 function downDuel(min){var M=S.match;if(!M||!M.downAt)return 0;var s=mySide(M),a=M.downAt[s];return a!=null&&min>a?0.03*(M.down[s]||1):0;}
@@ -61,7 +86,7 @@ function pickSc(xi,id){var ok=xi.filter(function(x){return x!==id&&x!==S.me;});r
 function cardsTick(M,min){
  if(!M.cards)return;
  M.cards.forEach(function(c){if(!c.pend||c.min>min)return;c.pend=0;
-  if(M.red&&c.min>=M.red){c.void=1;return;}
+  if((M.red&&c.min>=M.red)||(M.subOff&&c.min>=M.subOff)){c.void=1;return;}
   M.yc=(M.yc||0)+1;
   if(M.yc>=2&&!M.red){M.red=c.min;M.red2=1;M.cards.push({min:c.min,id:S.me,t:'r',me:1});expel(M,c.min);manDown(M,mySide(M),c.min,S.me);}});
  M.cards.sort(function(a,b){return a.min-b.min;});
@@ -87,7 +112,8 @@ function cardOnDuel(M,d,o,ok){
 function cardsFinish(M){
  if(!M.cards)return;
  cardsTick(M,90);
- if(M.red&&M.mins>0){M.mins0=M.mins;var st=90-M.mins,played=Math.max(1,M.red-st);
+ if(M.subOff&&!M.red&&M.mins>0){M.mins0=M.mins;M.mins=Math.max(1,M.subOff-(90-M.mins0));}
+ if(M.red&&M.mins>0){M.mins0=M.mins0||M.mins;var st=90-M.mins0,played=Math.max(1,M.red-st);
   M.ev.forEach(function(e){if(e.min<=M.red)return;if(e.sc===S.me){e.sc=wpickXI(M.txi,S.me,'sg');e.mine=e.as===S.me?1:0;}if(e.as===S.me)e.as=-1;});
   M.mins=played;}
  M.cards=M.cards.filter(function(c){return !c.void&&!c.pend;}).sort(function(a,b){return a.min-b.min;});
@@ -97,8 +123,8 @@ function cardsAfter(M,rep){
  var club=!(M.desc&&M.desc.nat),lg=M.desc&&/^L:/.test(M.desc.ck);
  if(M.role==='sancionado'){S.ban=Math.max(0,(S.ban||0)-1);logm(S.ban?'Cumples un partido de sanción. Te quedan '+S.ban+'.':'Cumples la sanción: ya puedes volver a jugar.');}
  if(!M.cards)return;var y=M.cards.filter(function(c){return c.me&&c.t==='y';}).length,r=M.red?1:0;
- if(rep){rep.yc=y;rep.rc=r;rep.cards=M.cards.map(function(c){var p=S.pl[c.id];return {min:c.min,t:c.t,me:c.me?1:0,r2:c.r2||(c.me&&c.t==='r'&&M.red2)?1:0,n:c.id===S.me?S.name:(p?p.n:'')};});}
- S.stats.yc=(S.stats.yc||0)+y;S.stats.rc=(S.stats.rc||0)+r;
+ if(rep){rep.yc=y;rep.rc=r;rep.sub=M.subOff?1:0;rep.cards=M.cards.map(function(c){var p=S.pl[c.id];return {min:c.min,t:c.t,me:c.me?1:0,r2:c.r2||(c.me&&c.t==='r'&&M.red2)?1:0,n:c.id===S.me?S.name:(p?p.n:'')};});}
+ S.stats.yc=(S.stats.yc||0)+y;S.stats.rc=(S.stats.rc||0)+r;if(S.ss){S.ss.ya=(S.ss.ya||0)+y;S.ss.ra=(S.ss.ra||0)+r;}
  if(r&&club){var ban=M.red2?1:1+Math.floor(Math.random()*2.4);S.ban=(S.ban||0)+ban;rel('coach',-4);rel('team',-2);moral(-4);
   logm((M.red2?'Expulsado por doble amarilla':'Roja directa')+': '+ban+' partido(s) de sanción.');}
  if(lg&&y&&!M.red2){var before=S.ss.yc||0;S.ss.yc=before+y;if(Math.floor(S.ss.yc/5)>Math.floor(before/5)){S.ban=(S.ban||0)+1;logm('Ciclo de amarillas: '+S.ss.yc+' en liga. Te pierdes el próximo partido.');}}
@@ -116,3 +142,11 @@ function cardsFeed(M,c){
   return {min:x.min,cls:x.me?'me':'mut',t:cardIco(x.t)+' '+esc(n)+(x.t==='r'?' · expulsado, '+esc(team)+' se queda con uno menos':'')};});
 }
 function banTxt(){var p=[];if(S.ban>0)p.push('Sancionado: te pierdes '+S.ban+' partido(s) de club.');var y=(S.ss&&S.ss.yc)||0;if(y%5===4)p.push('Apercibido: llevas '+y+' amarillas en liga; una más y te pierdes un partido.');return p;}
+/* antes del partido: tu situación de tarjetas */
+function cardLine(nm){
+ var y=(S.ss&&S.ss.yc)||0,ban=S.ban||0,club=!nm.nat,t='',k='mut';
+ if(ban>0&&club){t='Sancionado: no puedes jugar este partido ('+ban+' por cumplir).';k='bad';}
+ else if(y%5===4){t='Apercibido: llevas '+y+' amarillas en liga. Una más y te pierdes el siguiente partido de liga.';k='star';}
+ else t='Tarjetas en liga esta temporada: '+y+' '+cardIco('y')+(y?' · a '+(5-y%5)+' del ciclo de sanción':'');
+ return '<div class="small '+k+'" style="margin-top:8px">'+t+'</div>';
+}

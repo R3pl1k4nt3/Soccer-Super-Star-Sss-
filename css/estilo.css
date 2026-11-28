@@ -460,3 +460,4 @@ tr:hover td{background:rgba(148,163,184,.07)}
 .negrow{flex-wrap:nowrap}
 .negrow.mut{flex-wrap:wrap}
 @media (max-width:420px){.negadj{gap:4px}.negadj b{min-width:56px}.negrow{padding:8px}}
+.opt.sel{border-color:var(--acc);box-shadow:inset 0 0 0 1px var(--acc)}

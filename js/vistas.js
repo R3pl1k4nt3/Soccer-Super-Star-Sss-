@@ -79,7 +79,8 @@ function keyRival(desc){
  var vals=set.o[0].ok.concat(set.o[1].ok).filter(function(x,i,a){return a.indexOf(x)===i;}).slice(0,3).map(function(id){return (SKNAME[id]||id)+' '+pskill(c,id);}).join(' · ');
  return '<div class="small" style="margin-top:8px">Duelo clave: <b class="star">'+esc(c.n)+'</b> <span class="mut">('+POS[c.p]+', '+c.o+') · '+vals+'</span></div>';
 }
-function nextInfo(){
+function nextInfo(){var nm=S.cal[S.slot]&&myNextMatch();return nextInfo0()+(nm?cardLine(nm):'');}
+function nextInfo0(){
  var nm=myNextMatch(),sl=S.cal[S.slot],me=S.pl[S.me];
  if(!sl)return '<p class="mut">Fin de temporada.</p>';
  if(!nm)return '<p class="small mut">'+slotLabel(sl)+'. Tu equipo no juega esta semana: entrenas y cobras igual.</p>';
@@ -96,6 +97,7 @@ function viewMatch(){
  if(S.press)h+=pressCard();
  if(S.match){var dn=nextDec(S.match);if(dn&&(S.match.clock||0)>=dn.min)h+=decisionCard();h+=liveCard();}
  var me=myClub(),en=Math.round(S.energy),p=Math.round(starterP(me)*100),sl=S.cal[S.slot];
+ if(!S.match&&typeof injCard==='function')h+=injCard();
  h+='<div class="card"><h3>Próximo partido</h3>'+nextInfo()+
   '<div class="rowb small" style="margin-top:8px"><span>Energía</span><span class="num">'+en+'%</span></div><div class="bar big en '+(en<30?'low':'')+'"><i style="width:'+en+'%"></i></div>'+
   '<div class="rowb small" style="margin-top:6px"><span>Moral</span><span class="num">'+S.moral+'</span></div><div class="bar big '+(S.moral<35?'low':'en')+'"><i style="width:'+S.moral+'%"></i></div>'+
@@ -104,11 +106,11 @@ function viewMatch(){
  if(S.event)h+='<div class="small" style="margin-top:8px;color:var(--gold)">Tienes un asunto pendiente en la pestaña Vida.</div>';
  if(S.match)h+='<div class="rowb" style="margin-top:10px;flex-wrap:wrap"><span class="small mut">Tienes un partido en juego. Se guarda: puedes seguir más tarde.</span><button class="go alt" data-a="go" data-id="home">Seguir más tarde</button></div></div>';
  else if(S.press)h+='<div class="small mut" style="margin-top:10px">Tienes una rueda de prensa pendiente. Si juegas el siguiente partido sin responder, se da por no atendida.</div><div class="btns" style="margin-top:10px"><button class="go full" data-a="play" data-n="1">Jugar siguiente partido</button><button class="go alt" data-a="go" data-id="home">Volver a Inicio</button></div></div>';
- else h+='<div class="btns" style="margin-top:12px"><button class="go full" data-a="play" data-n="1">'+(S.injured>0?'Descansar':'Jugar siguiente partido')+'</button><button class="go alt" data-a="play" data-n="5">Jugar 5 partidos</button><button class="go alt" data-a="play" data-n="99">Hasta fin de temporada</button></div></div>';
+ else h+='<div class="btns" style="margin-top:12px"><button class="go full" data-a="play" data-n="1">'+(S.injured>0&&!injCanPlay()?'Descansar':'Jugar siguiente partido')+'</button><button class="go alt" data-a="play" data-n="5">Jugar 5 partidos</button><button class="go alt" data-a="play" data-n="99">Hasta fin de temporada</button></div></div>';
  var r=S.last;
  if(r){
   h+='<div class="card"><h3>Último partido · '+esc(r.comp)+'</h3>'+(r.moments&&r.moments.length?r.moments.map(function(x){return '<div class="moment '+(x.k==='star'?'mstar':'mblack')+'"'+momBg(x.k)+'>'+icoMom(x)+'<b>'+(x.k==='star'?'★ Momento estrella':'✖ Momento negro')+'</b> '+esc(x.t)+'</div>';}).join(''):'')+'<div class="vs"><b>'+esc(r.home)+'</b><span class="score num">'+r.gh+' - '+r.ga+'</span><b>'+esc(r.away)+'</b></div>'+(r.pw?'<div class="small mut" style="text-align:center">Gana en los penaltis '+esc(r.pw==='h'?r.home:r.away)+'</div>':'');
-  h+='<div class="small mut" style="text-align:center">'+(r.role==='titular'?'Titular, 90 minutos':r.role==='suplente'?'Entras de suplente, '+r.mins+' minutos':r.role==='lesionado'?'Lesionado, no juegas':r.role==='sancionado'?'Sancionado, no juegas':'No juegas, estás en el banquillo')+'</div>';
+  h+='<div class="small mut" style="text-align:center">'+(r.role==='titular'?'Titular, '+(r.mins||90)+' minutos'+(r.rc?' (expulsado)':r.sub?' (pides el cambio)':''):r.role==='suplente'?'Entras de suplente, '+r.mins+' minutos':r.role==='lesionado'?'Lesionado, no juegas':r.role==='sancionado'?'Sancionado, no juegas':'No juegas, estás en el banquillo')+'</div>';
   r.evs.forEach(function(e){h+='<div class="ev"><b class="num">'+e.min+"'</b><span class='"+(e.me?'me':'')+"'>"+e.txt+'</span></div>';});
   if(r.decs&&r.decs.length){h+='<h3 style="margin-top:10px">Tus duelos</h3>';r.decs.forEach(function(d){h+='<div class="ev"><b class="num">'+d.min+"'</b><span>"+(d.dec?'<span class="star">◆</span> ':'')+d.n+': <b class="'+(d.ok?'good':'bad')+'">'+esc(d.res)+'</b></span></div>';});}
   h+='<div class="kv"><div><b class="num">'+(r.mins>0?ds(r.r):'-')+'</b><span>Nota</span></div>'+(S.pos==='POR'?'<div><b class="num">'+r.saves+'</b><span>Paradas</span></div>':'<div><b class="num">'+r.g+' / '+r.a+'</b><span>Goles / asist.</span></div>')+
@@ -320,12 +322,12 @@ function viewCareer(){
  var h=progressCard()+momentsCard();
  h+='<div class="card"><h3>'+esc(S.name)+'</h3><div class="small mut">'+POS[S.pos]+' · '+S.age+' años · '+natName(me.nat)+' · '+esc(myClub().n)+'</div><div class="small" style="margin-top:4px;color:var(--gold)">'+traitLine()+'</div>'+
   '<div class="kv"><div><b class="num">'+st.pj+'</b><span>Partidos</span></div><div><b class="num">'+(S.pos==='POR'?st.sv:st.g)+'</b><span>'+(S.pos==='POR'?'Paradas':'Goles')+'</span></div><div><b class="num">'+(S.pos==='POR'?st.cs:st.a)+'</b><span>'+(S.pos==='POR'?'Porterías a cero':'Asistencias')+'</span></div>'+
-  '<div><b class="num">'+(st.rn?ds(st.rsum/st.rn):'-')+'</b><span>Nota media</span></div><div><b class="num">'+S.trophies.filter(function(t){return t.k!=='ind';}).length+'</b><span>Títulos</span></div><div><b class="num">'+S.trophies.filter(function(t){return t.k==='ind';}).length+'</b><span>Premios</span></div><div><b class="num good">'+fmv(mv(me))+'</b><span>Valor de mercado</span></div></div></div>';
+  '<div><b class="num">'+(st.rn?ds(st.rsum/st.rn):'-')+'</b><span>Nota media</span></div><div><b class="num">'+S.trophies.filter(function(t){return t.k!=='ind';}).length+'</b><span>Títulos</span></div><div><b class="num">'+S.trophies.filter(function(t){return t.k==='ind';}).length+'</b><span>Premios</span></div><div><b class="num good">'+fmv(mv(me))+'</b><span>Valor de mercado</span></div><div><b class="num">'+(st.yc||0)+' '+cardIco('y')+' · '+(st.rc||0)+' '+cardIco('r')+'</b><span>Tarjetas</span></div></div></div>';
  if(S.trophies.length){h+='<div class="card"><h3>Palmarés</h3>';S.trophies.slice().reverse().slice(0,40).forEach(function(t){h+='<div class="ev"><b class="num" style="width:40px">T'+t.s+'</b><span>'+(t.k==='ind'?'<span class="star">◆</span> ':'🏆 ')+esc(t.n)+'</span></div>';});h+='</div>';}
  var mine=S.bdo.filter(function(b){return b.me;});
  if(mine.length){h+='<div class="card"><h3>Tus Balones de Oro</h3>'+mine.map(function(b){return '<div class="ev"><b class="num" style="width:40px">T'+b.s+'</b><span>'+b.me+'º puesto</span></div>';}).join('')+'</div>';}
- if(S.hist.length){h+='<div class="card wide"><h3>Temporadas</h3><div class="tw"><table><tr><th>T</th><th>Club</th><th>Pos</th><th>PJ</th><th>G</th><th>A</th><th>Nota</th><th>Val</th></tr>';
-  S.hist.slice().reverse().forEach(function(x){h+='<tr><td class="num">'+x.season+'</td><td>'+esc(x.club)+'<div class="small mut">'+esc(x.lg||'')+'</div></td><td class="num">'+x.pos+'º</td><td class="num">'+x.apps+'</td><td class="num">'+x.g+'</td><td class="num">'+x.a+'</td><td class="num">'+(x.apps?ds(x.rating):'-')+'</td><td class="num">'+ds(x.ov)+'</td></tr>';});
+ if(S.hist.length){h+='<div class="card wide"><h3>Temporadas</h3><div class="tw"><table><tr><th>T</th><th>Club</th><th>Pos</th><th>PJ</th><th>G</th><th>A</th><th>Nota</th><th>Val</th><th title="Tarjetas amarillas y rojas">Tarj.</th></tr>';
+  S.hist.slice().reverse().forEach(function(x){h+='<tr><td class="num">'+x.season+'</td><td>'+esc(x.club)+'<div class="small mut">'+esc(x.lg||'')+'</div></td><td class="num">'+x.pos+'º</td><td class="num">'+x.apps+'</td><td class="num">'+x.g+'</td><td class="num">'+x.a+'</td><td class="num">'+(x.apps?ds(x.rating):'-')+'</td><td class="num">'+ds(x.ov)+'</td><td class="num">'+(x.yc==null?'-':x.yc+(x.rc?' / <span class="bad">'+x.rc+'</span>':''))+'</td></tr>';});
   h+='</table></div></div>';}
  h+='<div class="card"><h3>Noticias</h3>';
  S.log.slice(0,20).forEach(function(l){h+='<div class="ev"><b style="width:74px;font-size:13px">'+l.t+'</b><span>'+esc(l.m)+'</span></div>';});
@@ -606,6 +608,7 @@ function popHTML(){
  if(P.k==='s3donly')return '<div class="modal" role="dialog" aria-modal="true"><div class="card pop"><h2>'+esc(P.t||'')+'</h2><button class="go block" data-a="popclose" style="margin-top:12px">Seguir</button></div></div>';
  var score=function(){return '<div class="popscore"><span>'+esc(P.hn)+'</span><b class="num">'+P.scNow[0]+' - '+P.scNow[1]+'</b><span>'+esc(P.an)+'</span></div>';};
  var shout=function(gk){return '<div class="gooool '+(gk==='g'?'gg':'ga')+'" aria-hidden="true">'+(gk==='g'?'¡GOOOL!':'¡ASISTENCIA!')+'</div>';};
+ if(P.k==='ten')return '<div class="modal" role="dialog" aria-modal="true" aria-label="Os quedáis con diez"><div class="card pop">'+tenPopHTML(P)+'</div></div>';
  if(P.k==='goal'){
   return '<div class="modal" role="dialog" aria-modal="true" aria-label="'+(P.gk==='g'?'Gol tuyo':'Asistencia tuya')+'"><div class="card pop pgood pgoal">'+
    '<div class="pophead"><span class="small mut">Minuto '+P.min+"'</span></div>"+shout(P.gk)+playAnimSVG(P)+
@@ -624,7 +627,7 @@ function popHTML(){
 }
 function reportHTML(r){
  var h='<div class="small mut" style="text-align:center">'+esc(r.comp||'')+'</div><div class="vs"><b>'+esc(r.home)+'</b><span class="score num">'+r.gh+' - '+r.ga+'</span><b>'+esc(r.away)+'</b></div>'+(r.pw?'<div class="small mut" style="text-align:center">Gana en los penaltis '+esc(r.pw==='h'?r.home:r.away)+'</div>':'');
- h+='<div class="small mut" style="text-align:center">'+(r.role==='titular'?'Titular, 90 minutos':r.role==='suplente'?'Entras de suplente, '+r.mins+' minutos':r.role==='lesionado'?'Lesionado, no juegas':r.role==='sancionado'?'Sancionado, no juegas':'No juegas, estás en el banquillo')+'</div>';
+ h+='<div class="small mut" style="text-align:center">'+(r.role==='titular'?'Titular, '+(r.mins||90)+' minutos'+(r.rc?' (expulsado)':r.sub?' (pides el cambio)':''):r.role==='suplente'?'Entras de suplente, '+r.mins+' minutos':r.role==='lesionado'?'Lesionado, no juegas':r.role==='sancionado'?'Sancionado, no juegas':'No juegas, estás en el banquillo')+'</div>';
  if(r.moments&&r.moments.length)h+=r.moments.map(function(x){return '<div class="moment '+(x.k==='star'?'mstar':'mblack')+'"'+momBg(x.k)+'>'+icoMom(x)+'<b>'+(x.k==='star'?'★ Momento estrella':'✖ Momento negro')+'</b> '+esc(x.t)+'</div>';}).join('');
  h+='<div class="kv"><div><b class="num">'+(r.mins>0?ds(r.r):'-')+'</b><span>Nota</span></div>'+(S.pos==='POR'?'<div><b class="num">'+r.saves+'</b><span>Paradas</span></div>':'<div><b class="num">'+r.g+' / '+r.a+'</b><span>Goles / asist.</span></div>')+
   '<div><b class="num">'+r.pts+'</b><span>Puntos habilidad</span></div><div><b class="num good">'+fmt(r.income||0)+'</b><span>Ingresos</span></div><div><b class="num">'+r.medals+'</b><span>Medallas</span></div></div>';

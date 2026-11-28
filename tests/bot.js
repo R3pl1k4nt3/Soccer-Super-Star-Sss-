@@ -16,6 +16,8 @@ function carrera(G,pos,tp,ts,nat,co,years,opts){
      if(fr.length&&Math.random()<0.5){G.negOpen('libre',fr[0]);if(S.neg){G.negAdj('wage',2);G.negPropose();if(S.neg)G.negAcceptCur();}}
      if(S.pre)G.preAutoSign();libres++;continue;}
     if(S.event)G.doEvent(Math.random()<0.5?0:1);
+    if(S.pol&&Math.random()<0.6)polemDo(Math.floor(Math.random()*3));
+    if(S.injured>0&&!S.injDec)injSet(Math.random()<0.5?'toc':'rest');
     if(S.bm)G.boardAns(Math.floor(Math.random()*BM[S.bm.k].o.length));
     if(S.neg){var t=0;NEGF.forEach(function(f){if(Math.random()<0.5)G.negAdj(f.k,1+Math.floor(Math.random()*3));});
      while(S.neg&&t++<6)G.negPropose();if(S.neg)G.negAcceptCur();}

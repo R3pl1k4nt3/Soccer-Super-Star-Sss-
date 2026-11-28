@@ -51,9 +51,15 @@ function downloadJSON(o){
  var blob=new Blob([JSON.stringify(o)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');
  a.href=url;a.download=fileName(o);document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(url);a.remove();},500);
 }
-function exportCurrent(){if(!S)return;S.bkSeason=S.season;saveNow();downloadJSON(S);toast('Copia guardada en un archivo. Guárdala bien: con ella recuperas la partida en cualquier navegador.');}
+function exportCurrent(){if(!S)return;S.bkSeason=S.season;S.bkDate=Date.now();S.bkWk=S.wk||0;saveNow();downloadJSON(S);toast('Copia guardada en un archivo. Guárdala bien: con ella recuperas la partida en cualquier navegador.');}
 /* temporadas desde la última copia de seguridad (para el recordatorio en Inicio) */
 function backupDue(){if(!S||S.pre)return 0;var n=S.season-(S.bkSeason||1);return n>=3?n:0;}
+/* iPhone en Safari (sin instalar en la pantalla de inicio): Safari borra la partida si pasas 7 días sin abrir la web.
+   Se recuerda hacer copia si han pasado 3 días o 6 semanas de juego desde la última. Devuelve el texto del aviso o ''. */
+function iosBackupDue(){if(!S||S.pre||typeof isIOS!=='function'||!isIOS()||isStandalone())return '';
+ var days=S.bkDate?Math.floor((Date.now()-S.bkDate)/864e5):99,wks=(S.wk||0)-(S.bkWk||0);
+ if(days<3&&wks<6)return '';
+ return (S.bkDate?'Tu última copia es de hace '+(days>=1?days+' día(s)':wks+' semanas de juego')+'.':'Aún no has hecho ninguna copia de esta partida.')+' En iPhone, Safari borra la partida si pasas 7 días sin abrir la web: haz una copia en un archivo (o juega desde el icono de la pantalla de inicio).';}
 /* pide al navegador que no borre las partidas por falta de espacio o por no visitar la web (Safari) */
 function askPersist(){try{if(typeof navigator!=='undefined'&&navigator.storage&&navigator.storage.persist)navigator.storage.persisted().then(function(p){if(!p)return navigator.storage.persist();return p;}).then(function(p){UI.persist=!!p;}).catch(function(){});}catch(e){}}
 function exportSlot(id){loadSlot(id,function(o){if(o)downloadJSON(o);else toast('No se ha podido leer esa partida.',1);});}

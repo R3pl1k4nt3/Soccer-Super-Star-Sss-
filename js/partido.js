@@ -115,7 +115,7 @@ function pskillNow(p,id,min,fm){return Math.round(clamp(pskill(p,id)*tiredF(p,id
 function duelP(o){
  var mine=skAvg(o.sk),p=S.pl[o.op],theirs=o.ok.reduce(function(s,id){return s+pskillNow(p,id,o.min,o.fm);},0)/o.ok.length;
  var base=[0.72,0.55,0.4][o.rk];
- return clamp(base+(mine-theirs)/50+(S.rel.coach-50)*0.001+(S.moral-50)*0.002-(S.energy<30?0.08:0)+traitDec(o)+(o.dec?tx('big'):0)+diff().p+(isCaptain()?0.02:0)-(typeof downDuel==='function'?downDuel(o.min):0),0.05,0.95);
+ return clamp(base+(mine-theirs)/50+(S.rel.coach-50)*0.001+(S.moral-50)*0.002-(S.energy<30?0.08:0)+traitDec(o)+(o.dec?tx('big'):0)+diff().p+(isCaptain()?0.02:0)-(S.match&&S.match.toc?0.07:0)-(typeof downDuel==='function'?downDuel(o.min):0),0.05,0.95);
 }
 function oppVals(o){var p=S.pl[o.op];return o.ok.map(function(id){return [SKNAME[id]||id,pskillNow(p,id,o.min,o.fm)];});}
 
@@ -137,7 +137,7 @@ function prepMatch(desc){
  syncMe();
  var me=S.pl[S.me],nat=!!desc.nat,home=nat?desc.h===me.nat:desc.h===me.c;
  var role='fuera',mins=0;
- if(S.injured>0)role='lesionado';
+ if(S.injured>0&&!injCanPlay())role='lesionado';
  else{var p=nat?ntStarterP():starterP(S.clubs[me.c]);
   if(Math.random()<p){role='titular';mins=90;}
   else if(S.pos!=='POR'&&Math.random()<0.6){role='suplente';mins=Math.round(15+Math.random()*30);}
@@ -150,6 +150,7 @@ function prepMatch(desc){
  var sc=simScore(sH,sA,desc.neutral),ev=makeEvents(H,A,sc[0],sc[1],S.me);
  var imp=matchImp(desc);
  var M={desc:desc,home:home,role:role,mins:mins,ev:ev,mg:0,ma:0,dr:0,decs:[],imp:imp,hn:H.n,an:A.n,hs:H.str,as:A.str,oxi:O.xi,txi:T.xi,fm:{}};
+ if(S.injured>0&&mins>0)M.toc=1;
  if(mins>0){
   /* número de jugadas: el mínimo de siempre (1 con menos de 60 minutos, 2 con 60 o más, +1 en partidos importantes) y a veces más */
   var nd=(mins>=60?2:1)+(imp>=1.7&&mins>=60?1:0),st=90-mins,deck=sitDeck(SITKEY[S.pos]),xr=Math.random();
@@ -194,7 +195,7 @@ function resolveDec(M,d,oi){
  var o=d.opts[oi],ok=Math.random()<duelP(o),mult=d.dec?1.5:1,side=mySide(M),os=side==='h'?'a':'h',opp=S.pl[o.op];
  d.done=oi;d.ok=ok;
  if(ok){M.dr+=PAY[o.rk]*mult;
-  if(o.ef==='att'){var gc=(o.shot?[0.12,0.3,0.5]:[0.08,0.22,0.4])[o.rk]*(d.dec?1.3:1)*(S.pos==='POR'?0.3:1);
+  if(o.ef==='att'){var gc=(o.shot?[0.12,0.3,0.5]:[0.08,0.22,0.4])[o.rk]*(d.dec?1.3:1)*(S.pos==='POR'?0.3:1)*(M.sac?0.7:1);
    if(Math.random()<gc){if(o.shot){M.ev.push({min:d.min,side:side,sc:S.me,as:Math.random()<0.5?wpickXI(M.txi,S.me,'sa'):-1,mine:1,shown:1});M.mg++;d.res='¡Gol! Superas a '+opp.n;}
     else{M.ev.push({min:d.min,side:side,sc:wpickXI(M.txi,S.me,'sg'),as:S.me,mine:1,shown:1});M.ma++;d.res='Asistencia de gol. Superas a '+opp.n;}}
    else d.res='Ganas el duelo a '+opp.n;}
@@ -227,7 +228,7 @@ function finishMatch(M){
  if(pos==='POR'&&mins>0){saves=poisson(2.6*Math.exp((O.str-T.str)/50))+(M.dgc||0);}
  var r=0;
  if(mins>0){
-  r=6+(ov-O.str)*0.015+(gf>gc?0.4:gf<gc?-0.4:0)+norm()*0.6+S.bono*0.008+(S.rel.team-50)*0.003+(S.moral-50)*0.006+tx('rate')+clamp(M.dr*0.35,-0.9,0.9)-(S.energy<30?0.6:0)+(M.imp>1.5?tx('big')*3:0)+(M.imp<=1.2?tx('small'):0);
+  r=(M.toc?-0.3:0)+6+(ov-O.str)*0.015+(gf>gc?0.4:gf<gc?-0.4:0)+norm()*0.6+S.bono*0.008+(S.rel.team-50)*0.003+(S.moral-50)*0.006+tx('rate')+clamp(M.dr*0.35,-0.9,0.9)-(S.energy<30?0.6:0)+(M.imp>1.5?tx('big')*3:0)+(M.imp<=1.2?tx('small'):0);
   if(pos==='POR')r+=saves*0.18-gc*0.22+(gc===0?0.7:0);
   else{r+=g*1.0+asi*0.5;if(P.df)r+=(gc===0?0.6:-0.15*gc);else if(P.line==='MED'&&gf>gc)r+=0.1;}
   r+=formF()*0.12;if(M.red)r-=1.5;
@@ -267,13 +268,18 @@ function finishMatch(M){
   rel('press',(g>=2?2:0)+(r>=8.5?1:0)+(r<4.5?-1:0));
   moral((r-6.3)*3+res*2);
   if(tx('pressure')&&r<5.5){rel('press',-2);moral(-4);}
-  S.fol=Math.round(S.fol*(1+0.002+Math.max(0,r-6)*0.003*vis+g*0.01*vis*M.imp+0.002*vis));}
+  /* seguidores: suben con los buenos partidos y bajan con las derrotas, las malas notas y las expulsiones */
+  var fd=0.002+Math.max(0,r-6)*0.003*vis+g*0.01*vis*M.imp+0.002*vis-(res<0?0.003*vis+Math.max(0,5.5-r)*0.004*vis:0)-(M.red?0.006:0);
+  S.fol=Math.max(100,Math.round(S.fol*(1+fd)));
+  if(typeof polemAfter==='function')polemAfter({res:res,r:r,g:g,red:!!M.red});}
  else{S.fol=Math.round(S.fol*1.001);if(M.role==='banquillo')moral(-2);}
  /* energía, lesiones y desgaste del material */
  var inj=0;
- S.energy=Math.max(0,S.energy-(mins+(typeof downMins==='function'?downMins(M)*0.6:0))/90*22*(1+tx('drain'))*(1-gearFx('drain')));
+ S.energy=Math.max(0,S.energy-(mins+(typeof downMins==='function'?downMins(M)*0.6:0))/90*22*(1+tx('drain'))*(1-gearFx('drain'))*(M.toc?1.3:1));
  if(mins>0){var pi=(S.energy<35?0.07:0.02)*(mins/90)*(1-0.3*itemLvl('physio'))*(1+tx('inj'))*(1-gearFx('inj'));
-  if(Math.random()<pi){inj=2+Math.floor(Math.random()*4);if(itemLvl('physio'))inj=Math.max(2,inj-itemLvl('physio'));if(itemLvl('crio')>=2)inj=Math.max(2,inj-1);S.injured=inj;logm('Te lesionas. Baja de '+(inj-1)+' semana(s).');}
+  if(Math.random()<pi){inj=2+Math.floor(Math.random()*4);if(itemLvl('physio'))inj=Math.max(2,inj-itemLvl('physio'));if(itemLvl('crio')>=2)inj=Math.max(2,inj-1);S.injured=inj;S.injDec=null;logm('Te lesionas. Baja de '+(inj-1)+' semana(s).');}
+  /* jugar tocado: riesgo de recaída */
+  if(M.toc&&!inj){if(Math.random()<0.35){var rw=2+Math.floor(Math.random()*3);S.injured+=rw;S.injDec=null;logm('Recaída: jugar tocado te cuesta '+rw+' semana(s) más de baja.');moral(-3);}else{logm('Aguantas el partido tocado.');rel('coach',1);}}
   wearGear();}
  /* estadísticas propias */
  var st=S.stats,ss=S.ss;
@@ -355,6 +361,7 @@ function liveStep(){
  var M=S.match;if(!M)return 'end';
  if(M.clock>=liveTarget(M))return nextDec(M)?'dec':liveEnd();
  M.clock++;if(typeof cardsTick==='function')cardsTick(M,M.clock);
+ if(typeof tenCheck==='function'&&!S.auto){var ta=tenCheck(M,M.clock);if(ta&&typeof UI!=='undefined'){UI.pop={k:'ten',min:ta.min,n:ta.n};return 'goal';}}
  var g=liveGoalAt(M,M.clock);
  if(g){g.shown=1;if(typeof UI!=='undefined'){var mine=g.sc===S.me,o=g.sc===S.me?g.as:g.sc;
   UI.pop={k:'goal',gk:mine?'g':'a',min:g.min,fk:g.fk,z:g.fk?[76,50]:[80+Math.round(Math.random()*8),30+Math.round(Math.random()*40)],ef:'att',shot:1,n:'g'+g.min,s3d:typeof s3dGoal==='function'?s3dGoal(mine):null,with:o>=0&&S.pl[o]?S.pl[o].n:null,scNow:scoreAt(M,g.min),hn:M.hn,an:M.an};}return 'goal';}
@@ -394,11 +401,12 @@ function weekly(rep){
  if(batch)batch.money+=inc-out+(rep?rep.bonus:0);
  if(S.fund>0){var ret=S.fund*(0.0025+norm()*0.012);S.fund=Math.max(0,Math.round(S.fund+ret));}
  S.energy=Math.min(100,S.energy+14+4*itemLvl('nutri')+3*itemLvl('crio')+2*itemLvl('chef'));if(itemLvl('chef'))moral(itemLvl('chef')*0.4);
- if(S.injured>0)S.injured--;
+ if(S.injured>0){S.injured--;if(S.injDec==='rest'&&S.injured>0&&Math.random()<0.25){S.injured--;logm('Descansar te sienta bien: recuperas una semana antes.');}}
+ if(!(S.injured>0))S.injDec=null;
  if(!rep){var k=pick(S.skills);if(addProg(k,1))logm(k.n+' sube a nivel '+k.lvl+'.');}
  cmWeekly();
  moral((50-S.moral)*0.05);
- S.acts=2;S.post=0;S.wk=(S.wk||0)+1;S.weekTrain=0;
+ S.acts=2;S.post=0;S.wk=(S.wk||0)+1;S.weekTrain=0;if(typeof polemWeek==='function')polemWeek();
  if(!S.event&&Math.random()<0.25)newEvent();
  boardWeekly();newsWeekly(rep);captainWeekly(rep);lifeWeekly();
 }
@@ -433,7 +441,7 @@ function endSeason(){
  sm.awards=seasonAwards();
  sm.awards.forEach(function(a){S.medals+=a.medals||0;sm.prize+=a.cash||0;});
  S.money+=sm.prize;
- S.hist.push({season:S.season,age:S.age,club:c.n,lg:lg.n,pos:pos,apps:S.ss.pj,g:S.ss.g,a:S.ss.a,rating:sm.rating,ov:sm.ovBefore});
+ S.hist.push({season:S.season,age:S.age,club:c.n,lg:lg.n,pos:pos,apps:S.ss.pj,g:S.ss.g,a:S.ss.a,rating:sm.rating,ov:sm.ovBefore,yc:S.ss.ya||0,rc:S.ss.ra||0});
  logm('Fin de temporada '+S.season+': '+pos+'º con '+c.n+(sm.champion?' (campeones)':'')+'.');
  /* clasificación europea antes de mover clubes */
  S.euq=euQualify(true);

@@ -44,13 +44,15 @@ function pendingItems(){
  if(windowOpen()&&S.offers.length)p.push({t:S.offers.length+(S.offers.length>1?' clubes quieren ficharte':' club quiere ficharte')+' y el mercado está abierto.',go:'career',sub:'club',btn:'Ver ofertas'});
  if(S.sofs.length)p.push({t:S.sofs.length+(S.sofs.length>1?' marcas quieren':' marca quiere')+' patrocinarte.',go:'biz',sub:'spon',btn:'Ver propuestas'});
  if((S.ads||[]).length)p.push({t:S.ads.length+(S.ads.length>1?' campañas de publicidad esperan':' campaña de publicidad espera')+' tu respuesta.',go:'life',sub:'red',btn:'Ver campañas'});
+ if(S.pol)p.push({k:'hl',t:POLEM[S.pol.k].t+': decide cómo responder.',go:'life',sub:'red',btn:'Responder'});
  if(!S.post)p.push({k:'hl',t:'Aún no has hecho la colaboración pagada en redes de esta semana: cobrarías '+fmt(postValue())+'. Si no publicas antes de jugar, la pierdes.',go:'life',sub:'red',btn:'Ir a redes'});
  S.spons.forEach(function(s){if(s.done<s.posts&&s.wk!==S.slot)p.push({k:'hl',t:byId(BRANDS,s.id).n+': aún no has hecho la publicación de esta semana (llevas '+s.done+'/'+s.posts+' este mes; si no llegas, la marca te avisa y puede rescindir).',go:'life',sub:'red',btn:'Ir a redes'});});
  var free=ACTS.filter(function(a){return actState(a).ok;}).length;
  if(S.acts>0&&free)p.push({t:'Te quedan '+S.acts+' acciones esta semana ('+free+' disponibles).',go:'life',sub:'team',btn:'Ver acciones'});
- var bk=backupDue();if(bk)p.push({t:'Hace '+bk+' temporadas que no haces una copia de tu partida. El navegador podría borrarla: guárdala en un archivo.',a:'export',btn:'Hacer copia'});
+ var ib=iosBackupDue();if(ib)p.push({k:'bad',t:ib,a:'export',btn:'Hacer copia'});
+ var bk=ib?0:backupDue();if(bk)p.push({t:'Hace '+bk+' temporadas que no haces una copia de tu partida. El navegador podría borrarla: guárdala en un archivo.',a:'export',btn:'Hacer copia'});
  banTxt().forEach(function(t){p.push({k:'bad',t:t});});
- if(S.injured>0)p.push({k:'bad',t:'Estás lesionado: '+S.injured+' semana(s) de baja.'});
+ if(S.injured>0)p.push(S.injDec?{k:'bad',t:'Estás lesionado: '+S.injured+' semana(s) de baja'+(S.injDec==='toc'?' (juegas tocado).':'.')}:{k:'bad',t:'Estás lesionado: '+S.injured+' semana(s) de baja. Decide si jugar tocado o parar.',go:'match',btn:'Decidir'});
  else if(S.energy<35)p.push({k:'bad',t:'Energía baja ('+Math.round(S.energy)+' %): rindes menos y te puedes lesionar.'});
  if(S.moral<35)p.push({k:'bad',t:'Moral baja ('+S.moral+'). Un buen partido o una rueda de prensa positiva ayudan.'});
  return p;

@@ -24,7 +24,7 @@ function pageHead(){
  var t=TABS.filter(function(x){return x[0]===S.tab;})[0];
  return '<header class="pagehead"><div><h1>'+t[1]+'</h1><p>'+sub+'</p></div></header>';
 }
-function dots(){return {home:homeBadge(),life:!!S.event||!!S.bm||!!S.neg||(S.ads||[]).length>0||!S.post||S.spons.some(function(s){return s.done<s.posts&&s.wk!==S.slot;}),biz:S.sofs.length>0,match:!!(S.match||S.press)};}
+function dots(){return {home:homeBadge(),life:!!S.event||!!S.pol||!!S.bm||!!S.neg||(S.ads||[]).length>0||!S.post||S.spons.some(function(s){return s.done<s.posts&&s.wk!==S.slot;}),biz:S.sofs.length>0,match:!!(S.match||S.press)};}
 function sideHTML(){
  var c=myClub(),kit=clubColors(c),d=dots();
  return '<aside id="side" aria-label="Menú principal"><div class="brand">'+(logoPlus(26)||'<svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.9L22 9.3l-5.5 4.8L18.2 21 12 17.3 5.8 21l1.7-6.9L2 9.3l7.1-.4z" fill="currentColor"/></svg>')+'Estrella del Balón</div>'+
@@ -119,9 +119,9 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&UI.pop){var
   negadj:function(){negAdj(id,n);},negprop:negPropose,negacc:negAcceptCur,negquit:negQuit,
   bm:function(){boardAns(i);},treq:function(){transferReq();},treqno:transferWithdraw,tforce:transferForce,
   ad:function(){adDo(i,!!n);},bizbuy:function(){bizBuy(id);},bizup:function(){bizUp(id);},bizmg:function(){bizMg(id);},bizsell:function(){bizSell(id);},
-  choose:function(){choose(i);},auto:function(){S.auto=!!n;save();render();},
+  choose:function(){choose(i);},tenpick:function(){tenChoose(i);},auto:function(){S.auto=!!n;save();render();},
   press:function(){pressAnswer(i);},pressskip:pressSkip,
-  ev:function(){doEvent(i);},act:function(){doAct(id);},post:postPaid,
+  ev:function(){doEvent(i);},injdec:function(){injSet(id);},polem:function(){polemDo(i);},act:function(){doAct(id);},post:postPaid,
   fundin:function(){fundIn(n/100);},fundout:fundOut,
   cat:function(){S.cat=id;save();render();},
   comp:function(){UI.comp=id;if(UI.ctab==='mes'&&id.charAt(0)!=='L')UI.ctab='tabla';render();},

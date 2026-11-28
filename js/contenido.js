@@ -118,3 +118,67 @@ EVENTS.push.apply(EVENTS,FAM_EVENTS);
 ACTS.push({id:'charla',w:'team',n:'Charla de capitán',d:'Solo si eres el capitán: +5 vestuario y +3 de moral',cd:4,cost:0,
  cond:function(){return isCaptain()?null:'Solo el capitán puede hacerlo.';},
  run:function(){rel('team',5);moral(3);return 'Reúnes al vestuario y hablas claro. El equipo sale enchufado.';}});
+/* ---------- redes: polémicas y momentos virales ----------
+   Después de algunos partidos pasa algo en tus redes y decides cómo responder. Si no respondes en 2 semanas, cuenta como ignorarlo. */
+var POLEM={
+ derrota:{t:'Te critican en redes tras la derrota',d:'Tras la derrota, muchos aficionados te señalan en tus redes.',p:0.18,
+  o:[{n:'Responder con calma',f:{fol:0.01,press:2,fans:1},r:'Tu mensaje tranquilo calma los ánimos.'},
+     {n:'Contestar con dureza',f:{fol:0.03,press:-4,coach:-2,fans:-3,moral:2},r:'Tu respuesta se hace viral, pero en el club no gusta nada.'},
+     {n:'Ignorarlo',f:{fol:-0.01,moral:-2},ig:1,r:'No dices nada y la tormenta pasa, aunque pierdes algún seguidor.'}]},
+ roja:{t:'Polémica por tu expulsión',d:'Las imágenes de tu roja dan la vuelta a las redes.',p:0.6,
+  o:[{n:'Pedir perdón',f:{fol:-0.005,team:2,fans:2,coach:1},r:'Pides perdón al equipo y a la afición. Se valora.'},
+     {n:'Defenderte: no era roja',f:{fol:0.02,press:-3,coach:-1},r:'Muchos te dan la razón, pero la prensa y el club no tanto.'},
+     {n:'Silencio',f:{fol:-0.01},ig:1,r:'Prefieres no hablar del tema.'}]},
+ fiesta:{t:'Se filtra una foto tuya de fiesta',d:'Alguien sube una foto tuya de madrugada en plena semana.',p:0.035,
+  o:[{n:'Explicarte: era un cumpleaños familiar',f:{press:1,coach:-1,fol:0.005},r:'La explicación convence a medias.'},
+     {n:'Tomártelo con humor',f:{fol:0.03,coach:-3,press:-1},r:'Tu broma gusta a los seguidores; al entrenador, no.'},
+     {n:'Desconectar de redes unos días',f:{fol:-0.02,moral:2,coach:1},ig:1,r:'Desapareces de redes y la cosa se enfría.'}]},
+ meme:{t:'Te has convertido en un meme',d:'Una jugada tuya del último partido corre por todas partes convertida en meme.',p:0.04,
+  o:[{n:'Reírte de ti mismo',f:{fol:0.05,press:2,moral:2},r:'Te ríes con todos y ganas un montón de seguidores.'},
+     {n:'Pedir que lo borren',f:{fol:-0.01,press:-1,moral:-2},r:'Lo único que consigues es que circule más.'},
+     {n:'No hacer caso',f:{},ig:1,r:'A los pocos días ya nadie se acuerda.'}]},
+ viral:{t:'Tu partido se hace viral',d:'El resumen de tu actuación es lo más visto de la jornada.',p:0.35,
+  o:[{n:'Aprovecharlo con una publicación pagada',f:{fol:0.03,money:1},r:'Una marca te paga por publicar en el mejor momento.'},
+     {n:'Dar las gracias al equipo',f:{fol:0.02,team:2,press:1},r:'Repartes el mérito y el vestuario lo agradece.'},
+     {n:'No darle importancia',f:{fol:0.01},ig:1,r:'Sigues a lo tuyo.'}]}
+};
+function polemAfter(info){
+ if(S.pol||!S.fol)return;var k=null;
+ if(info.red&&Math.random()<POLEM.roja.p)k='roja';
+ else if(info.res<0&&info.r<6&&Math.random()<POLEM.derrota.p*(info.r<5?1.6:1))k='derrota';
+ else if((info.g>=2||info.r>=8.5)&&Math.random()<POLEM.viral.p)k='viral';
+ else if(Math.random()<POLEM.meme.p)k='meme';
+ else if(Math.random()<POLEM.fiesta.p*(S.moral>70?1.5:1))k='fiesta';
+ if(!k)return;S.pol={k:k,wk:S.wk||0};logm(POLEM[k].t+'. Decide cómo responder en Vida → Redes.');
+}
+function polemDo(i,auto){
+ var P=S.pol;if(!P)return;var E=POLEM[P.k],o=E.o[i]||E.o[E.o.length-1],f=o.f,parts=[];S.pol=null;
+ if(f.fol){S.fol=Math.max(100,Math.round(S.fol*(1+f.fol)));parts.push('seguidores '+(f.fol>0?'+':'')+Math.round(f.fol*1000)/10+'%');}
+ ['press','fans','team','coach'].forEach(function(k){if(f[k])rel(k,f[k]);});
+ if(f.moral)moral(f.moral);
+ if(f.money){var m=Math.round(postValue()*0.8);S.money+=m;parts.push('cobras '+fmt(m));}
+ var msg=(auto?'No respondes a tiempo: ':'')+o.r+(parts.length?' ('+parts.join(', ')+')':'');logm(msg);if(!auto){toast(msg);save();render();}
+}
+/* cada semana: si llevas 2 sin responder, cuenta como ignorarlo */
+function polemWeek(){if(!S.pol)return;if((S.wk||0)-S.pol.wk>=2){var E=POLEM[S.pol.k],ig=0;E.o.forEach(function(o,i){if(o.ig)ig=i;});polemDo(ig,1);}}
+function polemCard(){
+ if(!S.pol)return '';var E=POLEM[S.pol.k];
+ return '<div class="card" style="border-color:var(--gold)"><h3>'+esc(E.t)+'</h3><p class="small mut" style="margin-top:0">'+esc(E.d)+' Si no respondes en 2 semanas, cuenta como «'+esc(E.o.filter(function(o){return o.ig;})[0].n.toLowerCase())+'».</p>'+
+  E.o.map(function(o,i){return '<button class="opt" data-a="polem" data-i="'+i+'">'+esc(o.n)+'</button>';}).join('')+'</div>';
+}
+
+/* ---------- lesiones: jugar tocado o parar ----------
+   Con una lesión leve (3 semanas o menos) puedes pedir jugar tocado: juegas peor, te cansas más y puedes recaer (35%).
+   Si eliges parar del todo, cada semana tienes un 25% de recuperarte una semana antes. */
+function injCanPlay(){return S.injured>0&&S.injured<=3&&S.injDec==='toc';}
+function injSet(k){if(!(S.injured>0))return;S.injDec=k;logm(k==='toc'?'Decides jugar tocado mientras dure la lesión.':'Decides parar del todo hasta recuperarte.');save();render();}
+function injCard(){
+ if(!(S.injured>0))return '';var leve=S.injured<=3,d=S.injDec;
+ return '<div class="card"><h3>Estás lesionado: '+S.injured+' semana(s) de baja</h3>'+
+  (leve?'<p class="small mut" style="margin-top:0">Es una lesión leve: puedes jugar tocado o parar del todo.</p>'+
+   '<button class="opt'+(d==='toc'?' sel':'')+'" data-a="injdec" data-id="toc"><b>Jugar tocado</b><div class="small mut">Puedes jugar (si el entrenador te pone). Duelos −7%, nota −0,3, más cansancio y un 35% de recaída por partido (2-4 semanas más). Si aguantas, al entrenador le gusta.</div></button>'+
+   '<button class="opt'+(d==='rest'?' sel':'')+'" data-a="injdec" data-id="rest"><b>Parar y recuperarte</b><div class="small mut">No juegas. Cada semana, un 25% de volver una semana antes.</div></button>'+
+   (d?'<div class="small good" style="margin-top:6px">Elegido: '+(d==='toc'?'jugar tocado':'parar y recuperarte')+'.</div>':'')
+  :'<p class="small mut" style="margin-top:0">Es una lesión seria: no puedes jugar. Cuando queden 3 semanas o menos podrás decidir si jugar tocado.</p>'+
+   '<button class="opt'+(d==='rest'?' sel':'')+'" data-a="injdec" data-id="rest"><b>Parar y recuperarte</b><div class="small mut">Cada semana, un 25% de volver una semana antes.</div></button>')+'</div>';
+}
